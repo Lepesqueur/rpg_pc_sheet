@@ -14,8 +14,8 @@ export const SKILLS_CATEGORIES = {
         color: '#ff00ff',
         borderColor: '#f1c40f',
         skills: [
-            { name: 'Arqueirismo', attr: 'DES', level: 3, icon: 'fa-bow-arrow' },
-            { name: 'Atirar', attr: ['DES', 'INTUI'], level: 2, icon: 'fa-bullseye' },
+            { name: 'Arqueirismo', attr: 'DES', level: 3, icon: 'fa-bullseye' },
+            { name: 'Atirar', attr: ['DES', 'INTUI'], level: 2, icon: 'fa-crosshairs' },
             { name: 'Haste', attr: ['DES', 'VIG'], level: 1, icon: 'fa-staff-snake' },
             { name: 'Lâminas', attr: ['TAM', 'DES'], level: 3, icon: 'fa-khanda' },
             { name: 'Pesadas', attr: ['TAM', 'VIG'], level: 0, icon: 'fa-hammer' },

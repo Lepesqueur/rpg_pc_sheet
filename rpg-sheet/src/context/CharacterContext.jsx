@@ -18,7 +18,26 @@ export const CharacterProvider = ({ children }) => {
         const saved = localStorage.getItem('aeliana_character_data');
         if (saved) {
             try {
-                return JSON.parse(saved);
+                const parsed = JSON.parse(saved);
+
+                // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
+                Object.keys(SKILLS_CATEGORIES).forEach(catKey => {
+                    if (parsed.skillCategories[catKey]) {
+                        parsed.skillCategories[catKey].skills = parsed.skillCategories[catKey].skills.map(skill => {
+                            const ruleSkill = SKILLS_CATEGORIES[catKey].skills.find(s => s.name === skill.name);
+                            if (ruleSkill) {
+                                return {
+                                    ...skill,
+                                    icon: ruleSkill.icon,
+                                    attr: ruleSkill.attr
+                                };
+                            }
+                            return skill;
+                        });
+                    }
+                });
+
+                return parsed;
             } catch (e) {
                 console.error("Failed to parse saved character data", e);
             }
