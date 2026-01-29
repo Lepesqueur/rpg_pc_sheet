@@ -649,7 +649,9 @@
                                             <tr>
                                                 <th className="pb-2 font-semibold">Arma</th>
                                                 <th className="pb-2 font-semibold text-center">AP</th>
+                                                <th className="pb-2 font-semibold text-center">Recurso</th>
                                                 <th className="pb-2 font-semibold text-center">Dano</th>
+                                                <th className="pb-2 font-semibold text-center">Alcance</th>
                                                 <th className="pb-2 font-semibold text-center">Desgaste</th>
                                             </tr>
                                         </thead>
@@ -657,10 +659,53 @@
                                             <tr onClick={() => setActiveModal('weapon')} className="group hover:bg-white/5 transition-colors cursor-pointer">
                                                 <td className="py-3 font-bold text-white group-hover:text-cyber-pink">Espada Longa</td>
                                                 <td className="py-3 text-center text-cyber-yellow font-mono">3</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <i className="fa-solid fa-heart text-[10px] text-cyber-pink"></i>
+                                                        <span className="text-white font-mono">2</span>
+                                                    </div>
+                                                </td>
                                                 <td className="py-3 text-center text-white font-mono">2d8+4</td>
+                                                <td className="py-3 text-center text-gray-400">C.C.</td>
                                                 <td className="py-3 text-center">
                                                     <div className="flex gap-1 justify-center">
                                                         <div className="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr className="group hover:bg-white/5 transition-colors cursor-pointer">
+                                                <td className="py-3 font-bold text-white group-hover:text-cyber-pink">Arco Curto</td>
+                                                <td className="py-3 text-center text-cyber-yellow font-mono">4</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <i className="fa-solid fa-bolt-lightning text-[10px] text-cyber-purple"></i>
+                                                        <span className="text-white font-mono">5</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 text-center text-white font-mono">1d6+3</td>
+                                                <td className="py-3 text-center text-gray-400 font-mono">18m</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex gap-1 justify-center">
+                                                        <div className="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr className="group hover:bg-white/5 transition-colors cursor-pointer">
+                                                <td className="py-3 font-bold text-white group-hover:text-cyber-pink">Adaga</td>
+                                                <td className="py-3 text-center text-cyber-yellow font-mono">2</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-1">
+                                                        <i className="fa-solid fa-star text-[10px] text-cyber-yellow"></i>
+                                                        <span className="text-white font-mono">1</span>
+                                                    </div>
+                                                </td>
+                                                <td className="py-3 text-center text-white font-mono">1d4+3</td>
+                                                <td className="py-3 text-center text-gray-400 font-mono">6m</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex gap-1 justify-center">
+                                                        <div className="w-2 h-2 rounded-full bg-gray-700"></div>
                                                         <div className="w-2 h-2 rounded-full bg-gray-700"></div>
                                                     </div>
                                                 </td>
@@ -688,7 +733,23 @@
                                                     <span className="font-bold text-white group-hover:text-cyber-yellow">Colete de Kevlar</span>
                                                 </td>
                                                 <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">4</td>
-                                                <td className="py-3 text-center text-white font-bold text-lg font-mono">4</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <input className="w-16 bg-cyber-yellow/10 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" defaultValue="4" />
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr className="group hover:bg-white/5 transition-colors cursor-pointer">
+                                                <td className="py-3 flex items-center gap-3">
+                                                    <i className="fa-solid fa-mask text-cyber-yellow text-xs"></i>
+                                                    <span className="font-bold text-white group-hover:text-cyber-yellow">Elmo Neural</span>
+                                                </td>
+                                                <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">2</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex items-center justify-center gap-2">
+                                                        <input className="w-16 bg-cyber-yellow/10 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" defaultValue="2" />
+                                                    </div>
+                                                </td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -701,22 +762,25 @@
                                 <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-purple">Defesas Primárias</h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                                     <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-purple/50 group">
+                                        <i className="fa-solid fa-shield-halved text-2xl text-cyber-purple mb-1 group-hover:scale-110 transition-transform"></i>
                                         <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Fortitude</span>
                                         <span className="text-3xl font-bold text-white">16</span>
                                     </div>
                                     <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-pink/50 group">
+                                        <i className="fa-solid fa-bolt-lightning text-2xl text-cyber-pink mb-1 group-hover:scale-110 transition-transform"></i>
                                         <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Reflexo</span>
                                         <span className="text-3xl font-bold text-white">18</span>
                                     </div>
                                     <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-yellow/50 group">
+                                        <i className="fa-solid fa-hand-fist text-2xl text-cyber-yellow mb-1 group-hover:scale-110 transition-transform"></i>
                                         <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Tenacidade</span>
                                         <span className="text-3xl font-bold text-white">14</span>
                                     </div>
                                 </div>
                             </div>
 
-                            <div className="space-y-4 cursor-pointer" onClick={() => setActiveModal('resistances')}>
-                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow flex justify-between items-center">
+                            <div className="space-y-4">
+                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow flex justify-between items-center cursor-pointer" onClick={() => setActiveModal('resistances')}>
                                     Resistências Especiais
                                     <i className="fa-solid fa-pen-to-square text-cyber-gray hover:text-white"></i>
                                 </h3>
@@ -728,7 +792,32 @@
                                         </div>
                                         <div className="flex flex-wrap gap-2">
                                             <span className="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
-                                                <i className="fa-solid fa-fire text-[10px]"></i> Fogo (10)
+                                                <i className="fa-solid fa-fire text-[10px]"></i> Fogo
+                                            </span>
+                                            <span className="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                                                <i className="fa-solid fa-gavel text-[10px]"></i> Físico
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-cyber-red text-sm">warning</span>
+                                            <span className="text-[11px] font-bold text-cyber-red uppercase tracking-tighter">Vulnerabilidades</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="bg-cyber-red/10 border border-cyber-red/30 text-cyber-red px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                                                <i className="fa-solid fa-bolt text-[10px]"></i> Elétrico
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-cyber-green text-sm">security</span>
+                                            <span className="text-[11px] font-bold text-cyber-green uppercase tracking-tighter">Imunidades</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="bg-cyber-green/10 border border-cyber-green/30 text-cyber-green px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                                                <i className="fa-solid fa-skull-crossbones text-[10px]"></i> Veneno
                                             </span>
                                         </div>
                                     </div>
@@ -740,10 +829,56 @@
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-6 pl-3 border-l-4 border-cyber-yellow shrink-0">Status e Condições</h3>
                             <div className="flex flex-col gap-8 items-center mb-6 overflow-y-auto pr-1">
                                 <div className="flex flex-col items-center gap-2 w-full shrink-0">
-                                    <div className="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,0,127,0.2)]" style={{ "--chart-color": "#ff007f", "--chart-percent": "80%" }}>
+                                    <div className="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,0,127,0.2)]" style={{ '--chart-color': '#ff007f', '--chart-percent': '80%' }}>
                                         <div className="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
                                             <span className="text-lg font-bold text-white">80<span className="text-xs text-gray-500">/100</span></span>
                                             <span className="text-[9px] uppercase text-cyber-pink tracking-widest font-bold">Vitalidade</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1">
+                                        <span className="text-[10px] text-cyber-pink uppercase tracking-[0.2em] font-semibold">Ferida</span>
+                                        <div className="flex gap-1">
+                                            <div className="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center gap-2 w-full shrink-0">
+                                    <div className="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(127,0,255,0.2)]" style={{ '--chart-color': '#7f00ff', '--chart-percent': '90%' }}>
+                                        <div className="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+                                            <span className="text-lg font-bold text-white">45<span className="text-xs text-gray-500">/50</span></span>
+                                            <span className="text-[9px] uppercase text-cyber-purple tracking-widest font-bold">Foco</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1">
+                                        <span className="text-[10px] text-cyber-purple uppercase tracking-[0.2em] font-semibold">Fadiga</span>
+                                        <div className="flex gap-1">
+                                            <div className="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col items-center gap-2 w-full shrink-0">
+                                    <div className="radial-chart flex items-center justify-center shrink-0 shadow-neon-yellow" style={{ '--chart-color': '#ffd700', '--chart-percent': '70%' }}>
+                                        <div className="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+                                            <span className="text-lg font-bold text-white text-glow-yellow">28<span className="text-xs text-gray-500">/40</span></span>
+                                            <span className="text-[9px] uppercase text-cyber-yellow tracking-widest font-bold">Vontade</span>
+                                        </div>
+                                    </div>
+                                    <div className="flex flex-col items-center gap-1">
+                                        <span className="text-[10px] text-cyber-yellow uppercase tracking-[0.2em] font-semibold">Trauma</span>
+                                        <div className="flex gap-1">
+                                            <div className="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+                                            <div className="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
                                         </div>
                                     </div>
                                 </div>
@@ -758,6 +893,15 @@
                                 <div className="flex flex-wrap gap-2 min-h-[60px] p-2 rounded-lg bg-black/20 border border-white/5">
                                     <div className="condition-badge condition-pink">
                                         <i className="fa-solid fa-ghost"></i> Amedrontado
+                                    </div>
+                                    <div className="condition-badge condition-purple">
+                                        <i className="fa-solid fa-brain"></i> Confuso
+                                    </div>
+                                    <div className="condition-badge condition-pink">
+                                        <i className="fa-solid fa-clock"></i> Lento
+                                    </div>
+                                    <div className="condition-badge condition-purple">
+                                        <i className="fa-solid fa-person-falling"></i> Caído
                                     </div>
                                 </div>
                             </div>
