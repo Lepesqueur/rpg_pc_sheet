@@ -4,9 +4,8 @@ import StatsGrid from './components/StatsGrid';
 import Navigation from './components/Navigation';
 import AttributesTab from './tabs/AttributesTab';
 import CombatTab from './tabs/CombatTab';
-
-const SkillsTab = () => <div className="p-12 text-center text-cyber-gray glass-card rounded-xl">Aba de Habilidades em breve...</div>;
-const InventoryTab = () => <div className="p-12 text-center text-cyber-gray glass-card rounded-xl">Aba de Inventário em breve...</div>;
+import SkillsTab from './tabs/SkillsTab';
+import InventoryTab from './tabs/InventoryTab';
 
 function App() {
   const [activeTab, setActiveTab] = useState('attributes');
