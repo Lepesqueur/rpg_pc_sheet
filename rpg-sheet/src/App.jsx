@@ -6,6 +6,7 @@ import AttributesTab from './tabs/AttributesTab';
 import CombatTab from './tabs/CombatTab';
 import SkillsTab from './tabs/SkillsTab';
 import InventoryTab from './tabs/InventoryTab';
+import { CharacterProvider } from './context/CharacterContext';
 
 function App() {
   const [activeTab, setActiveTab] = useState('attributes');
@@ -21,21 +22,23 @@ function App() {
   };
 
   return (
-    <div className="bg-scanline min-h-screen selection:bg-cyber-pink selection:text-white pb-20">
-      <div className="max-w-7xl mx-auto px-4 py-8 md:px-8">
-        <Header />
-        <StatsGrid />
-        <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+    <CharacterProvider>
+      <div className="bg-scanline min-h-screen selection:bg-cyber-pink selection:text-white pb-20">
+        <div className="max-w-7xl mx-auto px-4 py-8 md:px-8">
+          <Header />
+          <StatsGrid />
+          <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
 
-        <div className="min-h-[500px]">
-          {renderTab()}
+          <div className="min-h-[500px]">
+            {renderTab()}
+          </div>
+
+          <footer className="mt-20 pt-8 border-t border-white/5 text-center">
+            <p className="text-[10px] text-cyber-gray opacity-50 uppercase tracking-[0.5em]">SYSTEM VERSION 3.0.0 // REACT MIGRATION PRTCL</p>
+          </footer>
         </div>
-
-        <footer className="mt-20 pt-8 border-t border-white/5 text-center">
-          <p className="text-[10px] text-cyber-gray opacity-50 uppercase tracking-[0.5em]">SYSTEM VERSION 3.0.0 // REACT MIGRATION PRTCL</p>
-        </footer>
       </div>
-    </div>
+    </CharacterProvider>
   );
 }
 

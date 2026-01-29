@@ -15,10 +15,10 @@ export const SKILLS_CATEGORIES = {
         borderColor: '#f1c40f',
         skills: [
             { name: 'Arqueirismo', attr: 'DES', level: 3, icon: 'fa-bow-arrow' },
-            { name: 'Atirar', attr: 'DES', level: 2, icon: 'fa-bullseye' },
+            { name: 'Atirar', attr: ['DES', 'INTUI'], level: 2, icon: 'fa-bullseye' },
             { name: 'Haste', attr: ['DES', 'VIG'], level: 1, icon: 'fa-staff-snake' },
-            { name: 'Lâminas', attr: 'DES', level: 3, icon: 'fa-khanda' },
-            { name: 'Pesadas', attr: 'VIG', level: 0, icon: 'fa-hammer' },
+            { name: 'Lâminas', attr: ['TAM', 'DES'], level: 3, icon: 'fa-khanda' },
+            { name: 'Pesadas', attr: ['TAM', 'VIG'], level: 0, icon: 'fa-hammer' },
             { name: 'Rápidas', attr: 'DES', level: 2, icon: 'fa-bolt' },
         ]
     },
@@ -59,7 +59,7 @@ export const SKILLS_CATEGORIES = {
             { name: 'Dissimular', attr: 'PRE', level: 2, icon: 'fa-mask' },
             { name: 'Empatia Feral', attr: 'INTUI', level: 1, icon: 'fa-paw' },
             { name: 'Inuendo', attr: ['PRE', 'INTUI'], level: 3, icon: 'fa-user-secret' },
-            { name: 'Intimidação', attr: 'PRE', level: 2, icon: 'fa-skull' },
+            { name: 'Intimidação', attr: ['TAM', 'PRE'], level: 2, icon: 'fa-skull' },
             { name: 'Performance', attr: 'PRE', level: 1, icon: 'fa-masks-theater' },
             { name: 'Persuasão', attr: 'PRE', level: 3, icon: 'fa-handshake' },
         ]
