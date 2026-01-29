@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Aeliana - Cyberpunk RPG Dashboard</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries,typography"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+    <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+    <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Rajdhani', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                        body: ['Roboto', 'sans-serif'],
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        cyber: {
+                            bg: '#050505',
+                            card: '#13131f',
+                            pink: '#ff0099',
+                            purple: '#bd00ff',
+                            yellow: '#ffd700',
+                            green: '#39ff14',
+                            red: '#ff3131',
+                            cyan: '#00f3ff',
+                            gray: '#888899',
+                            dark: '#0d0d10',
+                            panel: '#16161c',
+                        },
+                        rpg: {
+                            dark: '#0f0f13',
+                            panel: '#151520',
+                            border: '#2a2a35',
+                            pink: '#ff007f',
+                            purple: '#bd00ff',
+                            gold: '#ffd700',
+                            text: '#e0e0e0',
+                            muted: '#8a8a9b'
+                        },
+                        neon: {
+                            pink: '#d633ff',
+                            yellow: '#f2ff00',
+                            green: '#66fcf1',
+                            purple: '#9d4edd',
+                        }
+                    },
+                    boxShadow: {
+                        'neon-pink': '0 0 5px #ff0099, 0 0 10px #ff0099',
+                        'neon-purple': '0 0 5px #bd00ff, 0 0 10px #bd00ff',
+                        'neon-yellow': '0 0 5px #ffd700, 0 0 10px #ffd700',
+                        'neon-green': '0 0 5px #39ff14, 0 0 10px #39ff14',
+                        'neon-red': '0 0 5px #ff3131, 0 0 10px #ff3131',
+                        'neon-cyan': '0 0 5px #00f3ff, 0 0 10px #00f3ff',
+                        'glow-pink': '0 0 5px #d633ff, 0 0 10px #d633ff, inset 0 0 2px #d633ff',
+                        'glow-yellow': '0 0 5px #f2ff00, 0 0 10px #f2ff00, inset 0 0 2px #f2ff00',
+                    },
+                    backgroundImage: {
+                        'scanline': 'linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06))',
+                        'radial-cyber': 'radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style type="text/tailwindcss">
+        body {
+        background-color: #0b0b0f;
+        background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+        color: white;
+    }
+    .glass-card {
+        background: rgba(19, 19, 31, 0.7);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    }
+    .text-glow-pink { text-shadow: 0 0 8px #ff007f; }
+    .text-glow-purple { text-shadow: 0 0 8px #7f00ff; }
+    .text-glow-yellow { text-shadow: 0 0 8px #ffd700; }
+    .text-glow-green { text-shadow: 0 0 8px #39ff14; }
+    .text-glow-cyan { text-shadow: 0 0 8px #00f3ff; }
+    .text-glow-red { text-shadow: 0 0 8px #ff3131; }
+    .bg-scanline {
+        background-size: 100% 3px, 6px 100%;
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: #050505; }
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #555; }
+    
+    .custom-scrollbar::-webkit-scrollbar {
+        width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+        background: rgba(224, 38, 255, 0.3);
+        border-radius: 10px;
+    }
+
+    .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    .condition-badge {
+        @apply px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer;
+    }
+    .condition-pink {
+        @apply bg-cyber-pink/20 border border-cyber-pink/50 text-cyber-pink shadow-[0_0_10px_rgba(255,0,153,0.3)] hover:shadow-[0_0_15px_rgba(255,0,153,0.6)];
+    }
+    .condition-purple {
+        @apply bg-cyber-purple/20 border border-cyber-purple/50 text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.3)] hover:shadow-[0_0_15px_rgba(189,0,255,0.6)];
+    }
+    .condition-yellow {
+        @apply bg-cyber-yellow/20 border border-cyber-yellow/50 text-cyber-yellow shadow-[0_0_10px_rgba(255,215,0,0.3)] hover:shadow-[0_0_15px_rgba(255,215,0,0.6)];
+    }
+    .radial-chart {
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        background: radial-gradient(closest-side, #13131f 85%, transparent 86% 100%),
+                    conic-gradient(var(--chart-color) var(--chart-percent), #2d2d3d 0);
+    }
+    .writing-vertical-lr {
+      writing-mode: vertical-lr;
+      transform: rotate(180deg);
+      white-space: nowrap;
+    }
+    .profile-glow {
+        box-shadow: 0 0 15px #d633ff, 0 0 30px #d633ff;
+        border: 2px solid #d633ff;
+    }
+    .progress-gradient {
+        background: linear-gradient(90deg, #f2ff00 0%, #d633ff 100%);
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+        animation: fadeIn 0.3s ease-out forwards;
+    }
+</style>
+</head>
+
+<body class="bg-scanline min-h-screen text-white overflow-x-hidden selection:bg-cyber-pink selection:text-white">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { createRoot } = ReactDOM;
+        const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+        // --- Components ---
+
+        const Header = () => {
+            return (
+                <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
+                    <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+                    <div className="relative shrink-0 group">
+                        <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                        <img alt="Aeliana Portrait" className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI" />
+                    </div>
+                    <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
+                        <h1 className="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink">Aeliana, a Arconte</h1>
+                        <div className="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4">Nível <span className="text-white">5</span></div>
+                        <div className="w-full max-w-md mx-auto md:mx-0">
+                            <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                                <div className="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow w-3/4 shadow-[0_0_10px_#ff007f]"></div>
+                            </div>
+                            <div className="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
+                                <span>XP: 14500</span>
+                                <span>NEXT: 18000</span>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+            );
+        };
+
+        const StatsGrid = () => (
+            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+                    <i className="fa-solid fa-mountain text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Tamanho</span>
+                    <span className="font-bold text-white text-5xl">12</span>
+                </div>
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+                    <i className="fa-solid fa-heart text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Vigor</span>
+                    <span className="font-bold text-white text-5xl">16</span>
+                </div>
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+                    <i className="fa-solid fa-location-arrow text-2xl text-cyber-purple mb-2 rotate-45 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Destreza</span>
+                    <span className="font-bold text-white text-5xl">18</span>
+                </div>
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+                    <i className="fa-solid fa-brain text-2xl text-cyber-purple mb-2 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intelecto</span>
+                    <span className="font-bold text-white text-5xl">20</span>
+                </div>
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+                    <i className="fa-solid fa-eye text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intuição</span>
+                    <span className="font-bold text-white text-5xl">15</span>
+                </div>
+                <div className="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+                    <i className="fa-regular fa-star text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+                    <span className="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Presença</span>
+                    <span className="font-bold text-white text-5xl">14</span>
+                </div>
+            </section>
+        );
+
+        const Navigation = ({ activeTab, onTabChange }) => {
+            const getLinkClass = (tabName) => {
+                const isActive = activeTab === tabName;
+                return `cursor-pointer px-2 py-3 text-sm font-semibold transition-colors whitespace-nowrap relative ${isActive
+                    ? 'text-white border-b-2 border-cyber-pink'
+                    : 'text-gray-400 hover:text-white'
+                    }`;
+            }
+
+            return (
+                <nav className="flex overflow-x-auto border-b border-white/10 pb-1 space-x-8 mb-6">
+                    <a onClick={() => onTabChange('attributes')} className={getLinkClass('attributes')}>
+                        ATRIBUTOS & PERÍCIAS
+                        {activeTab === 'attributes' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyber-pink to-transparent"></span>}
+                    </a>
+                    <a onClick={() => onTabChange('combat')} className={getLinkClass('combat')}>
+                        COMBATE & DEFESA
+                        {activeTab === 'combat' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyber-pink to-transparent"></span>}
+                    </a>
+                    <a onClick={() => onTabChange('skills')} className={getLinkClass('skills')}>
+                        HABILIDADES & TALENTOS
+                        {activeTab === 'skills' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyber-pink to-transparent"></span>}
+                    </a>
+                    <a onClick={() => onTabChange('inventory')} className={getLinkClass('inventory')}>
+                        INVENTÁRIO & NOTAS
+                        {activeTab === 'inventory' && <span className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyber-pink to-transparent"></span>}
+                    </a>
+                </nav>
+            );
+        };
+
+        // --- Pages ---
+
+        const AttributesTab = () => {
+            return (
+                <div className="animate-fade-in">
+                    <main className="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
+                        <section data-purpose="card-weapons">
+                            <div className="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(241,196,15,0.1)] border-[#f1c40f]/40 h-full">
+                                <h2 className="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <i className="fa-solid fa-crosshairs"></i> Armas
+                                </h2>
+                                <ul className="space-y-3">
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-bow-arrow"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Arqueirismo</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-bullseye"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Atirar</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-staff-snake"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Haste</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                                <span className="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-khanda"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Lâminas</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-hammer"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Pesadas</div>
+                                                <span className="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-bolt"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Rápidas</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#f1c40f] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section data-purpose="card-tech">
+                            <div className="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(0,229,255,0.1)] border-[#00e5ff]/40 h-full">
+                                <h2 className="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <i className="fa-solid fa-microchip"></i> Técnicas
+                                </h2>
+                                <ul className="space-y-3">
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-toolbox"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Aparatos</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-bullseye"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Arremesso</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">TAM</span>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-person-running"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Atletismo</div>
+                                                <span className="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-user-ninja"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Furtividade</div>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-hand-fist"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Luta</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">TAM</span>
+                                                <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="text-[#00e5ff] w-4 text-center"><i className="fa-solid fa-wand-sparkles"></i></div>
+                                        <div className="flex items-center gap-2">
+                                            <div className="text-sm font-bold text-gray-200">Prestidigitação</div>
+                                            <span className="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+                                        </div>
+                                        <div className="flex gap-1 text-[#00e5ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section data-purpose="card-knowledge">
+                            <div className="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(155,89,182,0.1)] border-[#9b59b6]/40 h-full">
+                                <h2 className="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <i className="fa-solid fa-book"></i> Conhecimentos
+                                </h2>
+                                <ul className="space-y-3">
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-flask"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Alquimia</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-hat-wizard"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Arcana</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-mountain-sun"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Escotismo</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                                <span className="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-scroll"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">História</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-magnifying-glass"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Investigação</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="text-[#9b59b6] w-4 text-center"><i className="fa-solid fa-briefcase-medical"></i></div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Medicina</div>
+                                                <span className="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+                                                <span className="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#9b59b6] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                        <section data-purpose="card-social">
+                            <div className="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(255,0,255,0.1)] border-[#ff00ff]/40 h-full">
+                                <h2 className="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+                                    <i className="fa-solid fa-comments"></i> Sociais
+                                </h2>
+                                <ul className="space-y-3">
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-mask"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Dissimular</div>
+                                                <span className="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-paw"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Empatia Feral</div>
+                                                <span className="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-user-secret"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Inuendo</div>
+                                                <span className="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+                                                <span className="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-skull"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Intimidação</div>
+                                                <span className="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-masks-theater"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Performance</div>
+                                                <span className="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-regular fa-diamond opacity-30"></i><i className="fa-regular fa-diamond opacity-30"></i>
+                                        </div>
+                                    </li>
+                                    <li className="flex items-center justify-between group cursor-pointer">
+                                        <div className="flex items-center gap-3">
+                                            <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+                                                <i className="fa-solid fa-handshake"></i>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <div className="text-sm font-bold text-gray-200">Persuasão</div>
+                                                <span className="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-1 text-[#ff00ff] text-xs">
+                                            <i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i><i className="fa-solid fa-diamond"></i>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </section>
+                    </main>
+                </div>
+            );
+        };
+
+
+        const CombatTab = () => {
+            const [activeModal, setActiveModal] = useState(null); // 'resistances', 'conditions', 'weapon', 'armor'
+
+            return (
+                <div className="animate-fade-in">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
+                        <div className="lg:col-span-5 flex flex-col gap-6">
+                            <div className="border border-white/10 rounded-xl p-4 flex flex-col">
+                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-pink">Ataques</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-sm">
+                                        <thead className="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
+                                            <tr>
+                                                <th className="pb-2 font-semibold">Arma</th>
+                                                <th className="pb-2 font-semibold text-center">AP</th>
+                                                <th className="pb-2 font-semibold text-center">Dano</th>
+                                                <th className="pb-2 font-semibold text-center">Desgaste</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            <tr onClick={() => setActiveModal('weapon')} className="group hover:bg-white/5 transition-colors cursor-pointer">
+                                                <td className="py-3 font-bold text-white group-hover:text-cyber-pink">Espada Longa</td>
+                                                <td className="py-3 text-center text-cyber-yellow font-mono">3</td>
+                                                <td className="py-3 text-center text-white font-mono">2d8+4</td>
+                                                <td className="py-3 text-center">
+                                                    <div className="flex gap-1 justify-center">
+                                                        <div className="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-gray-700"></div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className="border border-white/10 rounded-xl p-4 flex flex-col">
+                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow">Armaduras</h3>
+                                <div className="overflow-x-auto">
+                                    <table className="w-full text-left text-sm">
+                                        <thead className="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
+                                            <tr>
+                                                <th className="pb-2 font-semibold">Nome da Armadura</th>
+                                                <th className="pb-2 font-semibold text-center w-20">MÁX</th>
+                                                <th className="pb-2 font-semibold text-center w-24">ATUAL</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="divide-y divide-white/5">
+                                            <tr onClick={() => setActiveModal('armor')} className="group hover:bg-white/5 transition-colors cursor-pointer">
+                                                <td className="py-3 flex items-center gap-3">
+                                                    <i className="fa-solid fa-shield-halved text-cyber-yellow text-xs"></i>
+                                                    <span className="font-bold text-white group-hover:text-cyber-yellow">Colete de Kevlar</span>
+                                                </td>
+                                                <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">4</td>
+                                                <td className="py-3 text-center text-white font-bold text-lg font-mono">4</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-4 flex flex-col space-y-6 border border-white/10 rounded-xl p-4">
+                            <div className="space-y-4">
+                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-purple">Defesas Primárias</h3>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                    <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-purple/50 group">
+                                        <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Fortitude</span>
+                                        <span className="text-3xl font-bold text-white">16</span>
+                                    </div>
+                                    <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-pink/50 group">
+                                        <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Reflexo</span>
+                                        <span className="text-3xl font-bold text-white">18</span>
+                                    </div>
+                                    <div className="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-yellow/50 group">
+                                        <span className="text-[10px] text-cyber-gray uppercase tracking-widest">Tenacidade</span>
+                                        <span className="text-3xl font-bold text-white">14</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4 cursor-pointer" onClick={() => setActiveModal('resistances')}>
+                                <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow flex justify-between items-center">
+                                    Resistências Especiais
+                                    <i className="fa-solid fa-pen-to-square text-cyber-gray hover:text-white"></i>
+                                </h3>
+                                <div className="glass-card p-4 rounded-xl space-y-4">
+                                    <div className="space-y-2">
+                                        <div className="flex items-center gap-2">
+                                            <span className="material-symbols-outlined text-cyber-purple text-sm">verified_user</span>
+                                            <span className="text-[11px] font-bold text-cyber-purple uppercase tracking-tighter">Resistências</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2">
+                                            <span className="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+                                                <i className="fa-solid fa-fire text-[10px]"></i> Fogo (10)
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="lg:col-span-3 rounded-xl p-4 border relative border-white/10 flex flex-col h-full overflow-hidden">
+                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-6 pl-3 border-l-4 border-cyber-yellow shrink-0">Status e Condições</h3>
+                            <div className="flex flex-col gap-8 items-center mb-6 overflow-y-auto pr-1">
+                                <div className="flex flex-col items-center gap-2 w-full shrink-0">
+                                    <div className="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,0,127,0.2)]" style={{ "--chart-color": "#ff007f", "--chart-percent": "80%" }}>
+                                        <div className="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+                                            <span className="text-lg font-bold text-white">80<span className="text-xs text-gray-500">/100</span></span>
+                                            <span className="text-[9px] uppercase text-cyber-pink tracking-widest font-bold">Vitalidade</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="border-t border-white/10 pt-4 mt-auto">
+                                <div className="flex justify-between items-center mb-3">
+                                    <h4 className="text-cyber-gray text-[10px] font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink">Condições Ativas</h4>
+                                    <button onClick={() => setActiveModal('conditions')} className="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyber-pink/20 hover:border-cyber-pink/50 transition-all text-gray-400 hover:text-cyber-pink">
+                                        <i className="fa-solid fa-plus text-[10px]"></i>
+                                    </button>
+                                </div>
+                                <div className="flex flex-wrap gap-2 min-h-[60px] p-2 rounded-lg bg-black/20 border border-white/5">
+                                    <div className="condition-badge condition-pink">
+                                        <i className="fa-solid fa-ghost"></i> Amedrontado
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Modals */}
+                    {activeModal === 'resistances' && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+                            <div className="glass-card w-full max-w-4xl max-h-[90vh] rounded-2xl overflow-hidden flex flex-col border border-white/20 shadow-2xl relative">
+                                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-black/40">
+                                    <div><h2 className="text-2xl font-bold uppercase tracking-widest text-white text-glow-purple">Editar Resistências</h2></div>
+                                    <button onClick={() => setActiveModal(null)} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-xmark text-xl"></i></button>
+                                </div>
+                                <div className="p-6 overflow-y-auto space-y-8 flex-grow">
+                                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                        <div className="bg-black/40 border border-cyber-purple/20 rounded-lg p-3 flex flex-col gap-3">
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-white font-semibold flex items-center gap-2 text-sm uppercase"><i className="fa-solid fa-fire text-cyber-purple/80"></i> Fogo</span>
+                                                <input className="bg-black/40 border border-white/10 rounded px-2 py-1 text-center w-12 text-sm text-white" type="text" defaultValue="10" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-6 border-t border-white/10 bg-black/40 flex justify-end gap-4">
+                                    <button onClick={() => setActiveModal(null)} className="px-6 py-2 text-sm font-bold uppercase tracking-widest text-cyber-gray hover:text-white">Cancelar</button>
+                                    <button onClick={() => setActiveModal(null)} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeModal === 'weapon' && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                            <div className="glass-card w-full max-w-2xl rounded-2xl border border-white/20 shadow-2xl relative overflow-hidden flex flex-col max-h-[90vh]">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-pink opacity-80"></div>
+                                <div className="p-6 border-b border-white/10 flex items-center justify-between bg-white/5">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-lg bg-cyber-pink/20 border border-cyber-pink/50 flex items-center justify-center shadow-neon-pink"><i className="fa-solid fa-sword text-cyber-pink text-xl"></i></div>
+                                        <div><h2 className="text-2xl font-bold tracking-tight text-white uppercase text-glow-pink">Editar Ataque</h2><p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase">Espada Longa</p></div>
+                                    </div>
+                                    <button onClick={() => setActiveModal(null)} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-xmark text-xl"></i></button>
+                                </div>
+                                <div className="p-6 space-y-8 overflow-y-auto">
+                                    <div className="flex flex-col gap-1.5">
+                                        <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1">Dano</label>
+                                        <input className="bg-black/40 border border-white/10 rounded-lg py-2 px-3 text-white font-mono text-lg" type="text" defaultValue="2d8+4" />
+                                    </div>
+                                </div>
+                                <div className="p-6 bg-black/60 flex items-center justify-between border-t border-white/10">
+                                    <button className="px-6 py-2.5 rounded-lg border border-cyber-red/50 text-cyber-red font-bold uppercase text-xs">Excluir</button>
+                                    <button onClick={() => setActiveModal(null)} className="px-8 py-2.5 rounded-lg bg-cyber-green text-black font-extrabold uppercase text-xs shadow-neon-green">Salvar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeModal === 'conditions' && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+                            <div className="glass-card w-full max-w-6xl max-h-[92vh] rounded-2xl overflow-hidden flex flex-col border-white/20 shadow-2xl">
+                                <div className="px-6 py-5 border-b border-white/10 flex justify-between items-center bg-gradient-to-r from-cyber-purple/10 to-transparent">
+                                    <div><h2 className="text-2xl font-bold tracking-wider uppercase italic leading-tight">Editar Condições</h2></div>
+                                    <button onClick={() => setActiveModal(null)} className="text-cyber-gray hover:text-white transition-colors bg-white/5 w-10 h-10 rounded-full flex items-center justify-center border border-white/10"><i className="fa-solid fa-xmark text-xl"></i></button>
+                                </div>
+                                <div className="p-8 overflow-y-auto">
+                                    <div className="flex items-center justify-between p-4 rounded-xl bg-white/5 border border-white/5 hover:border-cyber-purple/40 transition-all group">
+                                        <div className="flex items-center gap-4">
+                                            <span className="text-sm font-bold tracking-widest uppercase group-hover:text-cyber-purple transition-colors">Amedrontada</span>
+                                        </div>
+                                        <input type="checkbox" defaultChecked className="form-checkbox h-5 w-5 text-cyber-purple rounded border-gray-300 focus:ring-cyber-purple" />
+                                    </div>
+                                </div>
+                                <div className="p-8 border-t border-white/10 bg-black/60 flex justify-end gap-6">
+                                    <button onClick={() => setActiveModal(null)} className="w-full max-w-xs py-4 bg-cyber-pink hover:bg-cyber-pink/80 text-white font-bold uppercase tracking-[0.2em] rounded-lg shadow-neon-pink transition-all">Confirmar</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeModal === 'armor' && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+                            <div className="glass-card w-full max-w-2xl rounded-2xl overflow-hidden border-2 border-cyber-yellow shadow-neon-yellow relative flex flex-col">
+                                <header className="p-6 border-b border-white/10 flex items-center justify-between">
+                                    <div className="flex items-center gap-4">
+                                        <div className="w-12 h-12 rounded-lg bg-cyber-yellow/10 flex items-center justify-center border border-cyber-yellow/30 shadow-neon-yellow"><i className="fa-solid fa-shield-halved text-2xl text-cyber-yellow"></i></div>
+                                        <div><h2 className="text-2xl font-bold text-white tracking-wider uppercase italic">Editar Armadura</h2><p className="text-cyber-yellow font-mono text-sm uppercase tracking-widest">Colete de Kevlar</p></div>
+                                    </div>
+                                    <button onClick={() => setActiveModal(null)} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-xmark text-xl"></i></button>
+                                </header>
+                                <div className="p-6 space-y-6 overflow-y-auto max-h-[70vh]">
+                                    <div className="bg-cyber-yellow/5 border border-cyber-yellow/20 rounded-xl p-6">
+                                        <h3 className="text-cyber-yellow text-xs font-bold tracking-[0.3em] uppercase mb-6 flex items-center gap-2"><i className="fa-solid fa-bolt text-[10px]"></i> Proteção</h3>
+                                        <div className="flex flex-col items-center gap-3">
+                                            <label className="text-[10px] text-cyber-gray font-bold uppercase tracking-widest">Atual</label>
+                                            <div className="flex items-center gap-4">
+                                                <input className="w-20 bg-transparent text-center text-4xl font-bold text-white border-none focus:ring-0 p-0 font-mono text-glow-yellow" type="number" defaultValue="4" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <footer className="p-6 bg-black/40 flex justify-end gap-4 border-t border-white/5">
+                                    <button onClick={() => setActiveModal(null)} className="px-8 py-3 rounded-lg bg-cyber-yellow text-black font-bold uppercase tracking-widest text-xs shadow-neon-yellow hover:brightness-110 transition-all flex items-center justify-center gap-2">Salvar</button>
+                                </footer>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const SkillsTab = () => {
+            const [viewingSkill, setViewingSkill] = useState(null);
+
+            return (
+                <div className="animate-fade-in">
+                    <section className="glass-card rounded-2xl p-6 min-h-[500px] flex flex-col">
+                        <div className="mb-8 relative">
+                            <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i className="fa-solid fa-magnifying-glass text-gray-500 text-sm"></i>
+                            </div>
+                            <input className="w-full bg-black/40 border border-white/10 text-gray-300 rounded-lg pl-11 pr-4 py-3 focus:outline-none focus:border-neon-pink focus:ring-1 focus:ring-neon-pink transition-all placeholder:text-gray-600 font-sans" placeholder="Filtrar habilidades ou talentos..." type="text" />
+                        </div>
+
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-2 h-6 bg-neon-pink shadow-neon-pink"></div>
+                                    <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Habilidades Ativas</h2>
+                                </div>
+
+                                <div onClick={() => setViewingSkill("Explosão Arcana")} className="group relative bg-white/5 border border-white/10 hover:border-neon-pink/50 rounded-xl p-5 transition-all duration-300 cursor-pointer">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-pink/20 text-neon-pink text-[10px] font-bold border border-neon-pink/30 rounded">3 PA</span>
+                                        <div className="flex gap-2">
+                                            <span className="flex items-center gap-1 text-neon-purple text-[10px] font-bold" title="Custo de Foco">
+                                                <i className="fa-solid fa-bolt text-[9px]"></i> 2
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-pink/10 border border-neon-pink/20 group-hover:shadow-[0_0_10px_rgba(214,51,255,0.3)] transition-all">
+                                            <i className="fa-solid fa-burst text-2xl text-neon-pink"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">EXPLOSÃO ARCANA</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Libera uma onda de energia bruta em um raio de 3 metros, causando dano mágico crítico.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative bg-white/5 border border-white/10 hover:border-neon-pink/50 rounded-xl p-5 transition-all duration-300">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-pink/20 text-neon-pink text-[10px] font-bold border border-neon-pink/30 rounded">2 PA</span>
+                                        <div className="flex gap-2">
+                                            <span className="flex items-center gap-1 text-neon-purple text-[10px] font-bold" title="Custo de Foco">
+                                                <i className="fa-solid fa-bolt text-[9px]"></i> 1
+                                            </span>
+                                            <span className="flex items-center gap-1 text-neon-pink text-[10px] font-bold" title="Custo de Vitalidade">
+                                                <i className="fa-solid fa-heart text-[9px]"></i> 1
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-pink/10 border border-neon-pink/20 group-hover:shadow-[0_0_10px_rgba(214,51,255,0.3)] transition-all">
+                                            <i className="fa-solid fa-door-open text-2xl text-neon-pink"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">TELETRANSPORTE MENOR</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Permite deslocar-se instantaneamente para um ponto visível a até 15 metros.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative bg-white/5 border border-white/10 hover:border-neon-pink/50 rounded-xl p-5 transition-all duration-300">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-pink/20 text-neon-pink text-[10px] font-bold border border-neon-pink/30 rounded">1 PA</span>
+                                        <div className="flex gap-2">
+                                            <span className="flex items-center gap-1 text-neon-yellow text-[10px] font-bold" title="Custo de Vontade">
+                                                <i className="fa-solid fa-brain text-[9px]"></i> 5
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-pink/10 border border-neon-pink/20 group-hover:shadow-[0_0_10px_rgba(214,51,255,0.3)] transition-all">
+                                            <i className="fa-solid fa-shield-halved text-2xl text-neon-pink"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">ESCUDO PROTETOR</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Conjura uma barreira translúcida que absorve os próximos 10 pontos de dano físico.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="space-y-4">
+                                <div className="flex items-center gap-3 mb-4">
+                                    <div className="w-2 h-6 bg-neon-yellow shadow-neon-yellow"></div>
+                                    <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Talentos Passivos</h2>
+                                </div>
+
+                                <div className="group relative bg-white/5 border border-white/10 hover:border-neon-yellow/50 rounded-xl p-5 transition-all duration-300">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-yellow/20 text-neon-yellow text-[10px] font-bold border border-neon-yellow/30 rounded uppercase">Passiva</span>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-yellow/10 border border-neon-yellow/20 group-hover:shadow-[0_0_10px_rgba(242,255,0,0.3)] transition-all">
+                                            <i className="fa-solid fa-gavel text-2xl text-neon-yellow"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">MESTRE DE ARMAS</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Adiciona +2 em jogadas de ataque com armas pesadas ou de haste.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative bg-white/5 border border-white/10 hover:border-neon-yellow/50 rounded-xl p-5 transition-all duration-300">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-yellow/20 text-neon-yellow text-[10px] font-bold border border-neon-yellow/30 rounded uppercase">Passiva</span>
+                                        <div className="flex gap-2">
+                                            <span className="flex items-center gap-1 text-neon-purple text-[10px] font-bold" title="Custo de Foco">
+                                                <i className="fa-solid fa-bolt text-[9px]"></i> 1
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-yellow/10 border border-neon-yellow/20 group-hover:shadow-[0_0_10px_rgba(242,255,0,0.3)] transition-all">
+                                            <i className="fa-solid fa-ear-listen text-2xl text-neon-yellow"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">SENTIDOS AGUÇADOS</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Vantagem em testes de Percepção baseados em audição ou olfato.</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="group relative bg-white/5 border border-white/10 hover:border-neon-yellow/50 rounded-xl p-5 transition-all duration-300">
+                                    <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
+                                        <span className="px-2 py-0.5 bg-neon-yellow/20 text-neon-yellow text-[10px] font-bold border border-neon-yellow/30 rounded uppercase">Passiva</span>
+                                        <div className="flex gap-2">
+                                            <span className="flex items-center gap-1 text-neon-yellow text-[10px] font-bold" title="Custo de Vontade">
+                                                <i className="fa-solid fa-brain text-[9px]"></i> 2
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-start gap-4">
+                                        <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-neon-yellow/10 border border-neon-yellow/20 group-hover:shadow-[0_0_10px_rgba(242,255,0,0.3)] transition-all">
+                                            <i className="fa-solid fa-head-side-virus text-2xl text-neon-yellow"></i>
+                                        </div>
+                                        <div className="flex-grow pr-16">
+                                            <h3 className="font-display text-white font-bold tracking-wider mb-1">RESILIÊNCIA MENTAL</h3>
+                                            <p className="text-sm text-gray-400 leading-relaxed">Sua mente é um forte. Imune a efeitos de medo mundanos e resistência a dano psíquico.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    {viewingSkill && (
+                        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                            <div className="relative w-full max-w-2xl glass-card border border-white/10 rounded-3xl overflow-hidden shadow-2xl">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyber-pink to-transparent opacity-50"></div>
+                                <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10">
+                                    <div className="flex items-center gap-5">
+                                        <div className="w-16 h-16 rounded-2xl bg-cyber-pink/10 border border-cyber-pink/40 flex items-center justify-center text-cyber-pink shadow-[0_0_20px_rgba(224,38,255,0.2)]">
+                                            <span className="material-symbols-outlined text-4xl">flare</span>
+                                        </div>
+                                        <div>
+                                            <h2 className="text-3xl font-display font-bold uppercase tracking-wider text-white">Explosão Arcana</h2>
+                                            <div className="flex flex-wrap items-center gap-2 mt-1.5">
+                                                <span className="px-2.5 py-0.5 rounded-md bg-cyber-pink/20 border border-cyber-pink/40 text-[10px] font-bold text-cyber-pink uppercase tracking-widest">Habilidade Ativa</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button onClick={() => setViewingSkill(null)} className="p-2 hover:bg-white/5 rounded-full transition-colors group">
+                                        <span className="material-symbols-outlined text-slate-400 group-hover:text-white">close</span>
+                                    </button>
+                                </div>
+                                <div className="p-6 md:p-8 space-y-8 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                                    <div className="bg-white/5 border border-white/10 rounded-2xl p-5">
+                                        <p className="text-slate-300 leading-relaxed">
+                                            O conjurador canaliza energia pura do Éter, liberando-a em uma violenta onda de choque ao seu redor. A explosão ignora armaduras físicas convencionais e empurra inimigos pequenos para longe do centro do impacto.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className="p-6 bg-zinc-900/80 border-t border-white/10 flex justify-end gap-6">
+                                    <button onClick={() => setViewingSkill(null)} className="px-8 py-3 rounded-xl bg-cyber-pink hover:brightness-110 text-white font-bold text-sm shadow-lg shadow-cyber-pink/20 transition-all uppercase tracking-wide">
+                                        Ativar Habilidade
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+        const InventoryTab = () => {
+            const [editingItem, setEditingItem] = useState(null);
+
+            return (
+                <div className="animate-fade-in">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto min-h-[600px]">
+                        <article className="lg:col-span-8 glass-card rounded-xl border border-rpg-border flex overflow-hidden">
+                            <div className="w-10 md:w-12 border-r border-rpg-border flex flex-col justify-between items-center py-6 text-xs text-gray-500 font-mono tracking-widest select-none bg-opacity-60 bg-[#0f0f13]/60">
+                                <div className="writing-vertical-lr text-rpg-text font-bold text-lg mt-4">INVENTÁRIO</div>
+                                <div className="h-full w-[1px] bg-gray-800 my-4"></div>
+                                <div className="writing-vertical-lr text-gray-600 font-mono tracking-widest mb-4">EQUIPAMENTO VESTIDO</div>
+                            </div>
+                            <div className="flex-grow flex flex-col bg-transparent pl-2">
+                                <div className="flex flex-col md:flex-row justify-between items-center p-4 border-b border-rpg-border/50 bg-[#1a1a2e]/50">
+                                    <h2 className="text-lg font-bold text-white tracking-wide">INVENTÁRIO</h2>
+                                    <div className="flex items-center gap-3 mt-3 md:mt-0">
+                                        <div className="flex items-center bg-[#0f0f13] border border-rpg-border/60 rounded px-2 py-1 shadow-inner focus-within:border-rpg-gold focus-within:ring-1 focus-within:ring-rpg-gold/50 transition-all">
+                                            <label htmlFor="inv-gold" className="text-rpg-gold font-bold text-xs mr-2 font-mono">PO</label>
+                                            <input id="inv-gold" className="bg-transparent border-none p-0 w-16 text-right text-white text-sm font-mono focus:ring-0" type="number" defaultValue="1250" />
+                                        </div>
+                                        <div className="flex items-center bg-[#0f0f13] border border-rpg-border/60 rounded px-2 py-1 shadow-inner focus-within:border-gray-300 focus-within:ring-1 focus-within:ring-gray-300/50 transition-all">
+                                            <label htmlFor="inv-silver" className="text-gray-300 font-bold text-xs mr-2 font-mono">PP</label>
+                                            <input id="inv-silver" className="bg-transparent border-none p-0 w-10 text-right text-white text-sm font-mono focus:ring-0" type="number" defaultValue="45" />
+                                        </div>
+                                        <div className="flex items-center bg-[#0f0f13] border border-rpg-border/60 rounded px-2 py-1 shadow-inner focus-within:border-orange-500 focus-within:ring-1 focus-within:ring-orange-500/50 transition-all">
+                                            <label htmlFor="inv-copper" className="text-orange-500 font-bold text-xs mr-2 font-mono">PC</label>
+                                            <input id="inv-copper" className="bg-transparent border-none p-0 w-10 text-right text-white text-sm font-mono focus:ring-0" type="number" defaultValue="20" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="flex-grow overflow-y-auto custom-scrollbar p-2">
+                                    <table className="w-full text-left border-collapse">
+                                        <thead className="text-[10px] uppercase text-gray-500 font-semibold tracking-wider sticky top-0 bg-[#151520] z-10">
+                                            <tr>
+                                                <th className="p-2 w-8"></th>
+                                                <th className="p-2">Item</th>
+                                                <th className="p-2 text-center">Qtd.</th>
+                                                <th className="p-2 text-center">Usos</th>
+                                                <th className="p-2">Tipo</th>
+                                                <th className="p-2 text-right">Preço</th>
+                                                <th className="p-2 text-right">Peso</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody className="text-sm divide-y divide-gray-800">
+                                            <tr onClick={() => setEditingItem("Poção de Cura")} className="hover:bg-white/5 transition-colors cursor-pointer group">
+                                                <td className="p-2 text-center text-lg"><i className="fa-solid fa-flask text-rpg-pink"></i></td>
+                                                <td className="p-2 font-medium text-white group-hover:text-rpg-pink transition-colors">Poção de Cura</td>
+                                                <td className="p-2 text-center text-gray-400">x3</td>
+                                                <td className="p-2 text-center text-xs text-[#00ff99]">1/1</td>
+                                                <td className="p-2 text-xs text-[#aaaaaa]">Consumível</td>
+                                                <td className="p-2 text-right text-xs text-[#ffd700]">5 po</td>
+                                                <td className="p-2 text-right text-gray-400 text-xs">0.5kg</td>
+                                            </tr>
+                                            <tr onClick={() => setEditingItem("Pergaminho")} className="hover:bg-white/5 transition-colors group">
+                                                <td className="p-2 text-center text-lg"><i className="fa-solid fa-scroll text-rpg-gold"></i></td>
+                                                <td className="p-2 font-medium text-white group-hover:text-rpg-gold transition-colors">Pergaminho de Mísseis</td>
+                                                <td className="p-2 text-center text-gray-400">x2</td>
+                                                <td className="p-2 text-center text-xs text-[#ffd700]">3/3</td>
+                                                <td className="p-2 text-xs text-[#aaaaaa]">Consumível</td>
+                                                <td className="p-2 text-right text-xs text-[#ffd700]">15 po</td>
+                                                <td className="p-2 text-right text-gray-400 text-xs">0.1kg</td>
+                                            </tr>
+                                            <tr onClick={() => setEditingItem("Corda")} className="hover:bg-white/5 transition-colors group">
+                                                <td className="p-2 text-center text-lg"><i className="fa-solid fa-dharmachakra text-rpg-gold"></i></td>
+                                                <td className="p-2 font-medium text-white group-hover:text-yellow-200 transition-colors">Corda de Cânhamo</td>
+                                                <td className="p-2 text-center text-gray-400">x1</td>
+                                                <td className="p-2 text-center text-gray-600 text-xs">-</td>
+                                                <td className="p-2 text-xs text-[#aaaaaa]">Item</td>
+                                                <td className="p-2 text-right text-xs text-[#ffd700]">2 po</td>
+                                                <td className="p-2 text-right text-gray-400 text-xs">2kg</td>
+                                            </tr>
+                                            <tr onClick={() => setEditingItem("Adaga")} className="hover:bg-white/5 transition-colors cursor-pointer bg-white/[0.02] group">
+                                                <td className="p-2 text-center text-lg"><i className="fa-solid fa-khanda text-gray-300"></i></td>
+                                                <td className="p-2 font-medium text-white group-hover:text-rpg-purple transition-colors">Adaga</td>
+                                                <td className="p-2 text-center text-gray-400">x1</td>
+                                                <td className="p-2 text-center text-gray-600 text-xs">-</td>
+                                                <td className="p-2 text-xs text-[#aaaaaa]">Arma</td>
+                                                <td className="p-2 text-right text-xs text-[#ffd700]">10 po</td>
+                                                <td className="p-2 text-right text-gray-400 text-xs">1kg</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="p-4 bg-[#1a1a2e]/80 border-t border-rpg-border mt-auto">
+                                    <div className="flex justify-between text-xs text-gray-400 mb-1">
+                                        <span>Carga Atual</span>
+                                        <span className="text-white font-mono">PESO: 35 / 100 kg</span>
+                                    </div>
+                                    <div className="w-full bg-gray-800 rounded-full h-2 relative">
+                                        <div className="absolute top-0 left-0 h-full w-[35%] bg-gradient-to-r from-rpg-purple to-rpg-pink rounded-full"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+
+                        <div className="lg:col-span-4 flex flex-col gap-6 h-full">
+                            <article className="glass-card rounded-xl border border-rpg-border flex flex-col p-6 flex-1">
+                                <h2 className="text-lg font-bold text-white tracking-wide mb-4 border-b border-gray-700/50 pb-2">NOTAS E BIOGRAFIA</h2>
+                                <div className="text-sm text-gray-400 leading-relaxed font-sans space-y-4 overflow-y-auto custom-scrollbar pr-2 h-64 lg:h-auto">
+                                    <p className="first-letter:float-left first-letter:mr-2 first-letter:text-rpg-gold first-letter:font-bold first-letter:text-5xl">
+                                        Sampte journal journale consolera antu es mesines notes homes: tidibn o o neromenho que rnas som sela se sua conselda: Ile previdde inovelar ose oereceexreie em de doer pore den oioerate e questa.
+                                    </p>
+                                    <div className="pl-3 border-l-2 border-rpg-purple">
+                                        <h4 className="text-white font-semibold mb-1">Questes notas:</h4>
+                                        <ul className="list-disc list-inside space-y-1 marker:text-rpg-purple">
+                                            <li>Parer otuctanh o datos ouos intterforim pelo chartender als aofho.</li>
+                                            <li>Imparwceo peta na rontiura Comostia...</li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h4 className="text-white font-semibold mb-1">Moteras:</h4>
+                                        <p>~ Agia esscquesta notoc ando pofice de telers una armadura e um inlite lioco que seris andores paramente de fontraitos.</p>
+                                    </div>
+                                </div>
+                            </article>
+                            <article className="glass-card rounded-xl border border-rpg-border flex flex-col p-6 flex-1">
+                                <div className="flex items-center justify-between mb-4 border-b border-gray-700/50 pb-2">
+                                    <h2 className="text-lg font-bold text-white tracking-wide">PECULIARIDADES</h2>
+                                    <button className="text-rpg-muted hover:text-white transition-colors">
+                                        <i className="fa-solid fa-plus text-xs border border-rpg-muted p-1 rounded hover:border-white"></i>
+                                    </button>
+                                </div>
+                                <div className="overflow-y-auto custom-scrollbar pr-2 flex-grow">
+                                    <ul className="space-y-3">
+                                        <li className="flex items-center justify-between group bg-white/5 p-2 rounded border border-transparent hover:border-rpg-purple/30 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <i className="fa-solid fa-fingerprint text-rpg-purple text-opacity-80"></i>
+                                                <span className="text-sm font-medium text-gray-200">Sentidos Aguçados</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-[#00ff99] bg-[#00ff99]/10 px-2 py-0.5 rounded border border-[#00ff99]/20">+2</span>
+                                        </li>
+                                        <li className="flex items-center justify-between group bg-white/5 p-2 rounded border border-transparent hover:border-rpg-pink/30 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <i className="fa-solid fa-ghost text-rpg-pink text-opacity-80"></i>
+                                                <span className="text-sm font-medium text-gray-200">Fobia de Escuro</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-red-400 bg-red-400/10 px-2 py-0.5 rounded border border-red-400/20">-3</span>
+                                        </li>
+                                        <li className="flex items-center justify-between group bg-white/5 p-2 rounded border border-transparent hover:border-rpg-gold/30 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <i className="fa-solid fa-book-open text-rpg-gold text-opacity-80"></i>
+                                                <span className="text-sm font-medium text-gray-200">Memória Eidética</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-[#00ff99] bg-[#00ff99]/10 px-2 py-0.5 rounded border border-[#00ff99]/20">+4</span>
+                                        </li>
+                                        <li className="flex items-center justify-between group bg-white/5 p-2 rounded border border-transparent hover:border-rpg-purple/30 transition-all">
+                                            <div className="flex items-center gap-3">
+                                                <i className="fa-solid fa-link-slash text-gray-500"></i>
+                                                <span className="text-sm font-medium text-gray-200">Voto de Silêncio</span>
+                                            </div>
+                                            <span className="text-sm font-bold text-red-400 bg-red-400/10 px-2 py-0.5 rounded border border-red-400/20">-2</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </article>
+                        </div>
+                    </div>
+
+                    {editingItem && (
+                        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm">
+                            <div className="w-full max-w-2xl bg-rpg-panel border border-rpg-border rounded-2xl shadow-2xl overflow-hidden glass-card">
+                                <div className="p-6 border-b border-rpg-border flex justify-between items-center bg-gradient-to-r from-rpg-pink/10 to-transparent">
+                                    <h2 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+                                        <span className="text-rpg-pink">Editar Item:</span> {editingItem}
+                                    </h2>
+                                    <button onClick={() => setEditingItem(null)} className="text-rpg-muted hover:text-white transition-colors">
+                                        <span className="material-symbols-outlined">close</span>
+                                    </button>
+                                </div>
+                                <div className="p-8 space-y-8">
+                                    <div className="grid grid-cols-2 gap-6">
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] uppercase tracking-widest text-rpg-muted font-bold">Quantidade</label>
+                                            <div className="flex items-center bg-rpg-dark border border-rpg-border rounded-lg overflow-hidden h-10">
+                                                <input className="w-full bg-transparent border-none text-center text-white focus:ring-0 text-sm font-bold" type="number" defaultValue="1" />
+                                            </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <label className="text-[10px] uppercase tracking-widest text-rpg-muted font-bold">Peso (kg)</label>
+                                            <input className="w-full bg-rpg-dark border border-rpg-border rounded-lg text-white focus:ring-rpg-pink h-10 text-sm pl-3 pr-8" step="0.1" type="number" defaultValue="0.5" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="p-6 bg-[#0d0d12] border-t border-rpg-border flex flex-col md:flex-row justify-between gap-4">
+                                    <button className="flex items-center justify-center gap-2 text-red-500 hover:text-white hover:bg-red-500/20 px-6 py-2.5 rounded-lg border border-red-500/30 transition-all font-semibold uppercase text-xs tracking-widest order-2 md:order-1">
+                                        <span className="material-symbols-outlined text-sm">delete</span> Excluir
+                                    </button>
+                                    <div className="flex gap-3 order-1 md:order-2">
+                                        <button onClick={() => setEditingItem(null)} className="px-6 py-2.5 rounded-lg text-rpg-muted hover:text-white transition-colors uppercase text-xs font-bold tracking-widest">Cancelar</button>
+                                        <button onClick={() => setEditingItem(null)} className="bg-gradient-to-r from-rpg-pink to-rpg-purple text-white px-8 py-2.5 rounded-lg font-bold shadow-lg shadow-rpg-pink/20 hover:shadow-rpg-pink/40 hover:scale-[1.02] transition-all uppercase text-xs tracking-widest">Salvar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        };
+
+
+        // --- App Root ---
+
+        const App = () => {
+            const [activeTab, setActiveTab] = useState('attributes');
+
+            return (
+                <div className="max-w-7xl mx-auto p-4 md:p-8">
+                    <Header />
+                    <StatsGrid />
+                    <Navigation activeTab={activeTab} onTabChange={setActiveTab} />
+
+                    <div className="min-h-[600px]">
+                        {activeTab === 'attributes' && <AttributesTab />}
+                        {activeTab === 'combat' && <CombatTab />}
+                        {activeTab === 'skills' && <SkillsTab />}
+                        {activeTab === 'inventory' && <InventoryTab />}
+                    </div>
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyber-Fantasy Character Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'cyber-dark': '#0d0d10',
+                        'cyber-panel': '#16161c',
+                        'neon-pink': '#ff00ff',
+                        'neon-yellow': '#ffff00',
+                        'neon-purple': '#bf00ff',
+                        'neon-blue': '#00f3ff',
+                    },
+                    fontFamily: {
+                        sans: ['Segoe UI', 'Roboto', 'Helvetica', 'Arial', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+            background-color: #0d0d10;
+            color: #e2e8f0;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+        .text-glow-pink {
+            text-shadow: 0 0 5px rgba(255, 0, 255, 0.6);
+        }
+        .text-glow-yellow {
+            text-shadow: 0 0 5px rgba(255, 255, 0, 0.6);
+        }
+        .box-glow-pink {
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.3), inset 0 0 5px rgba(255, 0, 255, 0.1);
+        }
+        .nav-item.active {
+            color: #ff00ff;
+            border-bottom-color: #ff00ff;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+            box-shadow: 0 4px 10px -4px rgba(255, 0, 255, 0.4);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0d10; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #333; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #555; 
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen p-4 md:p-8 relative">
+<div class="absolute top-4 left-4 z-50 hidden md:block">
+<button class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-neon-pink text-neon-pink text-xs font-bold uppercase tracking-wider hover:bg-neon-pink hover:text-black transition-all shadow-[0_0_10px_rgba(255,0,255,0.3)] bg-cyber-dark/80 backdrop-blur-sm">
+<i class="fa-solid fa-lock-open text-xs"></i>
+    Editar Ficha
+</button>
+</div>
+<div class="max-w-7xl mx-auto space-y-8 mt-8 md:mt-0" data-purpose="main-container">
+<header class="relative flex flex-col md:flex-row items-center gap-6 md:gap-8 bg-cyber-panel/50 p-6 rounded-xl border border-white/5 backdrop-blur-sm">
+<div class="absolute top-4 right-4 z-10 md:hidden">
+<button class="flex items-center justify-center w-8 h-8 rounded-full border border-neon-pink text-neon-pink hover:bg-neon-pink hover:text-black transition-all shadow-[0_0_10px_rgba(255,0,255,0.3)]">
+<i class="fa-solid fa-lock-open text-xs"></i>
+</button>
+</div>
+<div class="relative shrink-0 mt-6 md:mt-0" data-purpose="avatar-container">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-[#ff00ff] p-1 shadow-[0_0_15px_#ff00ff] bg-cyber-dark overflow-hidden relative">
+<img alt="Character Avatar" class="w-full h-full object-cover rounded-full opacity-90 hover:opacity-100 transition-opacity duration-300" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_7kbNI0gxuzw53MIeiZ79uR-fekQeIJyhK4xiOEd4qlb1TrfE5OI_PiA3QUHRsg3R2sSxYDNt5R4RF-oRvaPBtGuWrSI5aFE7rCTGcACJ5BUGE0sqJW3FaDnTKUAnCZuu_VxoF2ndzGeY4ePjsF3PJR53PYJnGy72DlkWGzKiApoWPXqzKSxyXAxMB0UkSEUPnx9MBc1F9ewwSTcIlSm4JQb72h9Zn3HRVy9svZosR6vwTUGSwWQ-UHCYlj6ZMGB4MgrFCoNCUyM"/>
+<div class="absolute inset-0 rounded-full bg-gradient-to-tr from-transparent via-white/10 to-transparent pointer-events-none"></div>
+</div>
+</div>
+<div class="flex-grow w-full text-center md:text-left space-y-3">
+<div class="flex flex-col md:flex-row md:items-end gap-2 md:gap-4 justify-center md:justify-start">
+<h1 class="text-3xl md:text-5xl font-bold uppercase tracking-wider text-white text-glow-pink">Aeliana, a Arconte</h1>
+<span class="text-xl font-mono text-neon-yellow text-glow-yellow mb-1">NÍVEL 5</span>
+</div>
+<div class="w-full space-y-1" data-purpose="xp-bar">
+<div class="flex justify-between text-xs text-gray-400 font-mono uppercase tracking-widest">
+<span>Experiência</span>
+<span>2450 / 5000 XP</span>
+</div>
+<div class="w-full h-3 bg-gray-800 rounded-full overflow-hidden border border-white/10 relative">
+<div class="h-full bg-gradient-to-r from-neon-pink via-purple-500 to-neon-yellow w-[65%] shadow-[0_0_10px_rgba(255,0,255,0.5)]"></div>
+</div>
+</div>
+<div class="flex gap-4 justify-center md:justify-start text-sm text-gray-400 mt-2">
+<span class="flex items-center gap-2"><i class="fa-solid fa-khanda text-neon-pink"></i> Paladino</span>
+<span class="flex items-center gap-2"><i class="fa-solid fa-dna text-neon-blue"></i> Humana</span>
+<span class="flex items-center gap-2"><i class="fa-solid fa-scale-balanced text-neon-yellow"></i> Leal Neutro</span>
+</div>
+</div>
+</header>
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4" id="stats">
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-ruler-vertical text-neon-blue"></i> TAM
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">12</div>
+</article>
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-heart text-red-500"></i> VIG
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">16</div>
+</article>
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-wind text-green-400"></i> DEX
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">18</div>
+</article>
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-brain text-neon-blue"></i> INT
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">20</div>
+</article>
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-eye text-neon-yellow"></i> INTUI
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">15</div>
+</article>
+<article class="bg-white/5 border border-[#333] p-4 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-[#ff00ff] transition-colors group relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gray-600 to-transparent group-hover:via-neon-pink transition-all"></div>
+<div class="text-gray-400 text-xs uppercase tracking-widest font-bold flex items-center gap-2">
+<i class="fa-solid fa-crown text-neon-purple"></i> PRE
+                </div>
+<div class="text-3xl font-bold text-white group-hover:text-neon-pink transition-colors">14</div>
+</article>
+</section>
+<nav class="border-b border-white/10 sticky top-0 bg-cyber-dark/95 backdrop-blur z-20">
+<ul class="flex overflow-x-auto no-scrollbar gap-8">
+<li class="shrink-0">
+<a class="nav-item active block py-4 text-sm font-bold tracking-widest uppercase border-b-2 border-transparent hover:text-white transition-all" href="#">
+                        Atributos &amp; Perícias
+                    </a>
+</li>
+<li class="shrink-0">
+<a class="nav-item block py-4 text-sm font-bold tracking-widest uppercase border-b-2 border-transparent text-gray-500 hover:text-white transition-all" href="#">
+                        Combate &amp; Defesa
+                    </a>
+</li>
+<li class="shrink-0">
+<a class="nav-item block py-4 text-sm font-bold tracking-widest uppercase border-b-2 border-transparent text-gray-500 hover:text-white transition-all" href="#">
+                        Habilidades &amp; Talentos
+                    </a>
+</li>
+<li class="shrink-0">
+<a class="nav-item block py-4 text-sm font-bold tracking-widest uppercase border-b-2 border-transparent text-gray-500 hover:text-white transition-all" href="#">
+                        Inventário &amp; Notas
+                    </a>
+</li>
+</ul>
+</nav>
+<main class="grid grid-cols-1 md:grid-cols-2 gap-8 pb-12">
+<section data-purpose="card-weapons">
+<div class="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(241,196,15,0.1)] border-[#f1c40f]/40 h-full">
+<h2 class="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+<i class="fa-solid fa-crosshairs"></i> Armas
+                    </h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-bow-arrow"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Arqueirismo</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-bullseye"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Atirar</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-staff-snake"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Haste</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+<span class="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-khanda"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Lâminas</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-hammer"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Pesadas</div>
+<span class="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-bolt"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Rápidas</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#f1c40f] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section data-purpose="card-tech">
+<div class="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(0,229,255,0.1)] border-[#00e5ff]/40 h-full">
+<h2 class="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+<i class="fa-solid fa-microchip"></i> Técnicas
+                    </h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-toolbox"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Aparatos</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-bullseye"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Arremesso</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">TAM</span>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-person-running"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Atletismo</div>
+<span class="text-[10px] bg-[#e74c3c] text-white px-1 rounded font-mono uppercase font-bold">VIG</span>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-user-ninja"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Furtividade</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-hand-fist"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Luta</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">TAM</span>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="text-[#00e5ff] w-4 text-center"><i class="fa-solid fa-wand-sparkles"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Prestidigitação</div>
+<span class="text-[10px] bg-[#2ecc71] text-black px-1 rounded font-mono uppercase font-bold">DEX</span>
+</div>
+<div class="flex gap-1 text-[#00e5ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section data-purpose="card-knowledge">
+<div class="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(155,89,182,0.1)] border-[#9b59b6]/40 h-full">
+<h2 class="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+<i class="fa-solid fa-book"></i> Conhecimentos
+                    </h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-flask"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Alquimia</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-hat-wizard"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Arcana</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-mountain-sun"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Escotismo</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+<span class="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-scroll"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">História</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-magnifying-glass"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Investigação</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="text-[#9b59b6] w-4 text-center"><i class="fa-solid fa-briefcase-medical"></i></div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Medicina</div>
+<span class="text-[10px] bg-[#3498db] text-white px-1 rounded font-mono uppercase font-bold">INT</span>
+<span class="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#9b59b6] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+</ul>
+</div>
+</section>
+<section data-purpose="card-social">
+<div class="bg-cyber-panel/40 rounded-xl p-5 border shadow-[0_0_15px_rgba(255,0,255,0.1)] border-[#ff00ff]/40 h-full">
+<h2 class="text-[#ff00ff] font-bold uppercase tracking-wider mb-6 flex items-center gap-2 border-b border-white/10 pb-2">
+<i class="fa-solid fa-comments"></i> Sociais
+                    </h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-mask"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Dissimular</div>
+<span class="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-paw"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Empatia Feral</div>
+<span class="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-user-secret"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Inuendo</div>
+<span class="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+<span class="text-[10px] bg-[#f1c40f] text-black px-1 rounded font-mono uppercase font-bold">INTUI</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-skull"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Intimidação</div>
+<span class="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-masks-theater"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Performance</div>
+<span class="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-regular fa-diamond opacity-30"></i><i class="fa-regular fa-diamond opacity-30"></i>
+</div>
+</li>
+<li class="flex items-center justify-between group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-colors">
+<i class="fa-solid fa-handshake"></i>
+</div>
+<div class="flex items-center gap-2">
+<div class="text-sm font-bold text-gray-200">Persuasão</div>
+<span class="text-[10px] bg-[#9b59b6] text-white px-1 rounded font-mono uppercase font-bold">PRE</span>
+</div>
+</div>
+<div class="flex gap-1 text-[#ff00ff] text-xs">
+<i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i><i class="fa-solid fa-diamond"></i>
+</div>
+</li>
+</ul>
+</div>
+</section>
+</main>
+</div>
+</body></html>

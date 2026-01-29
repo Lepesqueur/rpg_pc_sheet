@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyberpunk RPG Dashboard - Combat &amp; Defense</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,FILL@0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Rajdhani', 'sans-serif'],
+              },
+              colors: {
+                cyber: {
+                  bg: '#050505',
+                  card: '#13131f',
+                  pink: '#ff0099',
+                  purple: '#bd00ff',
+                  yellow: '#ffd700',
+                  green: '#39ff14',
+                  red: '#ff3131',
+                  cyan: '#00f3ff',
+                  gray: '#888899'
+                }
+              },
+              boxShadow: {
+                'neon-pink': '0 0 5px #ff0099, 0 0 10px #ff0099',
+                'neon-purple': '0 0 5px #bd00ff, 0 0 10px #bd00ff',
+                'neon-yellow': '0 0 5px #ffd700, 0 0 10px #ffd700',
+                'neon-green': '0 0 5px #39ff14, 0 0 10px #39ff14',
+                'neon-red': '0 0 5px #ff3131, 0 0 10px #ff3131',
+                'neon-cyan': '0 0 5px #00f3ff, 0 0 10px #00f3ff',
+              }
+            }
+          }
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+          background-color: #0b0b0f;
+          background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+          color: white;
+        }
+        .glass-card {
+          background: rgba(19, 19, 31, 0.7);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .text-glow-pink { text-shadow: 0 0 8px #ff007f; }
+        .text-glow-purple { text-shadow: 0 0 8px #7f00ff; }
+        .text-glow-yellow { text-shadow: 0 0 8px #ffd700; }
+        .text-glow-green { text-shadow: 0 0 8px #39ff14; }
+        .text-glow-cyan { text-shadow: 0 0 8px #00f3ff; }
+        .text-glow-red { text-shadow: 0 0 8px #ff3131; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .bg-scanline {
+          background-color: #0b0b0f;
+          background-image: 
+            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+          background-size: 100% 3px, 6px 100%;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+            opacity: 1;
+            cursor: pointer;
+            filter: invert(1) hue-rotate(180deg) brightness(2);
+        }
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 antialiased selection:bg-cyber-pink selection:text-white bg-scanline overflow-hidden">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 modal-backdrop">
+<div class="glass-card w-full max-w-2xl rounded-2xl overflow-hidden border-2 border-cyber-yellow shadow-neon-yellow relative flex flex-col">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-yellow via-cyber-cyan to-cyber-yellow opacity-80"></div>
+<header class="p-6 border-b border-white/10 flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-cyber-yellow/10 flex items-center justify-center border border-cyber-yellow/30 shadow-neon-yellow">
+<i class="fa-solid fa-shield-halved text-2xl text-cyber-yellow"></i>
+</div>
+<div>
+<h2 class="text-2xl font-bold text-white tracking-wider uppercase italic">Editar Armadura</h2>
+<p class="text-cyber-yellow font-mono text-sm uppercase tracking-widest">Colete de Kevlar</p>
+</div>
+</div>
+<button class="text-cyber-gray hover:text-white transition-colors">
+<i class="fa-solid fa-xmark text-xl"></i>
+</button>
+</header>
+<form class="p-6 space-y-6 overflow-y-auto max-h-[70vh]">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-[10px] text-cyber-cyan font-bold uppercase tracking-widest pl-1">Nome da Armadura</label>
+<input class="w-full bg-black/40 border border-white/20 rounded-lg py-2 px-4 text-white focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan outline-none transition-all font-medium" type="text" value="Colete de Kevlar"/>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] text-cyber-cyan font-bold uppercase tracking-widest pl-1">Tipo</label>
+<select class="w-full bg-black/40 border border-white/20 rounded-lg py-2 px-4 text-white focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan outline-none transition-all font-medium">
+<option selected="">Leve</option>
+<option>Média</option>
+<option>Pesada</option>
+</select>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-[10px] text-cyber-cyan font-bold uppercase tracking-widest pl-1">Bônus de Reflexo</label>
+<input class="w-full bg-black/40 border border-white/20 rounded-lg py-2 px-4 text-white focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan outline-none transition-all font-mono" type="number" value="0"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-[10px] text-cyber-cyan font-bold uppercase tracking-widest pl-1">Propriedade</label>
+<textarea class="w-full bg-black/40 border border-white/20 rounded-lg py-3 px-4 text-white focus:border-cyber-cyan focus:ring-1 focus:ring-cyber-cyan outline-none transition-all font-medium h-24 resize-none" placeholder="Insira as propriedades especiais aqui...">Reduz o dano de projéteis de baixo calibre em 1 ponto adicional.</textarea>
+</div>
+<div class="bg-cyber-yellow/5 border border-cyber-yellow/20 rounded-xl p-6">
+<h3 class="text-cyber-yellow text-xs font-bold tracking-[0.3em] uppercase mb-6 flex items-center gap-2">
+<i class="fa-solid fa-bolt text-[10px]"></i> Proteção
+                </h3>
+<div class="grid grid-cols-2 gap-8">
+<div class="flex flex-col items-center gap-3">
+<label class="text-[10px] text-cyber-gray font-bold uppercase tracking-widest">Máxima</label>
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 rounded-full border border-cyber-yellow/40 flex items-center justify-center text-cyber-yellow hover:bg-cyber-yellow/20 transition-all" type="button">
+<i class="fa-solid fa-minus text-xs"></i>
+</button>
+<input class="w-20 bg-transparent text-center text-4xl font-bold text-white border-none focus:ring-0 p-0 font-mono text-glow-yellow" type="number" value="4"/>
+<button class="w-8 h-8 rounded-full border border-cyber-yellow/40 flex items-center justify-center text-cyber-yellow hover:bg-cyber-yellow/20 transition-all" type="button">
+<i class="fa-solid fa-plus text-xs"></i>
+</button>
+</div>
+</div>
+<div class="flex flex-col items-center gap-3">
+<label class="text-[10px] text-cyber-gray font-bold uppercase tracking-widest">Atual</label>
+<div class="flex items-center gap-4">
+<button class="w-8 h-8 rounded-full border border-cyber-yellow/40 flex items-center justify-center text-cyber-yellow hover:bg-cyber-yellow/20 transition-all" type="button">
+<i class="fa-solid fa-minus text-xs"></i>
+</button>
+<input class="w-20 bg-transparent text-center text-4xl font-bold text-white border-none focus:ring-0 p-0 font-mono text-glow-yellow" type="number" value="4"/>
+<button class="w-8 h-8 rounded-full border border-cyber-yellow/40 flex items-center justify-center text-cyber-yellow hover:bg-cyber-yellow/20 transition-all" type="button">
+<i class="fa-solid fa-plus text-xs"></i>
+</button>
+</div>
+</div>
+</div>
+</div>
+</form>
+<footer class="p-6 bg-black/40 flex flex-col md:flex-row gap-4 justify-between border-t border-white/5">
+<button class="px-6 py-3 rounded-lg border border-cyber-red/50 text-cyber-red font-bold uppercase tracking-widest text-xs hover:bg-cyber-red hover:text-white transition-all order-2 md:order-1 flex items-center justify-center gap-2">
+<i class="fa-solid fa-trash-can"></i> Excluir Armadura
+            </button>
+<div class="flex flex-col md:flex-row gap-4 order-1 md:order-2">
+<button class="px-8 py-3 rounded-lg bg-cyber-yellow text-black font-bold uppercase tracking-widest text-xs shadow-neon-yellow hover:brightness-110 transition-all flex items-center justify-center gap-2">
+<i class="fa-solid fa-check"></i> Salvar Alterações
+                </button>
+</div>
+</footer>
+</div>
+</div>
+<main class="max-w-7xl mx-auto space-y-6 blur-md pointer-events-none select-none">
+<header class="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+<div class="relative shrink-0 group">
+<div class="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+<img alt="Aeliana Portrait" class="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"/>
+</div>
+<div class="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
+<h1 class="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase">Aeliana, a Arconte</h1>
+<div class="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4">Nível <span class="text-white">5</span></div>
+<div class="w-full max-w-md mx-auto md:mx-0">
+<div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow w-3/4 shadow-[0_0_10px_#ff007f]"></div>
+</div>
+<div class="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
+<span>XP: 14500</span>
+<span>NEXT: 18000</span>
+</div>
+</div>
+</div>
+</header>
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+<i class="fa-solid fa-mountain text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Tamanho</span>
+<span class="font-bold text-white text-5xl">12</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+<i class="fa-solid fa-heart text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Vigor</span>
+<span class="font-bold text-white text-5xl">16</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+<i class="fa-solid fa-location-arrow text-2xl text-cyber-purple mb-2 rotate-45 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Destreza</span>
+<span class="font-bold text-white text-5xl">18</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+<i class="fa-solid fa-brain text-2xl text-cyber-purple mb-2 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intelecto</span>
+<span class="font-bold text-white text-5xl">20</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+<i class="fa-solid fa-eye text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intuição</span>
+<span class="font-bold text-white text-5xl">15</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+<i class="fa-regular fa-star text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Presença</span>
+<span class="font-bold text-white text-5xl">14</span>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
+<div class="lg:col-span-12">
+<div class="border border-white/10 rounded-xl p-4">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow">Armaduras</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
+<tr>
+<th class="pb-2 font-semibold">Nome da Armadura</th>
+<th class="pb-2 font-semibold text-center w-20">MÁX</th>
+<th class="pb-2 font-semibold text-center w-24">ATUAL</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="group hover:bg-white/5 transition-colors cursor-pointer">
+<td class="py-3 flex items-center gap-3">
+<i class="fa-solid fa-shield-halved text-cyber-yellow text-xs"></i>
+<span class="font-bold text-white">Colete de Kevlar</span>
+</td>
+<td class="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">4</td>
+<td class="py-3 text-center">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>

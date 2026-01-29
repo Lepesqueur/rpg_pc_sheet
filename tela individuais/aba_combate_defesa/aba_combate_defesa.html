@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Cyberpunk RPG Dashboard - Combat &amp; Defense</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,FILL@0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['Rajdhani', 'sans-serif'],
+              },
+              colors: {
+                cyber: {
+                  bg: '#050505',
+                  card: '#13131f',
+                  pink: '#ff0099',
+                  purple: '#bd00ff',
+                  yellow: '#ffd700',
+                  green: '#39ff14',
+                  red: '#ff3131',
+                  gray: '#888899'
+                }
+              },
+              boxShadow: {
+                'neon-pink': '0 0 5px #ff0099, 0 0 10px #ff0099',
+                'neon-purple': '0 0 5px #bd00ff, 0 0 10px #bd00ff',
+                'neon-yellow': '0 0 5px #ffd700, 0 0 10px #ffd700',
+                'neon-green': '0 0 5px #39ff14, 0 0 10px #39ff14',
+                'neon-red': '0 0 5px #ff3131, 0 0 10px #ff3131',
+              }
+            }
+          }
+        }
+    </script>
+<style type="text/tailwindcss">
+        body {
+          background-color: #0b0b0f;
+          background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+          color: white;
+        }
+        .glass-card {
+          background: rgba(19, 19, 31, 0.7);
+          backdrop-filter: blur(10px);
+          -webkit-backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+        }
+        .text-glow-pink { text-shadow: 0 0 8px #ff007f; }
+        .text-glow-purple { text-shadow: 0 0 8px #7f00ff; }
+        .text-glow-yellow { text-shadow: 0 0 8px #ffd700; }
+        .text-glow-green { text-shadow: 0 0 8px #39ff14; }
+        .text-glow-red { text-shadow: 0 0 8px #ff3131; }
+        .radial-chart {
+          position: relative;
+          display: inline-block;
+          width: 90px;
+          height: 90px;
+          border-radius: 50%;
+          background: radial-gradient(closest-side, #13131f 85%, transparent 86% 100%),
+                      conic-gradient(var(--chart-color) var(--chart-percent), #2d2d3d 0);
+        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        .bg-scanline {
+          background-color: #0b0b0f;
+          background-image: 
+            linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%),
+            linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+          background-size: 100% 3px, 6px 100%;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .condition-badge {
+            @apply px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all duration-300 cursor-pointer;
+        }
+        .condition-pink {
+            @apply bg-cyber-pink/20 border border-cyber-pink/50 text-cyber-pink shadow-[0_0_10px_rgba(255,0,153,0.3)] hover:shadow-[0_0_15px_rgba(255,0,153,0.6)];
+        }
+        .condition-purple {
+            @apply bg-cyber-purple/20 border border-cyber-purple/50 text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.3)] hover:shadow-[0_0_15px_rgba(189,0,255,0.6)];
+        }
+        .condition-yellow {
+            @apply bg-cyber-yellow/20 border border-cyber-yellow/50 text-cyber-yellow shadow-[0_0_10px_rgba(255,215,0,0.3)] hover:shadow-[0_0_15px_rgba(255,215,0,0.6)];
+        }input[type='number']::-webkit-inner-spin-button,
+        input[type='number']::-webkit-outer-spin-button {
+            opacity: 1;
+            cursor: pointer;
+            filter: invert(1) hue-rotate(180deg) brightness(2);
+        }
+    </style>
+</head>
+<body class="min-h-screen p-4 md:p-8 antialiased selection:bg-cyber-pink selection:text-white bg-scanline">
+<main class="max-w-7xl mx-auto space-y-6">
+<header class="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden">
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+<div class="relative shrink-0 group">
+<div class="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+<img alt="Aeliana Portrait" class="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"/>
+</div>
+<div class="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
+<h1 class="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase">Aeliana, a Arconte</h1>
+<div class="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4">Nível <span class="text-white">5</span></div>
+<div class="w-full max-w-md mx-auto md:mx-0">
+<div class="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+<div class="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow w-3/4 shadow-[0_0_10px_#ff007f]"></div>
+</div>
+<div class="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
+<span>XP: 14500</span>
+<span>NEXT: 18000</span>
+</div>
+</div>
+</div>
+<div class="absolute right-0 bottom-0 w-1/3 h-px bg-gradient-to-l from-cyber-purple to-transparent opacity-50"></div>
+</header>
+<section class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+<i class="fa-solid fa-mountain text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Tamanho</span>
+<span class="font-bold text-white text-5xl">12</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+<i class="fa-solid fa-heart text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Vigor</span>
+<span class="font-bold text-white text-5xl">16</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+<i class="fa-solid fa-location-arrow text-2xl text-cyber-purple mb-2 rotate-45 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Destreza</span>
+<span class="font-bold text-white text-5xl">18</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-purple/50">
+<i class="fa-solid fa-brain text-2xl text-cyber-purple mb-2 drop-shadow-[0_0_5px_rgba(127,0,255,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intelecto</span>
+<span class="font-bold text-white text-5xl">20</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-pink/50">
+<i class="fa-solid fa-eye text-2xl text-cyber-pink mb-2 drop-shadow-[0_0_5px_rgba(255,0,127,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Intuição</span>
+<span class="font-bold text-white text-5xl">15</span>
+</div>
+<div class="glass-card rounded-xl p-4 flex flex-col items-center justify-center border-t-2 border-t-cyber-yellow/50">
+<i class="fa-regular fa-star text-2xl text-cyber-yellow mb-2 drop-shadow-[0_0_5px_rgba(255,215,0,0.8)]"></i>
+<span class="text-xs text-cyber-gray tracking-wider mb-1 uppercase">Presença</span>
+<span class="font-bold text-white text-5xl">14</span>
+</div>
+</section>
+<nav class="flex overflow-x-auto border-b border-white/10 pb-1 space-x-8">
+<a class="px-2 py-3 text-sm font-semibold text-gray-400 hover:text-white transition-colors whitespace-nowrap" href="#">ATRIBUTOS &amp; PERÍCIAS</a>
+<a class="px-2 py-3 text-sm font-bold text-white border-b-2 border-cyber-pink transition-colors whitespace-nowrap relative" href="#">
+<span class="text-glow-pink">COMBATE &amp; DEFESA</span>
+<div class="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-cyber-pink to-transparent"></div>
+</a>
+<a class="px-2 py-3 text-sm font-semibold text-gray-400 hover:text-white transition-colors whitespace-nowrap" href="#">HABILIDADES &amp; TALENTOS</a>
+<a class="px-2 py-3 text-sm font-semibold text-gray-400 hover:text-white transition-colors whitespace-nowrap" href="#">INVENTÁRIO &amp; NOTAS</a>
+</nav>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
+<div class="lg:col-span-5 flex flex-col gap-6">
+<div class="border border-white/10 rounded-xl p-4 flex flex-col">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-pink">Ataques</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
+<tr>
+<th class="pb-2 font-semibold">Arma</th>
+<th class="pb-2 font-semibold text-center">AP</th>
+<th class="pb-2 font-semibold text-center">Recurso</th>
+<th class="pb-2 font-semibold text-center">Dano</th>
+<th class="pb-2 font-semibold text-center">Alcance</th>
+<th class="pb-2 font-semibold text-center">Desgaste</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="py-3 font-bold text-white group-hover:text-cyber-pink">Espada Longa</td>
+<td class="py-3 text-center text-cyber-yellow font-mono">3</td>
+<td class="py-3 text-center">
+<div class="flex items-center justify-center gap-1">
+<i class="fa-solid fa-heart text-[10px] text-cyber-pink"></i>
+<span class="text-white font-mono">2</span>
+</div>
+</td>
+<td class="py-3 text-center text-white font-mono">2d8+4</td>
+<td class="py-3 text-center text-gray-400">C.C.</td>
+<td class="py-3 text-center">
+<div class="flex gap-1 justify-center">
+<div class="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+<div class="w-2 h-2 rounded-full bg-gray-700"></div>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="py-3 font-bold text-white group-hover:text-cyber-pink">Arco Curto</td>
+<td class="py-3 text-center text-cyber-yellow font-mono">4</td>
+<td class="py-3 text-center">
+<div class="flex items-center justify-center gap-1">
+<i class="fa-solid fa-bolt-lightning text-[10px] text-cyber-purple"></i>
+<span class="text-white font-mono">5</span>
+</div>
+</td>
+<td class="py-3 text-center text-white font-mono">1d6+3</td>
+<td class="py-3 text-center text-gray-400 font-mono">18m</td>
+<td class="py-3 text-center">
+<div class="flex gap-1 justify-center">
+<div class="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+<div class="w-2 h-2 rounded-full bg-cyber-pink shadow-neon-pink"></div>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="py-3 font-bold text-white group-hover:text-cyber-pink">Adaga</td>
+<td class="py-3 text-center text-cyber-yellow font-mono">2</td>
+<td class="py-3 text-center">
+<div class="flex items-center justify-center gap-1">
+<i class="fa-solid fa-star text-[10px] text-cyber-yellow"></i>
+<span class="text-white font-mono">1</span>
+</div>
+</td>
+<td class="py-3 text-center text-white font-mono">1d4+3</td>
+<td class="py-3 text-center text-gray-400 font-mono">6m</td>
+<td class="py-3 text-center">
+<div class="flex gap-1 justify-center">
+<div class="w-2 h-2 rounded-full bg-gray-700"></div>
+<div class="w-2 h-2 rounded-full bg-gray-700"></div>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="border border-white/10 rounded-xl p-4 flex flex-col">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow">Armaduras</h3>
+<div class="overflow-x-auto">
+<table class="w-full text-left text-sm">
+<thead class="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
+<tr>
+<th class="pb-2 font-semibold">Nome da Armadura</th>
+<th class="pb-2 font-semibold text-center w-20">MÁX</th>
+<th class="pb-2 font-semibold text-center w-24">ATUAL</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-white/5">
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="py-3 flex items-center gap-3">
+<i class="fa-solid fa-shield-halved text-cyber-yellow text-xs"></i>
+<span class="font-bold text-white group-hover:text-cyber-yellow">Colete de Kevlar</span>
+</td>
+<td class="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">4</td>
+<td class="py-3 text-center">
+<div class="flex items-center justify-center gap-2">
+<input class="w-16 bg-cyber-yellow/10 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" value="4"/>
+</div>
+</td>
+</tr>
+<tr class="group hover:bg-white/5 transition-colors">
+<td class="py-3 flex items-center gap-3">
+<i class="fa-solid fa-mask text-cyber-yellow text-xs"></i>
+<span class="font-bold text-white group-hover:text-cyber-yellow">Elmo Neural</span>
+</td>
+<td class="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">2</td>
+<td class="py-3 text-center">
+<div class="flex items-center justify-center gap-2">
+<input class="w-16 bg-cyber-yellow/10 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" value="2"/>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<div class="lg:col-span-4 flex flex-col space-y-6 border border-white/10 rounded-xl p-4">
+<div class="space-y-4">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-purple">Defesas Primárias</h3>
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-purple/50 group">
+<i class="fa-solid fa-shield-halved text-2xl text-cyber-purple mb-1 group-hover:scale-110 transition-transform"></i>
+<span class="text-[10px] text-cyber-gray uppercase tracking-widest">Fortitude</span>
+<span class="text-3xl font-bold text-white">16</span>
+</div>
+<div class="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-pink/50 group">
+<i class="fa-solid fa-bolt-lightning text-2xl text-cyber-pink mb-1 group-hover:scale-110 transition-transform"></i>
+<span class="text-[10px] text-cyber-gray uppercase tracking-widest">Reflexo</span>
+<span class="text-3xl font-bold text-white">18</span>
+</div>
+<div class="glass-card p-4 rounded-lg flex flex-col items-center border-b-2 border-b-cyber-yellow/50 group">
+<i class="fa-solid fa-hand-fist text-2xl text-cyber-yellow mb-1 group-hover:scale-110 transition-transform"></i>
+<span class="text-[10px] text-cyber-gray uppercase tracking-widest">Tenacidade</span>
+<span class="text-3xl font-bold text-white">14</span>
+</div>
+</div>
+</div>
+<div class="space-y-4">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow">Resistências Especiais</h3>
+<div class="glass-card p-4 rounded-xl space-y-4">
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-cyber-purple text-sm">verified_user</span>
+<span class="text-[11px] font-bold text-cyber-purple uppercase tracking-tighter">Resistências</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+<i class="fa-solid fa-fire text-[10px]"></i> Fogo
+                            </span>
+<span class="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+<i class="fa-solid fa-gavel text-[10px]"></i> Físico
+                            </span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-cyber-red text-sm">warning</span>
+<span class="text-[11px] font-bold text-cyber-red uppercase tracking-tighter">Vulnerabilidades</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-cyber-red/10 border border-cyber-red/30 text-cyber-red px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+<i class="fa-solid fa-bolt text-[10px]"></i> Elétrico
+                            </span>
+</div>
+</div>
+<div class="space-y-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-cyber-green text-sm">security</span>
+<span class="text-[11px] font-bold text-cyber-green uppercase tracking-tighter">Imunidades</span>
+</div>
+<div class="flex flex-wrap gap-2">
+<span class="bg-cyber-green/10 border border-cyber-green/30 text-cyber-green px-2 py-1 rounded text-xs font-medium flex items-center gap-1">
+<i class="fa-solid fa-skull-crossbones text-[10px]"></i> Veneno
+                            </span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="lg:col-span-3 rounded-xl p-4 border relative border-white/10 flex flex-col h-full overflow-hidden">
+<h3 class="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-6 pl-3 border-l-4 border-cyber-yellow shrink-0">Status e Condições</h3>
+<div class="flex flex-col gap-8 items-center mb-6 overflow-y-auto pr-1">
+<div class="flex flex-col items-center gap-2 w-full shrink-0">
+<div class="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(255,0,127,0.2)]" style="--chart-color: #ff007f; --chart-percent: 80%;">
+<div class="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+<span class="text-lg font-bold text-white">80<span class="text-xs text-gray-500">/100</span></span>
+<span class="text-[9px] uppercase text-cyber-pink tracking-widest font-bold">Vitalidade</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-[10px] text-cyber-pink uppercase tracking-[0.2em] font-semibold">Ferida</span>
+<div class="flex gap-1">
+<div class="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-pink rounded-sm cursor-pointer hover:bg-cyber-pink/20 transition-colors"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 w-full shrink-0">
+<div class="radial-chart flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(127,0,255,0.2)]" style="--chart-color: #7f00ff; --chart-percent: 90%;">
+<div class="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+<span class="text-lg font-bold text-white">45<span class="text-xs text-gray-500">/50</span></span>
+<span class="text-[9px] uppercase text-cyber-purple tracking-widest font-bold">Foco</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-[10px] text-cyber-purple uppercase tracking-[0.2em] font-semibold">Fadiga</span>
+<div class="flex gap-1">
+<div class="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-purple rounded-sm cursor-pointer hover:bg-cyber-purple/20 transition-colors"></div>
+</div>
+</div>
+</div>
+<div class="flex flex-col items-center gap-2 w-full shrink-0">
+<div class="radial-chart flex items-center justify-center shrink-0 shadow-neon-yellow" style="--chart-color: #ffd700; --chart-percent: 70%;">
+<div class="absolute inset-[6px] bg-[#13131f] rounded-full flex flex-col items-center justify-center z-10">
+<span class="text-lg font-bold text-white text-glow-yellow">28<span class="text-xs text-gray-500">/40</span></span>
+<span class="text-[9px] uppercase text-cyber-yellow tracking-widest font-bold">Vontade</span>
+</div>
+</div>
+<div class="flex flex-col items-center gap-1">
+<span class="text-[10px] text-cyber-yellow uppercase tracking-[0.2em] font-semibold">Trauma</span>
+<div class="flex gap-1">
+<div class="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+<div class="w-4 h-4 border border-cyber-yellow shadow-[0_0_5px_rgba(255,215,0,0.5)] rounded-sm cursor-pointer hover:bg-cyber-yellow/20 transition-colors"></div>
+</div>
+</div>
+</div>
+</div>
+<div class="border-t border-white/10 pt-4 mt-auto">
+<div class="flex justify-between items-center mb-3">
+<h4 class="text-cyber-gray text-[10px] font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink">Condições Ativas</h4>
+<button class="w-6 h-6 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyber-pink/20 hover:border-cyber-pink/50 transition-all text-gray-400 hover:text-cyber-pink">
+<i class="fa-solid fa-plus text-[10px]"></i>
+</button>
+</div>
+<div class="flex flex-wrap gap-2 min-h-[60px] p-2 rounded-lg bg-black/20 border border-white/5">
+<div class="condition-badge condition-pink">
+<i class="fa-solid fa-ghost"></i>
+                        Amedrontado
+                    </div>
+<div class="condition-badge condition-purple">
+<i class="fa-solid fa-brain"></i>
+                        Confuso
+                    </div>
+<div class="condition-badge condition-pink">
+<i class="fa-solid fa-clock"></i>
+                        Lento
+                    </div>
+<div class="condition-badge condition-purple">
+<i class="fa-solid fa-person-falling"></i>
+                        Caído
+                    </div>
+</div>
+</div>
+</div>
+</div>
+</main>
+
+</body></html>
