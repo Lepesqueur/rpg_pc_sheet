@@ -1,0 +1,52 @@
+import React, { useEffect } from 'react';
+
+export const Modal = ({ isOpen, onClose, children, maxWidth = "max-w-2xl" }) => {
+    if (!isOpen) return null;
+
+    useEffect(() => {
+        const handleEsc = (e) => {
+            if (e.key === 'Escape') onClose();
+        };
+        window.addEventListener('keydown', handleEsc);
+        return () => window.removeEventListener('keydown', handleEsc);
+    }, [onClose]);
+
+    return (
+        <div
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
+            onClick={(e) => {
+                if (e.target === e.currentTarget) onClose();
+            }}
+        >
+            <div className={`glass-card w-full ${maxWidth} max-h-[95vh] flex flex-col rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden animate-scale-up`}>
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50 z-20"></div>
+                {children}
+            </div>
+        </div>
+    );
+};
+
+export const ModalHeader = ({ children, onClose, className = "" }) => (
+    <div className={`p-6 border-b border-white/5 bg-black/20 flex items-center justify-between shrink-0 relative z-10 ${className}`}>
+        <div className="flex-1 min-w-0">
+            {children}
+        </div>
+        {onClose && (
+            <button onClick={onClose} className="ml-4 w-10 h-10 rounded-full flex items-center justify-center text-cyber-gray hover:text-white hover:bg-white/5 transition-all">
+                <i className="fa-solid fa-xmark text-xl"></i>
+            </button>
+        )}
+    </div>
+);
+
+export const ModalBody = ({ children, className = "" }) => (
+    <div className={`p-6 overflow-y-auto custom-scrollbar flex-grow relative z-10 ${className}`}>
+        {children}
+    </div>
+);
+
+export const ModalFooter = ({ children, className = "" }) => (
+    <div className={`p-6 border-t border-white/5 bg-black/20 shrink-0 flex items-center justify-end gap-4 relative z-10 ${className}`}>
+        {children}
+    </div>
+);

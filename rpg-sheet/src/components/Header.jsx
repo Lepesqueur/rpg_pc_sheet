@@ -1,0 +1,32 @@
+import React from 'react';
+
+const Header = () => {
+    return (
+        <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+            <div className="relative shrink-0 group">
+                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                <img
+                    alt="Aeliana Portrait"
+                    className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10"
+                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"
+                />
+            </div>
+            <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
+                <h1 className="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink font-display">Aeliana, a Arconte</h1>
+                <div className="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4">Nível <span className="text-white">5</span></div>
+                <div className="w-full max-w-md mx-auto md:mx-0">
+                    <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
+                        <div className="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow w-3/4 shadow-[0_0_10px_#ff007f]"></div>
+                    </div>
+                    <div className="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
+                        <span>XP: 14500</span>
+                        <span>NEXT: 18000</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+    );
+};
+
+export default Header;
