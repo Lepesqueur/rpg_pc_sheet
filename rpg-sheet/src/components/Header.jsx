@@ -1,9 +1,30 @@
 import React from 'react';
+import { useCharacter } from '../context/CharacterContext';
 
 const Header = () => {
+    const { isEditMode, toggleEditMode } = useCharacter();
+
     return (
         <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+
+            {/* Edit Mode Toggle */}
+            <div className="absolute top-4 right-6 z-20">
+                <button
+                    onClick={toggleEditMode}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg border transition-all duration-300 group ${isEditMode
+                            ? 'bg-cyber-yellow/20 border-cyber-yellow text-cyber-yellow shadow-[0_0_15px_rgba(255,215,0,0.3)]'
+                            : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
+                        }`}
+                >
+                    <i className={`fa-solid ${isEditMode ? 'fa-unlock-keyhole' : 'fa-lock'} text-xs`}></i>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.2em]">
+                        {isEditMode ? 'Modo Edição Ativo' : 'Modo Leitura'}
+                    </span>
+                    <div className={`w-2 h-2 rounded-full ${isEditMode ? 'bg-cyber-yellow animate-pulse' : 'bg-gray-600'}`}></div>
+                </button>
+            </div>
+
             <div className="relative shrink-0 group">
                 <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
                 <img
