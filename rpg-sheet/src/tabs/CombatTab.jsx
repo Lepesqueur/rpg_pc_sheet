@@ -4,7 +4,7 @@ import { useCharacter } from '../context/CharacterContext';
 
 // Componente simples de progresso circular usando SVG
 const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, statusKey, isEditMode }) => {
-    const { updateStatusMax } = useCharacter();
+    const { updateStatusMax, updateStatus } = useCharacter();
     const radius = 35;
     const circumference = 2 * Math.PI * radius;
     const progress = (value / max) * circumference;
@@ -13,6 +13,14 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
     return (
         <div className="flex flex-col items-center gap-2 w-full shrink-0">
             <div className="relative w-[90px] h-[90px] flex items-center justify-center">
+                {/* Botão de Diminuir (Esq) */}
+                <button
+                    onClick={() => updateStatus(statusKey, -1)}
+                    className="absolute -left-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white/30 transition-all z-10"
+                >
+                    <i className="fa-solid fa-minus text-[8px]"></i>
+                </button>
+
                 <svg className="w-full h-full transform -rotate-90">
                     <circle cx="45" cy="45" r={radius} stroke="#2d2d3d" strokeWidth="6" fill="transparent" />
                     <circle
@@ -29,6 +37,7 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
                         style={{ filter: `drop-shadow(0 0 3px ${shadowColor || color})` }}
                     />
                 </svg>
+
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                     <div className="flex items-baseline justify-center">
                         <span className="text-lg font-bold text-white leading-none">{value}</span>
@@ -46,13 +55,30 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
                     </div>
                     <span className="text-[9px] uppercase font-bold tracking-widest mt-1" style={{ color }}>{label}</span>
                 </div>
+
+                {/* Botão de Aumentar (Dir) */}
+                <button
+                    onClick={() => updateStatus(statusKey, 1)}
+                    className="absolute -right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-black/60 border border-white/10 flex items-center justify-center text-white/50 hover:text-white hover:border-white/30 transition-all z-10"
+                >
+                    <i className="fa-solid fa-plus text-[8px]"></i>
+                </button>
             </div>
             <div className="flex flex-col items-center gap-1">
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color }}>{sublabel}</span>
                 <div className="flex gap-1">
-                    {[1, 2, 3, 4, 5].map(i => (
-                        <div key={i} className="w-4 h-4 border rounded-sm cursor-pointer transition-colors hover:bg-white/10" style={{ borderColor: color }}></div>
-                    ))}
+                    {[1, 2, 3, 4, 5].map(i => {
+                        const threshold = (max / 5) * i;
+                        const isActive = value >= threshold || (i === 1 && value > 0);
+                        return (
+                            <div
+                                key={i}
+                                onClick={() => updateStatus(statusKey, Math.ceil((max / 5) * i), false)}
+                                className={`w-4 h-4 border rounded-sm cursor-pointer transition-all hover:scale-110 ${isActive ? 'bg-current shadow-[0_0_8px_currentColor]' : 'bg-transparent overflow-hidden opacity-30 hover:opacity-100'}`}
+                                style={{ borderColor: color, color: color }}
+                            ></div>
+                        );
+                    })}
                 </div>
             </div>
         </div>

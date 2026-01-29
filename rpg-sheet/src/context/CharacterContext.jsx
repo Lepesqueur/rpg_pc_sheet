@@ -107,14 +107,23 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
-    const updateStatusCurrent = (statusKey, newValue) => {
-        setCharacterData(prev => ({
-            ...prev,
-            [statusKey]: {
-                ...prev[statusKey],
-                current: parseInt(newValue) || 0
-            }
-        }));
+    const updateStatus = (statusKey, deltaOrValue, isDelta = true) => {
+        setCharacterData(prev => {
+            const currentVal = prev[statusKey].current;
+            const maxVal = prev[statusKey].max;
+            let newValue = isDelta ? currentVal + deltaOrValue : deltaOrValue;
+
+            // Clamp between 0 and max
+            newValue = Math.min(Math.max(0, newValue), maxVal);
+
+            return {
+                ...prev,
+                [statusKey]: {
+                    ...prev[statusKey],
+                    current: parseInt(newValue) || 0
+                }
+            };
+        });
     };
 
     const updateSkillLevel = (categoryKey, skillName, newLevel) => {
@@ -146,7 +155,7 @@ export const CharacterProvider = ({ children }) => {
         updateAttribute,
         updateDefense,
         updateStatusMax,
-        updateStatusCurrent,
+        updateStatus,
         updateSkillLevel
     };
 
