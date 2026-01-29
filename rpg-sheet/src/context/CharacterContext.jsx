@@ -19,9 +19,9 @@ export const CharacterProvider = ({ children }) => {
         const defaultData = {
             attributes: ATTRIBUTES,
             skillCategories: SKILLS_CATEGORIES,
-            vitality: { current: 80, max: 100 },
-            focus: { current: 45, max: 50 },
-            will: { current: 28, max: 40 },
+            vitality: { current: 80, max: 100, level: 0 },
+            focus: { current: 45, max: 50, level: 0 },
+            will: { current: 28, max: 40, level: 0 },
             defenses: {
                 fortitude: 16,
                 reflex: 18,
@@ -126,6 +126,16 @@ export const CharacterProvider = ({ children }) => {
         });
     };
 
+    const updateConditionLevel = (statusKey, newLevel) => {
+        setCharacterData(prev => ({
+            ...prev,
+            [statusKey]: {
+                ...prev[statusKey],
+                level: prev[statusKey].level === newLevel ? newLevel - 1 : newLevel
+            }
+        }));
+    };
+
     const updateSkillLevel = (categoryKey, skillName, newLevel) => {
         if (!isEditMode) return; // Só permite se o modo de edição estiver ligado
 
@@ -156,6 +166,7 @@ export const CharacterProvider = ({ children }) => {
         updateDefense,
         updateStatusMax,
         updateStatus,
+        updateConditionLevel,
         updateSkillLevel
     };
 

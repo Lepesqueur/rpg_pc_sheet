@@ -4,7 +4,8 @@ import { useCharacter } from '../context/CharacterContext';
 
 // Componente simples de progresso circular usando SVG
 const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, statusKey, isEditMode }) => {
-    const { updateStatusMax, updateStatus } = useCharacter();
+    const { characterData, updateStatusMax, updateStatus, updateConditionLevel } = useCharacter();
+    const statusLevel = characterData[statusKey].level || 0;
     const radius = 35;
     const circumference = 2 * Math.PI * radius;
     const progress = (value / max) * circumference;
@@ -68,12 +69,11 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
                 <span className="text-[10px] uppercase tracking-[0.2em] font-semibold" style={{ color }}>{sublabel}</span>
                 <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map(i => {
-                        const threshold = (max / 5) * i;
-                        const isActive = value >= threshold || (i === 1 && value > 0);
+                        const isActive = statusLevel >= i;
                         return (
                             <div
                                 key={i}
-                                onClick={() => updateStatus(statusKey, Math.ceil((max / 5) * i), false)}
+                                onClick={() => updateConditionLevel(statusKey, i)}
                                 className={`w-4 h-4 border rounded-sm cursor-pointer transition-all hover:scale-110 ${isActive ? 'bg-current shadow-[0_0_8px_currentColor]' : 'bg-transparent overflow-hidden opacity-30 hover:opacity-100'}`}
                                 style={{ borderColor: color, color: color }}
                             ></div>
