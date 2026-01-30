@@ -44,6 +44,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "actions",
                     tags: ["Habilidade Ativa", "Magia de Éter"],
                     pa: 3,
+                    costs: { focus: 2, will: 0, vitality: 0 },
                     stats: {
                         duracao: "Instantânea",
                         ativacao: "Ação Padrão",
@@ -66,6 +67,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "actions",
                     tags: ["Habilidade Ativa"],
                     pa: 2,
+                    costs: { focus: 1, will: 0, vitality: 1 },
                     stats: {
                         duracao: "Instantânea",
                         ativacao: "Ação Padrão",
@@ -87,6 +89,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "actions",
                     tags: ["Habilidade Ativa"],
                     pa: 1,
+                    costs: { focus: 0, will: 5, vitality: 0 },
                     stats: {
                         duracao: "1 minuto",
                         ativacao: "Ação Bônus",
@@ -107,6 +110,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "talent",
                     tags: ["Passiva"],
                     pa: 0,
+                    costs: { focus: 0, will: 0, vitality: 0 },
                     stats: {
                         duracao: "Passiva",
                         ativacao: "Passiva",
@@ -125,6 +129,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "talent",
                     tags: ["Passiva"],
                     pa: 0,
+                    costs: { focus: 1, will: 0, vitality: 0 },
                     stats: {
                         duracao: "Passiva",
                         ativacao: "Passiva",
@@ -145,6 +150,7 @@ export const CharacterProvider = ({ children }) => {
                     category: "talent",
                     tags: ["Passiva"],
                     pa: 0,
+                    costs: { focus: 0, will: 2, vitality: 0 },
                     stats: {
                         duracao: "Passiva",
                         ativacao: "Passiva",

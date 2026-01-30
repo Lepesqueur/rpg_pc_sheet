@@ -83,9 +83,32 @@ const SkillsTab = () => {
                                 className="group relative bg-white/5 border border-white/10 hover:border-cyber-pink/50 rounded-xl p-5 transition-all duration-300 cursor-pointer"
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
-                                    <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded">
-                                        {item.pa} PA
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        {item.costs?.focus > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-purple text-[10px] font-bold" title="Custo de Foco">
+                                                <i className="fa-solid fa-bolt text-[9px]"></i> {item.costs.focus}
+                                            </span>
+                                        )}
+                                        {item.costs?.will > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-yellow text-[10px] font-bold" title="Custo de Vontade">
+                                                <i className="fa-solid fa-brain text-[9px]"></i> {item.costs.will}
+                                            </span>
+                                        )}
+                                        {item.costs?.vitality > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-pink text-[10px] font-bold" title="Custo de Vitalidade">
+                                                <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
+                                            </span>
+                                        )}
+                                        {item.pa > 0 ? (
+                                            <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded uppercase">
+                                                {item.pa} PA
+                                            </span>
+                                        ) : (
+                                            <span className="px-2 py-0.5 bg-white/5 text-gray-400 text-[10px] font-bold border border-white/10 rounded uppercase">
+                                                Passiva
+                                            </span>
+                                        )}
+                                    </div>
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
@@ -140,9 +163,32 @@ const SkillsTab = () => {
                                 className="group relative bg-white/5 border border-white/10 hover:border-cyber-yellow/50 rounded-xl p-5 transition-all duration-300 cursor-pointer"
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
-                                    <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
-                                        {item.tags?.[0] || 'Passiva'}
-                                    </span>
+                                    <div className="flex items-center gap-2">
+                                        {item.costs?.focus > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-purple text-[10px] font-bold" title="Custo de Foco">
+                                                <i className="fa-solid fa-bolt text-[9px]"></i> {item.costs.focus}
+                                            </span>
+                                        )}
+                                        {item.costs?.will > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-yellow text-[10px] font-bold" title="Custo de Vontade">
+                                                <i className="fa-solid fa-brain text-[9px]"></i> {item.costs.will}
+                                            </span>
+                                        )}
+                                        {item.costs?.vitality > 0 && (
+                                            <span className="flex items-center gap-0.5 text-cyber-pink text-[10px] font-bold" title="Custo de Vitalidade">
+                                                <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
+                                            </span>
+                                        )}
+                                        {item.pa > 0 ? (
+                                            <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
+                                                {item.pa} PA
+                                            </span>
+                                        ) : (
+                                            <span className="px-2 py-0.5 bg-white/5 text-gray-400 text-[10px] font-bold border border-white/10 rounded uppercase">
+                                                Passiva
+                                            </span>
+                                        )}
+                                    </div>
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
@@ -210,14 +256,40 @@ const SkillsTab = () => {
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
-                            {viewingTalent?.category === 'actions' && (
-                                <div className="flex flex-col items-end">
-                                    <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Custo de Ação</span>
-                                    <div className="bg-cyber-pink text-white font-display font-bold px-4 py-1 rounded-lg text-xl shadow-lg shadow-cyber-pink/20">
-                                        {viewingTalent?.pa} PA
+                            <div className="flex items-center gap-3">
+                                {viewingTalent?.costs?.focus > 0 && (
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-bold text-cyber-purple/70 uppercase tracking-tighter leading-none mb-1">Foco</span>
+                                        <div className="bg-cyber-purple text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-purple/20">
+                                            {viewingTalent.costs.focus}
+                                        </div>
                                     </div>
-                                </div>
-                            )}
+                                )}
+                                {viewingTalent?.costs?.will > 0 && (
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-bold text-cyber-yellow/70 uppercase tracking-tighter leading-none mb-1">Vontade</span>
+                                        <div className="bg-cyber-yellow text-zinc-900 font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-yellow/20">
+                                            {viewingTalent.costs.will}
+                                        </div>
+                                    </div>
+                                )}
+                                {viewingTalent?.costs?.vitality > 0 && (
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Vida</span>
+                                        <div className="bg-cyber-pink text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-pink/20">
+                                            {viewingTalent.costs.vitality}
+                                        </div>
+                                    </div>
+                                )}
+                                {viewingTalent?.category === 'actions' && (
+                                    <div className="flex flex-col items-end">
+                                        <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Custo de Ação</span>
+                                        <div className="bg-cyber-pink text-white font-display font-bold px-4 py-1 rounded-lg text-xl shadow-lg shadow-cyber-pink/20">
+                                            {viewingTalent?.pa} PA
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                             <button onClick={() => setViewingTalent(null)} className="p-2 hover:bg-white/5 rounded-full transition-colors group">
                                 <i className="fa-solid fa-xmark text-slate-400 group-hover:text-white"></i>
                             </button>
@@ -445,6 +517,40 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                                 onChange={handleTagChange}
                                 placeholder="Habilidade Ativa, Magia de Éter"
                             />
+                        </div>
+
+                        {/* Resource Costs */}
+                        <div className="grid grid-cols-3 gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-purple uppercase mb-1">Custo Foco</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 text-sm focus:border-cyber-purple focus:outline-none"
+                                    name="costs.focus"
+                                    value={formData?.costs?.focus || 0}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-yellow uppercase mb-1">Custo Vontade</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 text-sm focus:border-cyber-yellow focus:outline-none"
+                                    name="costs.will"
+                                    value={formData?.costs?.will || 0}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-pink uppercase mb-1">Custo Vida</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 text-sm focus:border-cyber-pink focus:outline-none"
+                                    name="costs.vitality"
+                                    value={formData?.costs?.vitality || 0}
+                                    onChange={handleChange}
+                                />
+                            </div>
                         </div>
                     </div>
 
