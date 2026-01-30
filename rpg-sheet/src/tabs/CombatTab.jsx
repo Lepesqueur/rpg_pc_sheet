@@ -434,7 +434,7 @@ const CombatTab = () => {
                                                 if (res && (res.vulnerable)) {
                                                     return (
                                                         <span key={type.key} className="bg-cyber-red/10 border border-cyber-red/30 text-cyber-red px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
-                                                            <i className={`fa-solid ${type.icon} text-[9px]`}></i> {type.name}{res.value > 0 ? ` (${res.value})` : ''}
+                                                            <i className={`fa-solid ${type.icon} text-[9px]`}></i> {type.name} {res.value > 0 ? `(${res.value})` : ''}
                                                         </span>
                                                     );
                                                 }
