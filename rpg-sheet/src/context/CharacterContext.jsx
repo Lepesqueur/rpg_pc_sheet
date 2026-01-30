@@ -486,6 +486,33 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    /**
+     * Verifica e consome recursos (vitalidade, foco, vontade).
+     * @param {Object} costs - Objeto contendo { vitality, focus, will }
+     * @returns {Object} - { success: boolean, missing: Array }
+     */
+    const consumeResources = (costs) => {
+        const { vitality = 0, focus = 0, will = 0 } = costs;
+        const missing = [];
+
+        if (characterData.vitality.current < vitality) missing.push('Vitalidade');
+        if (characterData.focus.current < focus) missing.push('Foco');
+        if (characterData.will.current < will) missing.push('Vontade');
+
+        if (missing.length > 0) {
+            return { success: false, missing };
+        }
+
+        setCharacterData(prev => ({
+            ...prev,
+            vitality: { ...prev.vitality, current: prev.vitality.current - vitality },
+            focus: { ...prev.focus, current: prev.focus.current - focus },
+            will: { ...prev.will, current: prev.will.current - will }
+        }));
+
+        return { success: true, missing: [] };
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -510,7 +537,8 @@ export const CharacterProvider = ({ children }) => {
         updateAllConditions,
         addTalent,
         updateTalent,
-        deleteTalent
+        deleteTalent,
+        consumeResources
     };
 
     return (

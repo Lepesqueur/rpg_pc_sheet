@@ -1,15 +1,30 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
+import { useToast } from '../components/Toast';
 
 const SkillsTab = () => {
-    const { characterData, isEditMode, addTalent, updateTalent, deleteTalent } = useCharacter();
+    const { characterData, isEditMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
+    const { showToast } = useToast();
     const [viewingTalent, setViewingTalent] = useState(null);
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
     const [searchTerm, setSearchTerm] = useState("");
     const [itemToDelete, setItemToDelete] = useState(null);
 
     const talents = characterData.talents || [];
+
+    const handleActivateSkill = (skill) => {
+        if (!skill.costs) return;
+
+        const result = consumeResources(skill.costs);
+
+        if (result.success) {
+            showToast(`HABILIDADE "${skill.name}" ATIVADA COM SUCESSO!`, 'success');
+            setViewingTalent(null);
+        } else {
+            showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
+        }
+    };
 
     const filteredTalents = talents.filter(t =>
         t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -385,7 +400,10 @@ const SkillsTab = () => {
                                         Editar Talento
                                     </button>
                                 )}
-                                <button className="flex-1 sm:flex-none px-8 py-3 rounded-xl bg-cyber-pink hover:brightness-110 text-white font-bold text-sm shadow-lg shadow-cyber-pink/20 transition-all active:scale-95 uppercase tracking-wide">
+                                <button
+                                    onClick={() => handleActivateSkill(viewingTalent)}
+                                    className="flex-1 sm:flex-none px-8 py-3 rounded-xl bg-cyber-pink hover:brightness-110 text-white font-bold text-sm shadow-lg shadow-cyber-pink/20 transition-all active:scale-95 uppercase tracking-wide"
+                                >
                                     Ativar Habilidade
                                 </button>
                             </div>
