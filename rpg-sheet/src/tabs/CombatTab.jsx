@@ -91,7 +91,7 @@ const CombatTab = () => {
         characterData, isEditMode, updateDefense,
         addAttack, updateAttack, deleteAttack, updateAttackWear,
         addArmor, updateArmor, deleteArmor, updateArmorCurrent,
-        updateResistance, updateAllResistances,
+        updateAllResistances,
         updateActiveCondition, updateAllConditions
     } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
@@ -144,7 +144,11 @@ const CombatTab = () => {
         }
     };
     const openConditionsModal = () => {
-        setTempConditions({ ...characterData.conditions });
+        const deepCopy = {};
+        Object.keys(characterData.conditions || {}).forEach(key => {
+            deepCopy[key] = { ...characterData.conditions[key] };
+        });
+        setTempConditions(deepCopy);
         setActiveModal('conditions');
     };
 
@@ -164,7 +168,11 @@ const CombatTab = () => {
     };
 
     const openResistancesModal = () => {
-        setTempResistances({ ...characterData.resistances });
+        const deepCopy = {};
+        Object.keys(characterData.resistances || {}).forEach(key => {
+            deepCopy[key] = { ...characterData.resistances[key] };
+        });
+        setTempResistances(deepCopy);
         setActiveModal('resistances');
     };
 
