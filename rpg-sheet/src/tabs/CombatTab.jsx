@@ -97,7 +97,7 @@ const CombatTab = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
 
-    const [armorForm, setArmorForm] = useState({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved' });
+    const [armorForm, setArmorForm] = useState({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved', reflexBonus: 0, properties: '' });
     const [selectedArmor, setSelectedArmor] = useState(null);
     const [isArmorDeleteModalOpen, setIsArmorDeleteModalOpen] = useState(false);
     const [armorToDelete, setArmorToDelete] = useState(null);
@@ -147,7 +147,7 @@ const CombatTab = () => {
 
     const openArmorAddModal = () => {
         setSelectedArmor(null);
-        setArmorForm({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved' });
+        setArmorForm({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved', reflexBonus: 0, properties: '' });
         setActiveModal('armor');
     };
 
@@ -308,8 +308,8 @@ const CombatTab = () => {
                                                             key={i}
                                                             onClick={() => updateArmorCurrent(armor.id, armor.current === i + 1 ? i : i + 1)}
                                                             className={`w-3.5 h-3.5 border rounded-sm transition-all hover:scale-110 cursor-pointer ${(armor.current || 0) > i
-                                                                    ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
-                                                                    : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
+                                                                ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
+                                                                : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
                                                                 }`}
                                                         ></div>
                                                     ))}
@@ -587,6 +587,25 @@ const CombatTab = () => {
                                 type="text"
                                 value={armorForm.icon}
                                 onChange={(e) => setArmorForm({ ...armorForm, icon: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Bônus de Reflexo</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-yellow transition-all"
+                                type="number"
+                                value={armorForm.reflexBonus}
+                                onChange={(e) => setArmorForm({ ...armorForm, reflexBonus: parseInt(e.target.value) || 0 })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2 col-span-1 md:col-span-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Propriedades</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all"
+                                type="text"
+                                placeholder="Ex: Pesada, Selada, Energizada..."
+                                value={armorForm.properties}
+                                onChange={(e) => setArmorForm({ ...armorForm, properties: e.target.value })}
                             />
                         </div>
                         <div className="flex flex-col gap-2 col-span-1 md:col-span-2">
