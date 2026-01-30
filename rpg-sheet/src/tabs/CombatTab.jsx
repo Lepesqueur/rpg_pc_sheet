@@ -302,13 +302,17 @@ const CombatTab = () => {
                                             </td>
                                             <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">{armor.max}</td>
                                             <td className="py-3 text-center">
-                                                <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
-                                                    <input
-                                                        className="w-16 bg-black/40 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]"
-                                                        type="number"
-                                                        value={armor.current}
-                                                        onChange={(e) => updateArmorCurrent(armor.id, e.target.value)}
-                                                    />
+                                                <div className="flex items-center justify-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                                                    {Array.from({ length: Math.min(5, armor.max || 0) }).map((_, i) => (
+                                                        <div
+                                                            key={i}
+                                                            onClick={() => updateArmorCurrent(armor.id, armor.current === i + 1 ? i : i + 1)}
+                                                            className={`w-3.5 h-3.5 border rounded-sm transition-all hover:scale-110 cursor-pointer ${(armor.current || 0) > i
+                                                                    ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
+                                                                    : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
+                                                                }`}
+                                                        ></div>
+                                                    ))}
                                                 </div>
                                             </td>
                                         </tr>
