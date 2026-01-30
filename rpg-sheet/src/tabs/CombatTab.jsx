@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
-import { DAMAGE_RESISTANCES } from '../data/rules';
+import { DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
 
 // Componente simples de progresso circular usando SVG
 const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, statusKey, isEditMode }) => {
@@ -455,12 +455,41 @@ const CombatTab = () => {
                             </button>
                         </div>
                         <div className="flex flex-wrap gap-2 p-2 rounded-lg bg-black/20 border border-white/5 min-h-[60px]">
-                            <span className="px-2 py-1 bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(255,0,153,0.3)]">
-                                <i className="fa-solid fa-ghost"></i> Amedrontado
-                            </span>
-                            <span className="px-2 py-1 bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(189,0,255,0.3)]">
-                                <i className="fa-solid fa-brain"></i> Confuso
-                            </span>
+                            {Object.entries(characterData.conditions || {}).map(([key, cond]) => {
+                                if (!cond.active) return null;
+
+                                // Find condition info from rules
+                                let condInfo = null;
+                                let colorClass = 'cyber-pink';
+                                Object.values(CONDITIONS).forEach(cat => {
+                                    const item = cat.items.find(i => i.key === key);
+                                    if (item) {
+                                        condInfo = item;
+                                        colorClass = cat.color;
+                                    }
+                                });
+
+                                if (!condInfo) return null;
+
+                                const rgbMap = {
+                                    'cyber-pink': '255,0,153',
+                                    'cyber-purple': '189,0,255',
+                                    'cyber-green': '57,255,20'
+                                };
+                                const rgb = rgbMap[colorClass] || '136,136,153';
+
+                                return (
+                                    <span
+                                        key={key}
+                                        className={`px-2 py-1 bg-${colorClass}/10 border border-${colorClass}/30 text-${colorClass} rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(${rgb},0.3)]`}
+                                    >
+                                        <i className={`fa-solid ${condInfo.icon}`}></i> {condInfo.name} {cond.level > 1 ? `(${cond.level})` : ''}
+                                    </span>
+                                );
+                            })}
+                            {!Object.values(characterData.conditions || {}).some(c => c.active) && (
+                                <span className="text-cyber-gray text-[10px] italic opacity-50 flex items-center justify-center w-full">Nenhuma condição ativa</span>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -781,7 +810,88 @@ const CombatTab = () => {
                 message={`Deseja realmente apagar a armadura "${armorToDelete?.name}"?`}
                 confirmText="Deletar"
             />
-        </div>
+
+            <Modal isOpen={activeModal === 'conditions'} onClose={() => setActiveModal(null)} maxWidth="max-w-6xl">
+                <ModalHeader onClose={() => setActiveModal(null)} className="bg-gradient-to-r from-cyber-purple/10 to-transparent border-b border-white/10">
+                    <div className="flex items-center gap-4">
+                        <span className="material-symbols-outlined text-cyber-pink text-3xl">warning</span>
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-wider uppercase italic leading-tight text-white">Editar Condições Ativas</h2>
+                            <p className="text-[10px] text-cyber-gray tracking-[0.3em] uppercase">Módulo de Alteração de Estado de Combate</p>
+                        </div>
+                    </div>
+                </ModalHeader>
+                <ModalBody className="p-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                        {Object.entries(CONDITIONS).map(([catKey, category]) => (
+                            <section key={catKey} className="space-y-4">
+                                <div className={`flex items-center gap-3 mb-6 border-l-4 border-${category.color} pl-3`}>
+                                    <h3 className={`text-${category.color} text-sm font-bold tracking-[0.2em] uppercase`}>{category.label}</h3>
+                                </div>
+                                <div className="space-y-3">
+                                    {category.items.map(item => {
+                                        const cond = characterData.conditions[item.key] || { active: false, level: 1 };
+                                        return (
+                                            <div key={item.key} className={`flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-${category.color}/40 transition-all group ${cond.active ? `border-${category.color}/30 bg-${category.color}/5` : ''}`}>
+                                                <div className="flex items-center gap-4 flex-grow">
+                                                    <label className="relative inline-flex items-center cursor-pointer">
+                                                        <input
+                                                            type="checkbox"
+                                                            className="sr-only peer"
+                                                            checked={cond.active}
+                                                            onChange={(e) => updateActiveCondition(item.key, 'active', e.target.checked)}
+                                                        />
+                                                        <div className={`w-10 h-5 bg-white/10 rounded-full transition-colors peer-checked:bg-${category.color}/50 relative border border-white/10`}>
+                                                            <div className={`absolute top-1 left-1.5 w-3 h-3 bg-white rounded-full transition-transform ${cond.active ? 'translate-x-4' : ''}`}></div>
+                                                        </div>
+                                                    </label>
+                                                    <div className="flex flex-col">
+                                                        <span className={`text-xs font-bold tracking-widest uppercase transition-colors ${cond.active ? `text-${category.color}` : 'text-white group-hover:text-white/80'}`}>
+                                                            {item.name}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                {cond.active && (
+                                                    <div className="flex items-center gap-2">
+                                                        <div className="flex items-center gap-1 bg-black/40 rounded-md border border-white/10 p-1">
+                                                            <button
+                                                                onClick={() => updateActiveCondition(item.key, 'level', Math.max(1, cond.level - 1))}
+                                                                className="w-5 h-5 flex items-center justify-center text-[10px] text-cyber-gray hover:text-white transition-colors"
+                                                            >
+                                                                <i className="fa-solid fa-minus"></i>
+                                                            </button>
+                                                            <span className={`w-5 text-center font-mono font-bold text-xs text-${category.color}`}>{cond.level}</span>
+                                                            <button
+                                                                onClick={() => updateActiveCondition(item.key, 'level', cond.level + 1)}
+                                                                className="w-5 h-5 flex items-center justify-center text-[10px] text-cyber-gray hover:text-white transition-colors"
+                                                            >
+                                                                <i className="fa-solid fa-plus"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </section>
+                        ))}
+                    </div>
+                </ModalBody>
+                <ModalFooter className="bg-black/60 flex items-center justify-between p-6 border-t border-white/10">
+                    <div className="flex items-center gap-3 text-cyber-gray italic text-[10px] uppercase tracking-widest">
+                        <i className="fa-solid fa-circle-info"></i>
+                        <span>Níveis elevados podem aumentar as penalidades.</span>
+                    </div>
+                    <button
+                        onClick={() => setActiveModal(null)}
+                        className="px-10 py-3 bg-cyber-pink hover:bg-cyber-pink/80 text-white font-bold uppercase tracking-[0.2em] rounded-lg shadow-neon-pink transition-all text-xs"
+                    >
+                        Confirmar Alterações
+                    </button>
+                </ModalFooter>
+            </Modal>
+        </div >
     );
 };
 

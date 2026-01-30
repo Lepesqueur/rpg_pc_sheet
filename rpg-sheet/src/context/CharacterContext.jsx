@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ATTRIBUTES, SKILLS_CATEGORIES, DAMAGE_RESISTANCES } from '../data/rules';
+import { ATTRIBUTES, SKILLS_CATEGORIES, DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
 
 const CharacterContext = createContext();
 
@@ -35,8 +35,16 @@ export const CharacterProvider = ({ children }) => {
                 { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
                 { id: 'a2', name: 'Elmo Neural', icon: 'fa-mask', current: 2, max: 2, notes: '', reflexBonus: 1, properties: '' }
             ],
-            resistances: {} // Will be populated below
+            resistances: {}, // Will be populated below
+            conditions: {} // Will be populated below
         };
+
+        // Populate initial conditions from rules
+        Object.values(CONDITIONS).forEach(category => {
+            category.items.forEach(item => {
+                defaultData.conditions[item.key] = { active: false, level: 1 };
+            });
+        });
 
         // Populate initial resistances from rules
         Object.values(DAMAGE_RESISTANCES).forEach(category => {
@@ -87,7 +95,8 @@ export const CharacterProvider = ({ children }) => {
                         properties: '',
                         ...armor
                     })),
-                    resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) }
+                    resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) },
+                    conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) }
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -297,6 +306,18 @@ export const CharacterProvider = ({ children }) => {
             };
         });
     };
+    const updateActiveCondition = (key, field, newValue) => {
+        setCharacterData(prev => ({
+            ...prev,
+            conditions: {
+                ...prev.conditions,
+                [key]: {
+                    ...prev.conditions[key],
+                    [field]: field === 'level' ? (parseInt(newValue) || 1) : newValue
+                }
+            }
+        }));
+    };
 
     const value = {
         characterData,
@@ -316,7 +337,8 @@ export const CharacterProvider = ({ children }) => {
         updateArmor,
         deleteArmor,
         updateArmorCurrent,
-        updateResistance
+        updateResistance,
+        updateActiveCondition
     };
 
     return (

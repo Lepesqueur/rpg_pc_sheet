@@ -107,3 +107,42 @@ export const DAMAGE_RESISTANCES = {
         ]
     }
 };
+
+export const CONDITIONS = {
+    mental: {
+        label: 'Condições Mentais',
+        color: 'cyber-purple',
+        icon: 'fa-brain',
+        items: [
+            { key: 'abatida', name: 'Abatida', icon: 'fa-face-frown' },
+            { key: 'amedrontada', name: 'Amedrontada', icon: 'fa-ghost' },
+            { key: 'ansiosa', name: 'Ansiosa', icon: 'fa-bolt' },
+            { key: 'encantada', name: 'Encantada', icon: 'fa-heart' },
+            { key: 'enfurecida', name: 'Enfurecida', icon: 'fa-fire' },
+            { key: 'entorpecida', name: 'Entorpecida', icon: 'fa-pills' },
+        ]
+    },
+    physical: {
+        label: 'Condições Físicas',
+        color: 'cyber-pink',
+        icon: 'fa-person-falling',
+        items: [
+            { key: 'atordoada', name: 'Atordoada', icon: 'fa-dizzy' },
+            { key: 'caida', name: 'Caída', icon: 'fa-person-falling' },
+            { key: 'letargica', name: 'Letárgica', icon: 'fa-hourglass' },
+            { key: 'presa', name: 'Presa', icon: 'fa-link' },
+            { key: 'ardendo', name: 'Ardendo', icon: 'fa-fire-alt' },
+            { key: 'paralisada', name: 'Paralisada', icon: 'fa-lock' },
+        ]
+    },
+    health: {
+        label: 'Condições de Saúde',
+        color: 'cyber-green',
+        icon: 'fa-heart-pulse',
+        items: [
+            { key: 'doente', name: 'Doente', icon: 'fa-virus' },
+            { key: 'envenenada', name: 'Envenenada', icon: 'fa-biohazard' },
+            { key: 'sangrando', name: 'Sangrando', icon: 'fa-droplet' },
+        ]
+    }
+};
