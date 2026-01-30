@@ -26,7 +26,11 @@ export const CharacterProvider = ({ children }) => {
                 fortitude: 16,
                 reflex: 18,
                 tenacity: 14
-            }
+            },
+            attacks: [
+                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.' },
+                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m' }
+            ]
         };
 
         const saved = localStorage.getItem('aeliana_character_data');
@@ -42,7 +46,8 @@ export const CharacterProvider = ({ children }) => {
                     defenses: { ...defaultData.defenses, ...(parsed.defenses || {}) },
                     vitality: { ...defaultData.vitality, ...(parsed.vitality || {}) },
                     focus: { ...defaultData.focus, ...(parsed.focus || {}) },
-                    will: { ...defaultData.will, ...(parsed.will || {}) }
+                    will: { ...defaultData.will, ...(parsed.will || {}) },
+                    attacks: parsed.attacks || defaultData.attacks
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -158,6 +163,27 @@ export const CharacterProvider = ({ children }) => {
         });
     };
 
+    const addAttack = (attack) => {
+        setCharacterData(prev => ({
+            ...prev,
+            attacks: [...(prev.attacks || []), { ...attack, id: Date.now().toString() }]
+        }));
+    };
+
+    const updateAttack = (id, updatedAttack) => {
+        setCharacterData(prev => ({
+            ...prev,
+            attacks: prev.attacks.map(attack => attack.id === id ? { ...attack, ...updatedAttack } : attack)
+        }));
+    };
+
+    const deleteAttack = (id) => {
+        setCharacterData(prev => ({
+            ...prev,
+            attacks: prev.attacks.filter(attack => attack.id !== id)
+        }));
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -167,7 +193,10 @@ export const CharacterProvider = ({ children }) => {
         updateStatusMax,
         updateStatus,
         updateConditionLevel,
-        updateSkillLevel
+        updateSkillLevel,
+        addAttack,
+        updateAttack,
+        deleteAttack
     };
 
     return (

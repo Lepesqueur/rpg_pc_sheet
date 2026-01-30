@@ -86,8 +86,38 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
 };
 
 const CombatTab = () => {
-    const { characterData, isEditMode, updateDefense } = useCharacter();
+    const { characterData, isEditMode, updateDefense, addAttack, updateAttack, deleteAttack } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
+    const [selectedAttack, setSelectedAttack] = useState(null);
+    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
+
+    const openEditModal = (attack) => {
+        setSelectedAttack(attack);
+        setAttackForm(attack);
+        setActiveModal('weapon');
+    };
+
+    const openAddModal = () => {
+        setSelectedAttack(null);
+        setAttackForm({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
+        setActiveModal('weapon');
+    };
+
+    const handleSaveAttack = () => {
+        if (selectedAttack) {
+            updateAttack(selectedAttack.id, attackForm);
+        } else {
+            addAttack(attackForm);
+        }
+        setActiveModal(null);
+    };
+
+    const handleDeleteAttack = () => {
+        if (selectedAttack) {
+            deleteAttack(selectedAttack.id);
+            setActiveModal(null);
+        }
+    };
 
     return (
         <div className="animate-fade-in">
@@ -109,30 +139,27 @@ const CombatTab = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
-                                    <tr onClick={() => setActiveModal('weapon')} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
-                                        <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">Espada Longa</td>
-                                        <td className="py-3 text-center text-cyber-yellow font-mono font-bold">3</td>
-                                        <td className="py-3 text-center">
-                                            <div className="flex items-center justify-center gap-1">
-                                                <i className="fa-solid fa-heart text-[8px] text-cyber-pink font-bold"></i>
-                                                <span className="text-white font-mono font-bold">2</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 text-center text-white font-mono font-bold">2d8+4</td>
-                                        <td className="py-3 text-center text-gray-400 font-mono">C.C.</td>
-                                    </tr>
-                                    <tr className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
-                                        <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">Arco Curto</td>
-                                        <td className="py-3 text-center text-cyber-yellow font-mono font-bold">4</td>
-                                        <td className="py-3 text-center">
-                                            <div className="flex items-center justify-center gap-1">
-                                                <i className="fa-solid fa-bolt-lightning text-[8px] text-cyber-purple font-bold"></i>
-                                                <span className="text-white font-mono font-bold">5</span>
-                                            </div>
-                                        </td>
-                                        <td className="py-3 text-center text-white font-mono font-bold">1d6+3</td>
-                                        <td className="py-3 text-center text-gray-400 font-mono">18m</td>
-                                    </tr>
+                                    {characterData.attacks.map((attack) => (
+                                        <tr key={attack.id} onClick={() => openEditModal(attack)} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
+                                            <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">{attack.name}</td>
+                                            <td className="py-3 text-center text-cyber-yellow font-mono font-bold">{attack.ap}</td>
+                                            <td className="py-3 text-center">
+                                                <div className="flex items-center justify-center gap-1">
+                                                    <i className={`fa-solid ${attack.resource.type === 'focus' ? 'fa-bolt-lightning text-cyber-purple' : 'fa-heart text-cyber-pink'} text-[8px] font-bold`}></i>
+                                                    <span className="text-white font-mono font-bold">{attack.resource.value}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-3 text-center text-white font-mono font-bold">{attack.damage}</td>
+                                            <td className="py-3 text-center text-gray-400 font-mono">{attack.range}</td>
+                                        </tr>
+                                    ))}
+                                    {isEditMode && (
+                                        <tr onClick={openAddModal} className="group hover:bg-cyber-pink/5 transition-colors cursor-pointer text-[13px] border-t border-dashed border-white/10">
+                                            <td colSpan="5" className="py-4 text-center text-cyber-pink font-bold uppercase tracking-widest text-[10px]">
+                                                <i className="fa-solid fa-plus mr-2"></i> Adicionar Novo Ataque
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -300,18 +327,79 @@ const CombatTab = () => {
                 <ModalHeader onClose={() => setActiveModal(null)} className="bg-white/5">
                     <div className="flex items-center gap-4">
                         <div className="w-12 h-12 rounded-lg bg-cyber-pink/20 border border-cyber-pink/50 flex items-center justify-center shadow-neon-pink text-cyber-pink-shadow"><i className="fa-solid fa-sword text-cyber-pink text-xl text-glow-pink"></i></div>
-                        <div><h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">Editar Ataque</h2><p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">Espada Longa</p></div>
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">{selectedAttack ? 'Editar Ataque' : 'Novo Ataque'}</h2>
+                            <p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">{attackForm.name || 'Nova Arma'}</p>
+                        </div>
                     </div>
                 </ModalHeader>
                 <ModalBody>
-                    <div className="flex flex-col gap-4">
-                        <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Dano</label>
-                        <input className="bg-black/40 border border-white/10 rounded-lg py-3 px-4 text-white font-mono text-xl outline-none focus:border-cyber-pink transition-all" type="text" defaultValue="2d8+4" />
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Nome da Arma</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-pink transition-all"
+                                type="text"
+                                value={attackForm.name}
+                                onChange={(e) => setAttackForm({ ...attackForm, name: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Ação Pública (AP)</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
+                                type="number"
+                                value={attackForm.ap}
+                                onChange={(e) => setAttackForm({ ...attackForm, ap: parseInt(e.target.value) || 0 })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Recurso (Tipo)</label>
+                            <select
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-pink transition-all"
+                                value={attackForm.resource.type}
+                                onChange={(e) => setAttackForm({ ...attackForm, resource: { ...attackForm.resource, type: e.target.value } })}
+                            >
+                                <option value="vitality">Vitalidade</option>
+                                <option value="focus">Foco</option>
+                            </select>
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Custo de Recurso</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
+                                type="number"
+                                value={attackForm.resource.value}
+                                onChange={(e) => setAttackForm({ ...attackForm, resource: { ...attackForm.resource, value: parseInt(e.target.value) || 0 } })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Dano</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
+                                type="text"
+                                value={attackForm.damage}
+                                onChange={(e) => setAttackForm({ ...attackForm, damage: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Alcance</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
+                                type="text"
+                                value={attackForm.range}
+                                onChange={(e) => setAttackForm({ ...attackForm, range: e.target.value })}
+                            />
+                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter className="bg-black/60 flex justify-between">
-                    <button className="px-6 py-2.5 rounded-lg border border-cyber-red/50 text-cyber-red font-bold uppercase text-xs hover:bg-cyber-red/10 transition-all">Excluir</button>
-                    <button onClick={() => setActiveModal(null)} className="px-8 py-2.5 rounded-lg bg-cyber-pink text-white font-extrabold uppercase text-xs shadow-neon-pink hover:scale-105 transition-all">Salvar</button>
+                    {selectedAttack ? (
+                        <button onClick={handleDeleteAttack} className="px-6 py-2.5 rounded-lg border border-cyber-red/50 text-cyber-red font-bold uppercase text-xs hover:bg-cyber-red/10 transition-all">Excluir</button>
+                    ) : (
+                        <div></div>
+                    )}
+                    <button onClick={handleSaveAttack} className="px-8 py-2.5 rounded-lg bg-cyber-pink text-white font-extrabold uppercase text-xs shadow-neon-pink hover:scale-105 transition-all">Salvar</button>
                 </ModalFooter>
             </Modal>
 
