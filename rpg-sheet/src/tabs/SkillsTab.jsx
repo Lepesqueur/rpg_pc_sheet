@@ -99,15 +99,9 @@ const SkillsTab = () => {
                                                 <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
                                             </span>
                                         )}
-                                        {item.pa > 0 ? (
-                                            <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded uppercase">
-                                                {item.pa} PA
-                                            </span>
-                                        ) : (
-                                            <span className="px-2 py-0.5 bg-white/5 text-gray-400 text-[10px] font-bold border border-white/10 rounded uppercase">
-                                                Passiva
-                                            </span>
-                                        )}
+                                        <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded uppercase">
+                                            {item.pa} PA
+                                        </span>
                                     </div>
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
@@ -179,15 +173,9 @@ const SkillsTab = () => {
                                                 <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
                                             </span>
                                         )}
-                                        {item.pa > 0 ? (
-                                            <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
-                                                {item.pa} PA
-                                            </span>
-                                        ) : (
-                                            <span className="px-2 py-0.5 bg-white/5 text-gray-400 text-[10px] font-bold border border-white/10 rounded uppercase">
-                                                Passiva
-                                            </span>
-                                        )}
+                                        <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
+                                            {item.pa} PA
+                                        </span>
                                     </div>
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
