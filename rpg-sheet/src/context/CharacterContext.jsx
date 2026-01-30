@@ -28,8 +28,8 @@ export const CharacterProvider = ({ children }) => {
                 tenacity: 14
             },
             attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil' },
-                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '' }
+                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
+                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
             ],
             armors: [
                 { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
@@ -76,6 +76,7 @@ export const CharacterProvider = ({ children }) => {
                             resource: { type: 'vitality', value: 0 },
                             skill: 'Luta', // Default generic skill
                             properties: '', // Default empty properties
+                            damageType: 'impacto', // Default damage type
                             ...attack
                         };
                     }),
@@ -205,7 +206,7 @@ export const CharacterProvider = ({ children }) => {
     const addAttack = (attack) => {
         setCharacterData(prev => ({
             ...prev,
-            attacks: [...(prev.attacks || []), { ...attack, id: Date.now().toString(), wear: 0 }]
+            attacks: [...(prev.attacks || []), { ...attack, id: Date.now().toString(), wear: 0, damageType: attack.damageType || 'impacto' }]
         }));
     };
 
