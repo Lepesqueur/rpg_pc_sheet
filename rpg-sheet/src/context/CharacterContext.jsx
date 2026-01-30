@@ -30,6 +30,10 @@ export const CharacterProvider = ({ children }) => {
             attacks: [
                 { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil' },
                 { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '' }
+            ],
+            armors: [
+                { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '' },
+                { id: 'a2', name: 'Elmo Neural', icon: 'fa-mask', current: 2, max: 2, notes: '' }
             ]
         };
 
@@ -60,7 +64,12 @@ export const CharacterProvider = ({ children }) => {
                             properties: '', // Default empty properties
                             ...attack
                         };
-                    })
+                    }),
+                    armors: (parsed.armors || defaultData.armors).map(armor => ({
+                        notes: '',
+                        icon: 'fa-shield-halved',
+                        ...armor
+                    }))
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -210,6 +219,34 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    const addArmor = (armor) => {
+        setCharacterData(prev => ({
+            ...prev,
+            armors: [...(prev.armors || []), { ...armor, id: Date.now().toString(), current: armor.max }]
+        }));
+    };
+
+    const updateArmor = (id, updatedArmor) => {
+        setCharacterData(prev => ({
+            ...prev,
+            armors: prev.armors.map(armor => armor.id === id ? { ...armor, ...updatedArmor } : armor)
+        }));
+    };
+
+    const deleteArmor = (id) => {
+        setCharacterData(prev => ({
+            ...prev,
+            armors: prev.armors.filter(armor => armor.id !== id)
+        }));
+    };
+
+    const updateArmorCurrent = (id, newValue) => {
+        setCharacterData(prev => ({
+            ...prev,
+            armors: prev.armors.map(armor => armor.id === id ? { ...armor, current: parseInt(newValue) || 0 } : armor)
+        }));
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -223,7 +260,11 @@ export const CharacterProvider = ({ children }) => {
         addAttack,
         updateAttack,
         deleteAttack,
-        updateAttackWear
+        updateAttackWear,
+        addArmor,
+        updateArmor,
+        deleteArmor,
+        updateArmorCurrent
     };
 
     return (

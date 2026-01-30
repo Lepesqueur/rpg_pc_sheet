@@ -86,12 +86,21 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
 };
 
 const CombatTab = () => {
-    const { characterData, isEditMode, updateDefense, addAttack, updateAttack, deleteAttack, updateAttackWear } = useCharacter();
+    const {
+        characterData, isEditMode, updateDefense,
+        addAttack, updateAttack, deleteAttack, updateAttackWear,
+        addArmor, updateArmor, deleteArmor, updateArmorCurrent
+    } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
     const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '', skill: 'Luta', properties: '' });
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
+
+    const [armorForm, setArmorForm] = useState({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved' });
+    const [selectedArmor, setSelectedArmor] = useState(null);
+    const [isArmorDeleteModalOpen, setIsArmorDeleteModalOpen] = useState(false);
+    const [armorToDelete, setArmorToDelete] = useState(null);
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -127,6 +136,43 @@ const CombatTab = () => {
             setIsDeleteModalOpen(false);
             setAttackToDelete(null);
             if (activeModal === 'weapon') setActiveModal(null);
+        }
+    };
+
+    const openArmorEditModal = (armor) => {
+        setSelectedArmor(armor);
+        setArmorForm(armor);
+        setActiveModal('armor');
+    };
+
+    const openArmorAddModal = () => {
+        setSelectedArmor(null);
+        setArmorForm({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved' });
+        setActiveModal('armor');
+    };
+
+    const handleSaveArmor = () => {
+        if (selectedArmor) {
+            updateArmor(selectedArmor.id, armorForm);
+        } else {
+            addArmor(armorForm);
+        }
+        setActiveModal(null);
+    };
+
+    const handleDeleteArmor = () => {
+        if (selectedArmor) {
+            setArmorToDelete(selectedArmor);
+            setIsArmorDeleteModalOpen(true);
+        }
+    };
+
+    const confirmDeleteArmor = () => {
+        if (armorToDelete) {
+            deleteArmor(armorToDelete.id);
+            setIsArmorDeleteModalOpen(false);
+            setArmorToDelete(null);
+            if (activeModal === 'armor') setActiveModal(null);
         }
     };
 
@@ -230,30 +276,50 @@ const CombatTab = () => {
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
-                                    <tr onClick={() => setActiveModal('armor')} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
-                                        <td className="py-3 flex items-center gap-3">
-                                            <i className="fa-solid fa-shield-halved text-cyber-yellow text-xs"></i>
-                                            <span className="font-bold text-white group-hover:text-cyber-yellow transition-colors">Colete de Kevlar</span>
-                                        </td>
-                                        <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">4</td>
-                                        <td className="py-3 text-center">
-                                            <div className="flex items-center justify-center gap-2">
-                                                <input className="w-16 bg-black/40 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" defaultValue="4" onClick={(e) => e.stopPropagation()} />
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
-                                        <td className="py-3 flex items-center gap-3">
-                                            <i className="fa-solid fa-mask text-cyber-yellow text-xs"></i>
-                                            <span className="font-bold text-white group-hover:text-cyber-yellow transition-colors">Elmo Neural</span>
-                                        </td>
-                                        <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">2</td>
-                                        <td className="py-3 text-center">
-                                            <div className="flex items-center justify-center gap-2">
-                                                <input className="w-16 bg-black/40 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]" type="number" defaultValue="2" onClick={(e) => e.stopPropagation()} />
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    {(characterData.armors || []).map((armor) => (
+                                        <tr key={armor.id} onClick={() => openArmorEditModal(armor)} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
+                                            <td className="py-3 flex items-center gap-3">
+                                                <div className="flex gap-2 items-center">
+                                                    {isEditMode && (
+                                                        <div className="flex gap-1">
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); openArmorEditModal(armor); }}
+                                                                className="text-cyber-yellow hover:text-white transition-colors p-1"
+                                                            >
+                                                                <i className="fa-solid fa-pen-to-square text-[10px]"></i>
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); setArmorToDelete(armor); setIsArmorDeleteModalOpen(true); }}
+                                                                className="text-cyber-red hover:text-white transition-colors p-1"
+                                                            >
+                                                                <i className="fa-solid fa-trash text-[10px]"></i>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                    <i className={`fa-solid ${armor.icon || 'fa-shield-halved'} text-cyber-yellow text-xs`}></i>
+                                                    <span className="font-bold text-white group-hover:text-cyber-yellow transition-colors">{armor.name}</span>
+                                                </div>
+                                            </td>
+                                            <td className="py-3 text-center text-cyber-yellow font-bold text-lg font-mono">{armor.max}</td>
+                                            <td className="py-3 text-center">
+                                                <div className="flex items-center justify-center gap-2" onClick={(e) => e.stopPropagation()}>
+                                                    <input
+                                                        className="w-16 bg-black/40 border border-cyber-yellow/30 rounded text-cyber-yellow font-bold text-center py-1 focus:ring-1 focus:ring-cyber-yellow focus:border-cyber-yellow outline-none transition-all shadow-[0_0_5px_rgba(255,215,0,0.2)]"
+                                                        type="number"
+                                                        value={armor.current}
+                                                        onChange={(e) => updateArmorCurrent(armor.id, e.target.value)}
+                                                    />
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                    {isEditMode && (
+                                        <tr onClick={openArmorAddModal} className="group hover:bg-cyber-yellow/5 transition-colors cursor-pointer text-[13px] border-t border-dashed border-white/10">
+                                            <td colSpan="3" className="py-4 text-center text-cyber-yellow font-bold uppercase tracking-widest text-[10px]">
+                                                <i className="fa-solid fa-plus mr-2"></i> Adicionar Nova Armadura
+                                            </td>
+                                        </tr>
+                                    )}
                                 </tbody>
                             </table>
                         </div>
@@ -479,6 +545,66 @@ const CombatTab = () => {
             </Modal>
 
             {/* Other modals (Resistances, Armor, Conditions) following the same logic */}
+            {/* Modal de Armadura */}
+            <Modal isOpen={activeModal === 'armor'} onClose={() => setActiveModal(null)} maxWidth="max-w-2xl">
+                <ModalHeader onClose={() => setActiveModal(null)} className="bg-white/5">
+                    <div className="flex items-center gap-4">
+                        <div className="w-12 h-12 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/50 flex items-center justify-center shadow-neon-yellow text-cyber-yellow-shadow"><i className="fa-solid fa-shield-halved text-cyber-yellow text-xl text-glow-yellow"></i></div>
+                        <div>
+                            <h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">{selectedArmor ? 'Editar Armadura' : 'Nova Armadura'}</h2>
+                            <p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">{armorForm.name || 'Nova Armadura'}</p>
+                        </div>
+                    </div>
+                </ModalHeader>
+                <ModalBody>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Nome da Armadura</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all"
+                                type="text"
+                                value={armorForm.name}
+                                onChange={(e) => setArmorForm({ ...armorForm, name: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Valor de Proteção (MAX)</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-yellow transition-all"
+                                type="number"
+                                value={armorForm.max}
+                                onChange={(e) => setArmorForm({ ...armorForm, max: parseInt(e.target.value) || 0, current: selectedArmor ? armorForm.current : parseInt(e.target.value) || 0 })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Ícone (FontAwesome class)</label>
+                            <input
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all font-mono text-sm"
+                                type="text"
+                                value={armorForm.icon}
+                                onChange={(e) => setArmorForm({ ...armorForm, icon: e.target.value })}
+                            />
+                        </div>
+                        <div className="flex flex-col gap-2 col-span-1 md:col-span-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Notas/Observações</label>
+                            <textarea
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white min-h-[80px] outline-none focus:border-cyber-yellow transition-all resize-none"
+                                value={armorForm.notes}
+                                onChange={(e) => setArmorForm({ ...armorForm, notes: e.target.value })}
+                            />
+                        </div>
+                    </div>
+                </ModalBody>
+                <ModalFooter className="bg-black/60 flex justify-between">
+                    {selectedArmor ? (
+                        <button onClick={handleDeleteArmor} className="px-6 py-2.5 rounded-lg border border-cyber-red/50 text-cyber-red font-bold uppercase text-xs hover:bg-cyber-red/10 transition-all">Excluir</button>
+                    ) : (
+                        <div></div>
+                    )}
+                    <button onClick={handleSaveArmor} className="px-8 py-2.5 rounded-lg bg-cyber-yellow text-black font-extrabold uppercase text-xs shadow-neon-yellow hover:scale-105 transition-all">Salvar</button>
+                </ModalFooter>
+            </Modal>
+
             <Modal isOpen={activeModal === 'resistances'} onClose={() => setActiveModal(null)} maxWidth="max-w-3xl">
                 <ModalHeader onClose={() => setActiveModal(null)} className="bg-white/5">
                     <div className="flex items-center gap-4">
@@ -510,6 +636,15 @@ const CombatTab = () => {
                 title="Confirmar Exclusão"
                 message={`Tem certeza que deseja excluir o ataque "${attackToDelete?.name}"? Esta ação não pode ser desfeita.`}
                 confirmText="Excluir"
+            />
+
+            <ConfirmationModal
+                isOpen={isArmorDeleteModalOpen}
+                onClose={() => setIsArmorDeleteModalOpen(false)}
+                onConfirm={confirmDeleteArmor}
+                title="Deletar Armadura"
+                message={`Deseja realmente apagar a armadura "${armorToDelete?.name}"?`}
+                confirmText="Deletar"
             />
         </div>
     );
