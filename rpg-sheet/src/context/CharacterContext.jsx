@@ -36,7 +36,130 @@ export const CharacterProvider = ({ children }) => {
                 { id: 'a2', name: 'Elmo Neural', icon: 'fa-mask', current: 2, max: 2, notes: '', reflexBonus: 1, properties: '' }
             ],
             resistances: {}, // Will be populated below
-            conditions: {} // Will be populated below
+            conditions: {}, // Will be populated below
+            talents: [
+                {
+                    id: 't1',
+                    name: "EXPLOSÃO ARCANA",
+                    category: "actions",
+                    tags: ["Habilidade Ativa", "Magia de Éter"],
+                    pa: 3,
+                    stats: {
+                        duracao: "Instantânea",
+                        ativacao: "Ação Padrão",
+                        alcance: "10 metros",
+                        alvo: "Área Circular"
+                    },
+                    description: "Libera uma onda de energia bruta em um raio de 3 metros, causando dano mágico crítico.",
+                    fullDescription: "O conjurador canaliza energia pura do Éter, liberando-a em uma violenta onda de choque ao seu redor. A explosão ignora armaduras físicas convencionais e empurra inimigos pequenos para longe do centro do impacto. Criaturas atingidas devem realizar um teste de Resistência Mágica ou sofrerão 4d8 de dano arcano.",
+                    potencializacoes: [
+                        { name: "+2d6 de Dano Adicional", effect: "Aumenta a densidade da carga energética", resource: "focus", value: 2 },
+                        { name: "Aumentar Alcance (+5m)", effect: "Expande a projeção da onda de choque", resource: "will", value: 1 },
+                        { name: "Efeito de Atordoamento", effect: "Inimigos falham automaticamente em reações", resource: "vitality", value: 3 }
+                    ],
+                    icon: "fa-burst",
+                    color: "neon-pink"
+                },
+                {
+                    id: 't2',
+                    name: "TELETRANSPORTE MENOR",
+                    category: "actions",
+                    tags: ["Habilidade Ativa"],
+                    pa: 2,
+                    stats: {
+                        duracao: "Instantânea",
+                        ativacao: "Ação Padrão",
+                        alcance: "15 metros",
+                        alvo: "Pessoal"
+                    },
+                    description: "Permite deslocar-se instantaneamente para um ponto visível a até 15 metros.",
+                    fullDescription: "Curte distância de transporte através do Éter.",
+                    potencializacoes: [
+                        { name: "Custo de Foco", effect: "Custo reduzido", resource: "focus", value: 1 },
+                        { name: "Custo de Vitalidade", effect: "Custo reduzido", resource: "vitality", value: 1 }
+                    ],
+                    icon: "fa-door-open",
+                    color: "neon-pink"
+                },
+                {
+                    id: 't3',
+                    name: "ESCUDO PROTETOR",
+                    category: "actions",
+                    tags: ["Habilidade Ativa"],
+                    pa: 1,
+                    stats: {
+                        duracao: "1 minuto",
+                        ativacao: "Ação Bônus",
+                        alcance: "Pessoal",
+                        alvo: "Pessoal"
+                    },
+                    description: "Conjura uma barreira translúcida que absorve os próximos 10 pontos de dano físico.",
+                    fullDescription: "Proteção física básica.",
+                    potencializacoes: [
+                        { name: "Custo de Vontade", effect: "Aumenta durabilidade", resource: "will", value: 5 }
+                    ],
+                    icon: "fa-shield-halved",
+                    color: "neon-pink"
+                },
+                {
+                    id: 't4',
+                    name: "MESTRE DE ARMAS",
+                    category: "talent",
+                    tags: ["Passiva"],
+                    pa: 0,
+                    stats: {
+                        duracao: "Passiva",
+                        ativacao: "Passiva",
+                        alcance: "-",
+                        alvo: "Pessoal"
+                    },
+                    description: "Adiciona +2 em jogadas de ataque com armas pesadas ou de haste.",
+                    fullDescription: "Sua maestria com armas grandes é inigualável.",
+                    potencializacoes: [],
+                    icon: "fa-gavel",
+                    color: "neon-yellow"
+                },
+                {
+                    id: 't5',
+                    name: "SENTIDOS AGUÇADOS",
+                    category: "talent",
+                    tags: ["Passiva"],
+                    pa: 0,
+                    stats: {
+                        duracao: "Passiva",
+                        ativacao: "Passiva",
+                        alcance: "-",
+                        alvo: "Pessoal"
+                    },
+                    description: "Vantagem em testes de Percepção baseados em audição ou olfato.",
+                    fullDescription: "Seus sentidos são extremamente treinados.",
+                    potencializacoes: [
+                        { name: "Custo de Foco", effect: "Foco aprofundado", resource: "focus", value: 1 }
+                    ],
+                    icon: "fa-ear-listen",
+                    color: "neon-yellow"
+                },
+                {
+                    id: 't6',
+                    name: "RESILIÊNCIA MENTAL",
+                    category: "talent",
+                    tags: ["Passiva"],
+                    pa: 0,
+                    stats: {
+                        duracao: "Passiva",
+                        ativacao: "Passiva",
+                        alcance: "-",
+                        alvo: "Pessoal"
+                    },
+                    description: "Sua mente é um forte. Imune a efeitos de medo mundanos e resistência a dano psíquico.",
+                    fullDescription: "Mente inquebrável.",
+                    potencializacoes: [
+                        { name: "Custo de Vontade", effect: "Proteção extra", resource: "will", value: 2 }
+                    ],
+                    icon: "fa-head-side-virus",
+                    color: "neon-yellow"
+                }
+            ]
         };
 
         // Populate initial conditions from rules
@@ -96,7 +219,8 @@ export const CharacterProvider = ({ children }) => {
                         ...armor
                     })),
                     resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) },
-                    conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) }
+                    conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) },
+                    talents: parsed.talents || defaultData.talents
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -335,6 +459,27 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    const addTalent = (talent) => {
+        setCharacterData(prev => ({
+            ...prev,
+            talents: [...(prev.talents || []), { ...talent, id: Date.now().toString() }]
+        }));
+    };
+
+    const updateTalent = (id, updatedTalent) => {
+        setCharacterData(prev => ({
+            ...prev,
+            talents: prev.talents.map(t => t.id === id ? { ...t, ...updatedTalent } : t)
+        }));
+    };
+
+    const deleteTalent = (id) => {
+        setCharacterData(prev => ({
+            ...prev,
+            talents: prev.talents.filter(t => t.id !== id)
+        }));
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -356,7 +501,10 @@ export const CharacterProvider = ({ children }) => {
         updateResistance,
         updateAllResistances,
         updateActiveCondition,
-        updateAllConditions
+        updateAllConditions,
+        addTalent,
+        updateTalent,
+        deleteTalent
     };
 
     return (
