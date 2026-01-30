@@ -307,15 +307,24 @@ export const CharacterProvider = ({ children }) => {
         });
     };
     const updateActiveCondition = (key, field, newValue) => {
+        setCharacterData(prev => {
+            const currentItem = prev.conditions[key] || { active: false, level: 1 };
+            return {
+                ...prev,
+                conditions: {
+                    ...prev.conditions,
+                    [key]: {
+                        ...currentItem,
+                        [field]: field === 'level' ? (parseInt(newValue) || 1) : newValue
+                    }
+                }
+            };
+        });
+    };
+    const updateAllConditions = (newConditions) => {
         setCharacterData(prev => ({
             ...prev,
-            conditions: {
-                ...prev.conditions,
-                [key]: {
-                    ...prev.conditions[key],
-                    [field]: field === 'level' ? (parseInt(newValue) || 1) : newValue
-                }
-            }
+            conditions: newConditions
         }));
     };
 
@@ -338,7 +347,8 @@ export const CharacterProvider = ({ children }) => {
         deleteArmor,
         updateArmorCurrent,
         updateResistance,
-        updateActiveCondition
+        updateActiveCondition,
+        updateAllConditions
     };
 
     return (

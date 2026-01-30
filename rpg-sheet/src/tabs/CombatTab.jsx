@@ -91,7 +91,7 @@ const CombatTab = () => {
         characterData, isEditMode, updateDefense,
         addAttack, updateAttack, deleteAttack, updateAttackWear,
         addArmor, updateArmor, deleteArmor, updateArmorCurrent,
-        updateResistance
+        updateResistance, updateActiveCondition, updateAllConditions
     } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
@@ -103,6 +103,7 @@ const CombatTab = () => {
     const [selectedArmor, setSelectedArmor] = useState(null);
     const [isArmorDeleteModalOpen, setIsArmorDeleteModalOpen] = useState(false);
     const [armorToDelete, setArmorToDelete] = useState(null);
+    const [tempConditions, setTempConditions] = useState({});
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -139,6 +140,25 @@ const CombatTab = () => {
             setAttackToDelete(null);
             if (activeModal === 'weapon') setActiveModal(null);
         }
+    };
+    const openConditionsModal = () => {
+        setTempConditions({ ...characterData.conditions });
+        setActiveModal('conditions');
+    };
+
+    const handleSaveConditions = () => {
+        updateAllConditions(tempConditions);
+        setActiveModal(null);
+    };
+
+    const updateTempCondition = (key, field, newValue) => {
+        setTempConditions(prev => ({
+            ...prev,
+            [key]: {
+                ...(prev[key] || { active: false, level: 1 }),
+                [field]: field === 'level' ? (parseInt(newValue) || 1) : newValue
+            }
+        }));
     };
 
     const openArmorEditModal = (armor) => {
@@ -450,7 +470,7 @@ const CombatTab = () => {
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Condições ativas</h3>
-                            <button onClick={() => setActiveModal('conditions')} className="text-cyber-gray hover:text-white transition-colors">
+                            <button onClick={openConditionsModal} className="text-cyber-gray hover:text-white transition-colors">
                                 <i className="fa-solid fa-plus text-xs"></i>
                             </button>
                         </div>
@@ -825,51 +845,43 @@ const CombatTab = () => {
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                         {Object.entries(CONDITIONS).map(([catKey, category]) => (
                             <section key={catKey} className="space-y-4">
-                                <div className={`flex items-center gap-3 mb-6 border-l-4 border-${category.color} pl-3`}>
+                                <div className={`flex items-center gap-3 mb-6 border-l-4 border-${category.color.replace('cyber-', '')} pl-3`}>
                                     <h3 className={`text-${category.color} text-sm font-bold tracking-[0.2em] uppercase`}>{category.label}</h3>
                                 </div>
                                 <div className="space-y-3">
                                     {category.items.map(item => {
-                                        const cond = characterData.conditions[item.key] || { active: false, level: 1 };
+                                        const cond = tempConditions[item.key] || { active: false, level: 1 };
+                                        const colorName = category.color.replace('cyber-', '');
                                         return (
-                                            <div key={item.key} className={`flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5 hover:border-${category.color}/40 transition-all group ${cond.active ? `border-${category.color}/30 bg-${category.color}/5` : ''}`}>
-                                                <div className="flex items-center gap-4 flex-grow">
+                                            <div key={item.key} className={`flex items-center justify-between p-4 rounded-xl bg-white/5 border transition-all group ${cond.active ? `border-${category.color}/40 bg-${category.color}/5` : 'border-white/5 hover:border-white/10'}`}>
+                                                <div className="flex items-center gap-4">
                                                     <label className="relative inline-flex items-center cursor-pointer">
                                                         <input
                                                             type="checkbox"
                                                             className="sr-only peer"
                                                             checked={cond.active}
-                                                            onChange={(e) => updateActiveCondition(item.key, 'active', e.target.checked)}
+                                                            onChange={(e) => updateTempCondition(item.key, 'active', e.target.checked)}
                                                         />
-                                                        <div className={`w-10 h-5 bg-white/10 rounded-full transition-colors peer-checked:bg-${category.color}/50 relative border border-white/10`}>
-                                                            <div className={`absolute top-1 left-1.5 w-3 h-3 bg-white rounded-full transition-transform ${cond.active ? 'translate-x-4' : ''}`}></div>
+                                                        <div className={`w-10 h-5 bg-white/10 rounded-full transition-colors peer-checked:bg-${category.color}/50 border border-white/10 relative`}>
+                                                            <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${cond.active ? 'translate-x-5' : ''}`}></div>
+                                                        </div>
+                                                        <div
+                                                            onClick={(e) => {
+                                                                if (cond.active) {
+                                                                    e.preventDefault();
+                                                                    e.stopPropagation();
+                                                                    updateTempCondition(item.key, 'level', (cond.level % 5) + 1);
+                                                                }
+                                                            }}
+                                                            className={`level-badge ml-4 ${cond.active ? `level-badge-active-${colorName}` : ''}`}
+                                                        >
+                                                            {cond.level}
                                                         </div>
                                                     </label>
-                                                    <div className="flex flex-col">
-                                                        <span className={`text-xs font-bold tracking-widest uppercase transition-colors ${cond.active ? `text-${category.color}` : 'text-white group-hover:text-white/80'}`}>
-                                                            {item.name}
-                                                        </span>
-                                                    </div>
+                                                    <span className={`text-sm font-bold tracking-widest uppercase transition-colors ${cond.active ? `text-${category.color} text-glow-${colorName}` : 'text-cyber-gray group-hover:text-white'}`}>
+                                                        {item.name}
+                                                    </span>
                                                 </div>
-                                                {cond.active && (
-                                                    <div className="flex items-center gap-2">
-                                                        <div className="flex items-center gap-1 bg-black/40 rounded-md border border-white/10 p-1">
-                                                            <button
-                                                                onClick={() => updateActiveCondition(item.key, 'level', Math.max(1, cond.level - 1))}
-                                                                className="w-5 h-5 flex items-center justify-center text-[10px] text-cyber-gray hover:text-white transition-colors"
-                                                            >
-                                                                <i className="fa-solid fa-minus"></i>
-                                                            </button>
-                                                            <span className={`w-5 text-center font-mono font-bold text-xs text-${category.color}`}>{cond.level}</span>
-                                                            <button
-                                                                onClick={() => updateActiveCondition(item.key, 'level', cond.level + 1)}
-                                                                className="w-5 h-5 flex items-center justify-center text-[10px] text-cyber-gray hover:text-white transition-colors"
-                                                            >
-                                                                <i className="fa-solid fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         );
                                     })}
@@ -878,20 +890,20 @@ const CombatTab = () => {
                         ))}
                     </div>
                 </ModalBody>
-                <ModalFooter className="bg-black/60 flex items-center justify-between p-6 border-t border-white/10">
-                    <div className="flex items-center gap-3 text-cyber-gray italic text-[10px] uppercase tracking-widest">
+                <ModalFooter className="p-8 border-t border-white/10 bg-black/60 flex items-center justify-between gap-6">
+                    <div className="flex items-center gap-3 text-cyber-gray italic text-xs uppercase tracking-widest">
                         <i className="fa-solid fa-circle-info"></i>
-                        <span>Níveis elevados podem aumentar as penalidades.</span>
+                        <span>Níveis elevados aumentam as penalidades dos testes. Clique no número para alterar o nível.</span>
                     </div>
                     <button
-                        onClick={() => setActiveModal(null)}
-                        className="px-10 py-3 bg-cyber-pink hover:bg-cyber-pink/80 text-white font-bold uppercase tracking-[0.2em] rounded-lg shadow-neon-pink transition-all text-xs"
+                        onClick={handleSaveConditions}
+                        className="w-full max-w-xs py-4 bg-cyber-pink hover:bg-cyber-pink/80 text-white font-bold uppercase tracking-[0.2em] rounded-lg shadow-neon-pink transition-all"
                     >
                         Confirmar Alterações
                     </button>
                 </ModalFooter>
             </Modal>
-        </div >
+        </div>
     );
 };
 
