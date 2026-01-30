@@ -91,7 +91,8 @@ const CombatTab = () => {
         characterData, isEditMode, updateDefense,
         addAttack, updateAttack, deleteAttack, updateAttackWear,
         addArmor, updateArmor, deleteArmor, updateArmorCurrent,
-        updateResistance, updateActiveCondition, updateAllConditions
+        updateResistance, updateAllResistances,
+        updateActiveCondition, updateAllConditions
     } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
@@ -104,6 +105,7 @@ const CombatTab = () => {
     const [isArmorDeleteModalOpen, setIsArmorDeleteModalOpen] = useState(false);
     const [armorToDelete, setArmorToDelete] = useState(null);
     const [tempConditions, setTempConditions] = useState({});
+    const [tempResistances, setTempResistances] = useState({});
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -159,6 +161,43 @@ const CombatTab = () => {
                 [field]: field === 'level' ? (parseInt(newValue) || 1) : newValue
             }
         }));
+    };
+
+    const openResistancesModal = () => {
+        setTempResistances({ ...characterData.resistances });
+        setActiveModal('resistances');
+    };
+
+    const handleSaveResistances = () => {
+        updateAllResistances(tempResistances);
+        setActiveModal(null);
+    };
+
+    const updateTempResistance = (type, field, newValue) => {
+        setTempResistances(prev => {
+            const currentRes = prev[type] || { value: 0, immunity: false, vulnerable: false };
+            let val = currentRes.value;
+            let immunity = currentRes.immunity;
+            let vulnerable = currentRes.vulnerable;
+
+            if (field === 'value') {
+                val = immunity ? 0 : Math.max(0, parseInt(newValue) || 0);
+            } else if (field === 'immunity') {
+                immunity = newValue;
+                if (immunity) {
+                    vulnerable = false;
+                    val = 0;
+                }
+            } else if (field === 'vulnerable') {
+                vulnerable = newValue;
+                if (vulnerable) immunity = false;
+            }
+
+            return {
+                ...prev,
+                [type]: { value: val, immunity, vulnerable }
+            };
+        });
     };
 
     const openArmorEditModal = (armor) => {
@@ -384,7 +423,7 @@ const CombatTab = () => {
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistência a dano</h3>
                             {isEditMode && (
-                                <button onClick={() => setActiveModal('resistances')} className="text-cyber-gray hover:text-white transition-colors">
+                                <button onClick={openResistancesModal} className="text-cyber-gray hover:text-white transition-colors">
                                     <i className="fa-solid fa-pen-to-square text-xs"></i>
                                 </button>
                             )}
@@ -765,7 +804,7 @@ const CombatTab = () => {
                             </div>
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                                 {category.types.map(type => {
-                                    const res = characterData.resistances[type.key] || { value: 0, immunity: false, vulnerable: false };
+                                    const res = tempResistances[type.key] || { value: 0, immunity: false, vulnerable: false };
                                     const catColor = catKey === 'mundane' ? 'cyber-pink' : catKey === 'elemental' ? 'cyber-purple' : catKey === 'intangible' ? 'cyber-yellow' : 'cyber-cyan';
 
                                     return (
@@ -780,12 +819,12 @@ const CombatTab = () => {
                                                     min="0"
                                                     disabled={res.immunity}
                                                     value={res.value}
-                                                    onChange={(e) => updateResistance(type.key, 'value', e.target.value)}
+                                                    onChange={(e) => updateTempResistance(type.key, 'value', e.target.value)}
                                                 />
                                             </div>
                                             <div className="flex justify-between items-center pt-2 border-t border-white/5">
                                                 <label
-                                                    onClick={() => updateResistance(type.key, 'immunity', !res.immunity)}
+                                                    onClick={() => updateTempResistance(type.key, 'immunity', !res.immunity)}
                                                     className="flex items-center gap-2 cursor-pointer group"
                                                 >
                                                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.immunity ? 'bg-cyber-green border-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.5)]' : 'border-cyber-green/30 group-hover:border-cyber-green/50'}`}>
@@ -794,7 +833,7 @@ const CombatTab = () => {
                                                     <span className={`text-[10px] uppercase font-bold tracking-tighter transition-colors ${res.immunity ? 'text-cyber-green' : 'text-cyber-gray group-hover:text-cyber-green'}`}>Imune</span>
                                                 </label>
                                                 <label
-                                                    onClick={() => updateResistance(type.key, 'vulnerable', !res.vulnerable)}
+                                                    onClick={() => updateTempResistance(type.key, 'vulnerable', !res.vulnerable)}
                                                     className="flex items-center gap-2 cursor-pointer group"
                                                 >
                                                     <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.vulnerable ? 'bg-cyber-red border-cyber-red shadow-[0_0_10px_rgba(255,49,49,0.5)]' : 'border-cyber-red/30 group-hover:border-cyber-red/50'}`}>
@@ -811,7 +850,7 @@ const CombatTab = () => {
                     ))}
                 </ModalBody>
                 <ModalFooter className="bg-black/60 flex justify-end p-6 border-t border-white/10">
-                    <button onClick={() => setActiveModal(null)} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink hover:scale-105 active:scale-95 transition-all">Salvar</button>
+                    <button onClick={handleSaveResistances} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink hover:scale-105 active:scale-95 transition-all">Salvar</button>
                 </ModalFooter>
             </Modal>
 

@@ -306,6 +306,13 @@ export const CharacterProvider = ({ children }) => {
             };
         });
     };
+    const updateAllResistances = (newResistances) => {
+        setCharacterData(prev => ({
+            ...prev,
+            resistances: newResistances
+        }));
+    };
+
     const updateActiveCondition = (key, field, newValue) => {
         setCharacterData(prev => {
             const currentItem = prev.conditions[key] || { active: false, level: 1 };
@@ -347,6 +354,7 @@ export const CharacterProvider = ({ children }) => {
         deleteArmor,
         updateArmorCurrent,
         updateResistance,
+        updateAllResistances,
         updateActiveCondition,
         updateAllConditions
     };
