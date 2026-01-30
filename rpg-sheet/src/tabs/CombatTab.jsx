@@ -360,7 +360,7 @@ const CombatTab = () => {
                         </div>
                     </div>
 
-                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card h-full">
+                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistência a dano</h3>
                             {isEditMode && (
@@ -446,6 +446,23 @@ const CombatTab = () => {
                             )}
                         </div>
                     </div>
+
+                    <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
+                        <div className="flex justify-between items-center mb-4">
+                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Condições ativas</h3>
+                            <button onClick={() => setActiveModal('conditions')} className="text-cyber-gray hover:text-white transition-colors">
+                                <i className="fa-solid fa-plus text-xs"></i>
+                            </button>
+                        </div>
+                        <div className="flex flex-wrap gap-2 p-2 rounded-lg bg-black/20 border border-white/5 min-h-[60px]">
+                            <span className="px-2 py-1 bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(255,0,153,0.3)]">
+                                <i className="fa-solid fa-ghost"></i> Amedrontado
+                            </span>
+                            <span className="px-2 py-1 bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(189,0,255,0.3)]">
+                                <i className="fa-solid fa-brain"></i> Confuso
+                            </span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* 5. STATUS E CONDIÇÕES */}
@@ -479,23 +496,6 @@ const CombatTab = () => {
                             statusKey="will"
                             isEditMode={isEditMode}
                         />
-                    </div>
-
-                    <div className="border-t border-white/10 pt-4 mt-auto">
-                        <div className="flex justify-between items-center mb-3">
-                            <h4 className="text-cyber-gray text-[10px] font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Condições Ativas</h4>
-                            <button onClick={() => setActiveModal('conditions')} className="w-5 h-5 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-cyber-pink/20 hover:border-cyber-pink/50 transition-all text-gray-400 hover:text-cyber-pink">
-                                <i className="fa-solid fa-plus text-[9px]"></i>
-                            </button>
-                        </div>
-                        <div className="flex flex-wrap gap-2 p-2 rounded-lg bg-black/20 border border-white/5 min-h-[50px]">
-                            <span className="px-2 py-1 bg-cyber-pink/10 border border-cyber-pink/30 text-cyber-pink rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(255,0,153,0.3)]">
-                                <i className="fa-solid fa-ghost"></i> Amedrontado
-                            </span>
-                            <span className="px-2 py-1 bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(189,0,255,0.3)]">
-                                <i className="fa-solid fa-brain"></i> Confuso
-                            </span>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -613,7 +613,7 @@ const CombatTab = () => {
                     )}
                     <button onClick={handleSaveAttack} className="px-8 py-2.5 rounded-lg bg-cyber-pink text-white font-extrabold uppercase text-xs shadow-neon-pink hover:scale-105 transition-all">Salvar</button>
                 </ModalFooter>
-            </Modal>
+            </Modal >
 
             {/* Other modals (Resistances, Armor, Conditions) following the same logic */}
             {/* Modal de Armadura */}
