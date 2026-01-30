@@ -470,9 +470,11 @@ const CombatTab = () => {
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-pink font-display">Condições ativas</h3>
-                            <button onClick={openConditionsModal} className="text-cyber-gray hover:text-white transition-colors">
-                                <i className="fa-solid fa-plus text-xs"></i>
-                            </button>
+                            {isEditMode && (
+                                <button onClick={openConditionsModal} className="text-cyber-gray hover:text-white transition-colors">
+                                    <i className="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                            )}
                         </div>
                         <div className="flex flex-wrap gap-2 p-2 rounded-lg bg-black/20 border border-white/5 min-h-[60px]">
                             {Object.entries(characterData.conditions || {}).map(([key, cond]) => {
@@ -865,19 +867,28 @@ const CombatTab = () => {
                                                         <div className={`w-10 h-5 bg-white/10 rounded-full transition-colors peer-checked:bg-${category.color}/50 border border-white/10 relative`}>
                                                             <div className={`absolute top-1 left-1 w-3 h-3 bg-white rounded-full transition-transform ${cond.active ? 'translate-x-5' : ''}`}></div>
                                                         </div>
-                                                        <div
-                                                            onClick={(e) => {
-                                                                if (cond.active) {
-                                                                    e.preventDefault();
-                                                                    e.stopPropagation();
-                                                                    updateTempCondition(item.key, 'level', (cond.level % 5) + 1);
-                                                                }
-                                                            }}
-                                                            className={`level-badge ml-4 ${cond.active ? `level-badge-active-${colorName}` : ''}`}
-                                                        >
-                                                            {cond.level}
-                                                        </div>
                                                     </label>
+
+                                                    {cond.active && (
+                                                        <div className="flex items-center gap-1 bg-black/40 rounded-lg border border-white/10 p-1 animate-scale-up">
+                                                            <button
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateTempCondition(item.key, 'level', Math.max(1, cond.level - 1)); }}
+                                                                className={`w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all`}
+                                                            >
+                                                                <i className="fa-solid fa-minus text-[10px]"></i>
+                                                            </button>
+                                                            <div className={`w-8 text-center font-display font-bold text-sm text-${category.color} text-glow-${colorName}`}>
+                                                                {cond.level}
+                                                            </div>
+                                                            <button
+                                                                onClick={(e) => { e.preventDefault(); e.stopPropagation(); updateTempCondition(item.key, 'level', cond.level + 1); }}
+                                                                className={`w-6 h-6 flex items-center justify-center rounded bg-white/5 hover:bg-white/10 text-white/50 hover:text-white transition-all`}
+                                                            >
+                                                                <i className="fa-solid fa-plus text-[10px]"></i>
+                                                            </button>
+                                                        </div>
+                                                    )}
+
                                                     <span className={`text-sm font-bold tracking-widest uppercase transition-colors ${cond.active ? `text-${category.color} text-glow-${colorName}` : 'text-cyber-gray group-hover:text-white'}`}>
                                                         {item.name}
                                                     </span>
