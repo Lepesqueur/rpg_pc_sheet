@@ -715,20 +715,20 @@ const CombatTab = () => {
                                                 />
                                             </div>
                                             <div className="flex justify-between items-center pt-2 border-t border-white/5">
-                                                <label className="flex items-center gap-2 cursor-pointer group">
-                                                    <div
-                                                        onClick={() => updateResistance(type.key, 'immunity', !res.immunity)}
-                                                        className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.immunity ? 'bg-cyber-green border-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.5)]' : 'border-cyber-green/30 group-hover:border-cyber-green/50'}`}
-                                                    >
+                                                <label
+                                                    onClick={() => updateResistance(type.key, 'immunity', !res.immunity)}
+                                                    className="flex items-center gap-2 cursor-pointer group"
+                                                >
+                                                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.immunity ? 'bg-cyber-green border-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.5)]' : 'border-cyber-green/30 group-hover:border-cyber-green/50'}`}>
                                                         {res.immunity && <i className="fa-solid fa-check text-[10px] text-white"></i>}
                                                     </div>
                                                     <span className={`text-[10px] uppercase font-bold tracking-tighter transition-colors ${res.immunity ? 'text-cyber-green' : 'text-cyber-gray group-hover:text-cyber-green'}`}>Imune</span>
                                                 </label>
-                                                <label className="flex items-center gap-2 cursor-pointer group">
-                                                    <div
-                                                        onClick={() => updateResistance(type.key, 'vulnerable', !res.vulnerable)}
-                                                        className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.vulnerable ? 'bg-cyber-red border-cyber-red shadow-[0_0_10px_rgba(255,49,49,0.5)]' : 'border-cyber-red/30 group-hover:border-cyber-red/50'}`}
-                                                    >
+                                                <label
+                                                    onClick={() => updateResistance(type.key, 'vulnerable', !res.vulnerable)}
+                                                    className="flex items-center gap-2 cursor-pointer group"
+                                                >
+                                                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.vulnerable ? 'bg-cyber-red border-cyber-red shadow-[0_0_10px_rgba(255,49,49,0.5)]' : 'border-cyber-red/30 group-hover:border-cyber-red/50'}`}>
                                                         {res.vulnerable && <i className="fa-solid fa-check text-[10px] text-white"></i>}
                                                     </div>
                                                     <span className={`text-[10px] uppercase font-bold tracking-tighter transition-colors ${res.vulnerable ? 'text-cyber-red' : 'text-cyber-gray group-hover:text-cyber-red'}`}>Vuln.</span>

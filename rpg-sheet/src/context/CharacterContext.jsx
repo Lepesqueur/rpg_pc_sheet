@@ -265,16 +265,28 @@ export const CharacterProvider = ({ children }) => {
     };
 
     const updateResistance = (type, field, newValue) => {
-        setCharacterData(prev => ({
-            ...prev,
-            resistances: {
-                ...prev.resistances,
-                [type]: {
-                    ...prev.resistances[type],
-                    [field]: field === 'value' ? (parseInt(newValue) || 0) : newValue
-                }
+        setCharacterData(prev => {
+            const currentRes = prev.resistances[type] || { value: 0, immunity: false, vulnerable: false };
+            const updatedRes = {
+                ...currentRes,
+                [field]: field === 'value' ? (parseInt(newValue) || 0) : newValue
+            };
+
+            // Mutuamente exclusivo: Imunidade e Vulnerabilidade
+            if (field === 'immunity' && newValue === true) {
+                updatedRes.vulnerable = false;
+            } else if (field === 'vulnerable' && newValue === true) {
+                updatedRes.immunity = false;
             }
-        }));
+
+            return {
+                ...prev,
+                resistances: {
+                    ...prev.resistances,
+                    [type]: updatedRes
+                }
+            };
+        });
     };
 
     const value = {
@@ -294,7 +306,8 @@ export const CharacterProvider = ({ children }) => {
         addArmor,
         updateArmor,
         deleteArmor,
-        updateArmorCurrent
+        updateArmorCurrent,
+        updateResistance
     };
 
     return (
