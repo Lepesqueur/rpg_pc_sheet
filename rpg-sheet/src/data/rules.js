@@ -65,3 +65,45 @@ export const SKILLS_CATEGORIES = {
         ]
     }
 };
+
+export const DAMAGE_RESISTANCES = {
+    mundane: {
+        label: 'Mundano',
+        color: 'cyber-pink',
+        icon: 'fa-shield-halved',
+        types: [
+            { key: 'corte', name: 'Corte', icon: 'fa-sword' },
+            { key: 'impacto', name: 'Impacto', icon: 'fa-hammer' },
+            { key: 'perfuracao', name: 'Perfuração', icon: 'fa-bullseye' },
+            { key: 'veneno', name: 'Veneno', icon: 'fa-biohazard' }
+        ]
+    },
+    elemental: {
+        label: 'Elemental',
+        color: 'cyber-purple',
+        icon: 'fa-wand-magic-sparkles',
+        types: [
+            { key: 'acido', name: 'Ácido', icon: 'fa-flask' },
+            { key: 'eletrico', name: 'Elétrico', icon: 'fa-bolt' },
+            { key: 'fogo', name: 'Fogo', icon: 'fa-fire' },
+            { key: 'frio', name: 'Frio', icon: 'fa-snowflake' }
+        ]
+    },
+    intangible: {
+        label: 'Intangível',
+        color: 'cyber-yellow',
+        icon: 'fa-ghost',
+        types: [
+            { key: 'psiquico', name: 'Psíquico', icon: 'fa-brain' },
+            { key: 'radiante', name: 'Radiante', icon: 'fa-sun' }
+        ]
+    },
+    entropic: {
+        label: 'Entrópico',
+        color: 'cyber-cyan',
+        icon: 'fa-skull',
+        types: [
+            { key: 'necrotico', name: 'Necrótico', icon: 'fa-cloud-showers-heavy' }
+        ]
+    }
+};

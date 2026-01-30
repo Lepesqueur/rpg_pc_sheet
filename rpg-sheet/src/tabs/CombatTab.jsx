@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
+import { DAMAGE_RESISTANCES } from '../data/rules';
 
 // Componente simples de progresso circular usando SVG
 const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, statusKey, isEditMode }) => {
@@ -89,7 +90,8 @@ const CombatTab = () => {
     const {
         characterData, isEditMode, updateDefense,
         addAttack, updateAttack, deleteAttack, updateAttackWear,
-        addArmor, updateArmor, deleteArmor, updateArmorCurrent
+        addArmor, updateArmor, deleteArmor, updateArmorCurrent,
+        updateResistance
     } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
@@ -364,31 +366,80 @@ const CombatTab = () => {
                             <button onClick={() => setActiveModal('resistances')} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-pen-to-square text-xs"></i></button>
                         </div>
                         <div className="space-y-4">
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-cyber-purple text-[16px]">verified_user</span>
-                                    <span className="text-[10px] font-bold text-cyber-purple uppercase tracking-tighter">Resistências</span>
+                            {/* Resistências (Valor > 0 e não vulnerável) */}
+                            {Object.entries(characterData.resistances || {}).some(([key, res]) => res.value > 0 && !res.vulnerable && !res.immunity) && (
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-cyber-green text-[16px]">verified_user</span>
+                                        <span className="text-[10px] font-bold text-cyber-green uppercase tracking-tighter">Resistências</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Object.entries(DAMAGE_RESISTANCES).flatMap(([catKey, cat]) =>
+                                            cat.types.map(type => {
+                                                const res = characterData.resistances[type.key];
+                                                if (res && res.value > 0 && !res.vulnerable && !res.immunity) {
+                                                    return (
+                                                        <span key={type.key} className="bg-cyber-green/10 border border-cyber-green/30 text-cyber-green px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
+                                                            <i className={`fa-solid ${type.icon} text-[9px]`}></i> {type.name} ({res.value})
+                                                        </span>
+                                                    );
+                                                }
+                                                return null;
+                                            })
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="flex flex-wrap gap-2">
-                                    <span className="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
-                                        <i className="fa-solid fa-fire text-[9px]"></i> Fogo (10)
-                                    </span>
-                                    <span className="bg-cyber-purple/10 border border-cyber-purple/30 text-cyber-purple px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
-                                        <i className="fa-solid fa-gavel text-[9px]"></i> Físico (5)
-                                    </span>
+                            )}
+
+                            {/* Imunidades */}
+                            {Object.entries(characterData.resistances || {}).some(([key, res]) => res.immunity) && (
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-cyber-cyan text-[16px]">security</span>
+                                        <span className="text-[10px] font-bold text-cyber-cyan uppercase tracking-tighter">Imunidades</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Object.entries(DAMAGE_RESISTANCES).flatMap(([catKey, cat]) =>
+                                            cat.types.map(type => {
+                                                const res = characterData.resistances[type.key];
+                                                if (res && res.immunity) {
+                                                    return (
+                                                        <span key={type.key} className="bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
+                                                            <i className={`fa-solid ${type.icon} text-[9px]`}></i> {type.name}
+                                                        </span>
+                                                    );
+                                                }
+                                                return null;
+                                            })
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                    <span className="material-symbols-outlined text-cyber-red text-[16px]">warning</span>
-                                    <span className="text-[10px] font-bold text-cyber-red uppercase tracking-tighter">Vulnerabilidades</span>
+                            )}
+
+                            {/* Vulnerabilidades */}
+                            {Object.entries(characterData.resistances || {}).some(([key, res]) => res.vulnerable || (res.value > 0 && res.vulnerable)) && (
+                                <div className="space-y-2">
+                                    <div className="flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-cyber-red text-[16px]">warning</span>
+                                        <span className="text-[10px] font-bold text-cyber-red uppercase tracking-tighter">Vulnerabilidades</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {Object.entries(DAMAGE_RESISTANCES).flatMap(([catKey, cat]) =>
+                                            cat.types.map(type => {
+                                                const res = characterData.resistances[type.key];
+                                                if (res && (res.vulnerable)) {
+                                                    return (
+                                                        <span key={type.key} className="bg-cyber-red/10 border border-cyber-red/30 text-cyber-red px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
+                                                            <i className={`fa-solid ${type.icon} text-[9px]`}></i> {type.name}{res.value > 0 ? ` (${res.value})` : ''}
+                                                        </span>
+                                                    );
+                                                }
+                                                return null;
+                                            })
+                                        )}
+                                    </div>
                                 </div>
-                                <div className="flex flex-wrap gap-2">
-                                    <span className="bg-cyber-red/10 border border-cyber-red/30 text-cyber-red px-2 py-1 rounded text-[11px] font-bold flex items-center gap-1">
-                                        <i className="fa-solid fa-bolt text-[9px]"></i> Elétrico
-                                    </span>
-                                </div>
-                            </div>
+                            )}
                         </div>
                     </div>
                 </div>
@@ -628,27 +679,70 @@ const CombatTab = () => {
                 </ModalFooter>
             </Modal>
 
-            <Modal isOpen={activeModal === 'resistances'} onClose={() => setActiveModal(null)} maxWidth="max-w-3xl">
-                <ModalHeader onClose={() => setActiveModal(null)} className="bg-white/5">
-                    <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-cyber-purple/20 border border-cyber-purple/50 flex items-center justify-center shadow-neon-purple text-cyber-purple-shadow"><i className="fa-solid fa-shield-virus text-cyber-purple text-xl text-glow-purple"></i></div>
-                        <div><h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">Editar Resistências</h2><p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">Modificadores de Dano</p></div>
+            <Modal isOpen={activeModal === 'resistances'} onClose={() => setActiveModal(null)} maxWidth="max-w-4xl">
+                <ModalHeader onClose={() => setActiveModal(null)} className="bg-black/40 border-b border-white/10">
+                    <div>
+                        <h2 className="text-2xl font-bold uppercase tracking-widest text-white text-glow-purple">Editar Resistências</h2>
+                        <p className="text-xs text-cyber-gray mt-1 uppercase tracking-tighter">Ajuste valores, imunidades e vulnerabilidades</p>
                     </div>
                 </ModalHeader>
-                <ModalBody>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Fogo</label>
-                            <input className="bg-black/40 border border-white/10 rounded px-2 py-2 text-center text-white font-mono" type="number" defaultValue="10" />
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Físico</label>
-                            <input className="bg-black/40 border border-white/10 rounded px-2 py-2 text-center text-white font-mono" type="number" defaultValue="5" />
-                        </div>
-                    </div>
+                <ModalBody className="p-6 overflow-y-auto space-y-8 max-h-[70vh]">
+                    {Object.entries(DAMAGE_RESISTANCES).map(([catKey, category]) => (
+                        <section key={catKey}>
+                            <div className="flex items-center gap-3 mb-4">
+                                <div className={`h-px flex-grow bg-gradient-to-r ${catKey === 'mundane' ? 'from-cyber-pink' : catKey === 'elemental' ? 'from-cyber-purple' : catKey === 'intangible' ? 'from-cyber-yellow' : 'from-cyber-cyan'} to-transparent opacity-30`}></div>
+                                <h3 className={`font-bold uppercase tracking-widest text-sm flex items-center gap-2 ${catKey === 'mundane' ? 'text-cyber-pink' : catKey === 'elemental' ? 'text-cyber-purple' : catKey === 'intangible' ? 'text-cyber-yellow' : 'text-cyber-cyan'}`}>
+                                    <i className={`fa-solid ${category.icon}`}></i> {category.label}
+                                </h3>
+                                <div className={`h-px flex-grow bg-gradient-to-l ${catKey === 'mundane' ? 'from-cyber-pink' : catKey === 'elemental' ? 'from-cyber-purple' : catKey === 'intangible' ? 'from-cyber-yellow' : 'from-cyber-cyan'} to-transparent opacity-30`}></div>
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                                {category.types.map(type => {
+                                    const res = characterData.resistances[type.key] || { value: 0, immunity: false, vulnerable: false };
+                                    const catColor = catKey === 'mundane' ? 'cyber-pink' : catKey === 'elemental' ? 'cyber-purple' : catKey === 'intangible' ? 'cyber-yellow' : 'cyber-cyan';
+
+                                    return (
+                                        <div key={type.key} className={`bg-black/40 border border-${catColor}/20 rounded-lg p-3 flex flex-col gap-3 transition-all ${res.value > 0 || res.immunity || res.vulnerable ? 'border-opacity-100 shadow-[0_0_10px_rgba(0,0,0,0.5)]' : 'border-opacity-20'}`}>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-white font-semibold flex items-center gap-2 text-sm uppercase truncate">
+                                                    <i className={`fa-solid ${type.icon} text-${catColor}/80`}></i> {type.name}
+                                                </span>
+                                                <input
+                                                    className={`bg-black/40 border border-${catColor}/30 rounded px-2 py-1 text-center w-12 text-sm focus:outline-none focus:border-${catColor}/60 transition-colors font-mono text-${catColor}`}
+                                                    type="number"
+                                                    value={res.value}
+                                                    onChange={(e) => updateResistance(type.key, 'value', e.target.value)}
+                                                />
+                                            </div>
+                                            <div className="flex justify-between items-center pt-2 border-t border-white/5">
+                                                <label className="flex items-center gap-2 cursor-pointer group">
+                                                    <div
+                                                        onClick={() => updateResistance(type.key, 'immunity', !res.immunity)}
+                                                        className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.immunity ? 'bg-cyber-green border-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.5)]' : 'border-cyber-green/30 group-hover:border-cyber-green/50'}`}
+                                                    >
+                                                        {res.immunity && <i className="fa-solid fa-check text-[10px] text-white"></i>}
+                                                    </div>
+                                                    <span className={`text-[10px] uppercase font-bold tracking-tighter transition-colors ${res.immunity ? 'text-cyber-green' : 'text-cyber-gray group-hover:text-cyber-green'}`}>Imune</span>
+                                                </label>
+                                                <label className="flex items-center gap-2 cursor-pointer group">
+                                                    <div
+                                                        onClick={() => updateResistance(type.key, 'vulnerable', !res.vulnerable)}
+                                                        className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${res.vulnerable ? 'bg-cyber-red border-cyber-red shadow-[0_0_10px_rgba(255,49,49,0.5)]' : 'border-cyber-red/30 group-hover:border-cyber-red/50'}`}
+                                                    >
+                                                        {res.vulnerable && <i className="fa-solid fa-check text-[10px] text-white"></i>}
+                                                    </div>
+                                                    <span className={`text-[10px] uppercase font-bold tracking-tighter transition-colors ${res.vulnerable ? 'text-cyber-red' : 'text-cyber-gray group-hover:text-cyber-red'}`}>Vuln.</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </section>
+                    ))}
                 </ModalBody>
-                <ModalFooter className="bg-black/60">
-                    <button onClick={() => setActiveModal(null)} className="px-8 py-2.5 rounded-lg bg-cyber-purple text-white font-extrabold uppercase text-xs shadow-neon-purple hover:scale-105 transition-all">Salvar Alterações</button>
+                <ModalFooter className="bg-black/60 flex justify-end p-6 border-t border-white/10">
+                    <button onClick={() => setActiveModal(null)} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink hover:scale-105 active:scale-95 transition-all">Fechar</button>
                 </ModalFooter>
             </Modal>
 

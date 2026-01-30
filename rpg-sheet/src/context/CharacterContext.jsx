@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { ATTRIBUTES, SKILLS_CATEGORIES } from '../data/rules';
+import { ATTRIBUTES, SKILLS_CATEGORIES, DAMAGE_RESISTANCES } from '../data/rules';
 
 const CharacterContext = createContext();
 
@@ -34,8 +34,22 @@ export const CharacterProvider = ({ children }) => {
             armors: [
                 { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
                 { id: 'a2', name: 'Elmo Neural', icon: 'fa-mask', current: 2, max: 2, notes: '', reflexBonus: 1, properties: '' }
-            ]
+            ],
+            resistances: {} // Will be populated below
         };
+
+        // Populate initial resistances from rules
+        Object.values(DAMAGE_RESISTANCES).forEach(category => {
+            category.types.forEach(type => {
+                defaultData.resistances[type.key] = { value: 0, immunity: false, vulnerable: false };
+            });
+        });
+
+        // Add some default resistances for testing
+        defaultData.resistances.fogo = { value: 10, immunity: false, vulnerable: false };
+        defaultData.resistances.impacto = { value: 5, immunity: false, vulnerable: false };
+        defaultData.resistances.eletrico = { value: 0, immunity: false, vulnerable: true };
+        defaultData.resistances.veneno = { value: 0, immunity: true, vulnerable: false };
 
         const saved = localStorage.getItem('aeliana_character_data');
         if (saved) {
@@ -71,7 +85,8 @@ export const CharacterProvider = ({ children }) => {
                         reflexBonus: 0,
                         properties: '',
                         ...armor
-                    }))
+                    })),
+                    resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) }
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -246,6 +261,19 @@ export const CharacterProvider = ({ children }) => {
         setCharacterData(prev => ({
             ...prev,
             armors: prev.armors.map(armor => armor.id === id ? { ...armor, current: parseInt(newValue) || 0 } : armor)
+        }));
+    };
+
+    const updateResistance = (type, field, newValue) => {
+        setCharacterData(prev => ({
+            ...prev,
+            resistances: {
+                ...prev.resistances,
+                [type]: {
+                    ...prev.resistances[type],
+                    [field]: field === 'value' ? (parseInt(newValue) || 0) : newValue
+                }
+            }
         }));
     };
 
