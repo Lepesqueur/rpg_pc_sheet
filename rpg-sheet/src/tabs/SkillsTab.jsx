@@ -125,7 +125,12 @@ const SkillsTab = () => {
                                         <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-cyber-pink`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
-                                        <h3 className="font-display text-white font-bold tracking-wider mb-1 uppercase">{item.name}</h3>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <h3 className="font-display text-white font-bold tracking-wider uppercase">{item.name}</h3>
+                                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
+                                                {item.stats?.ativacao || 'Ação'}
+                                            </span>
+                                        </div>
                                         <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
                                     </div>
                                 </div>
@@ -199,7 +204,12 @@ const SkillsTab = () => {
                                         <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-cyber-yellow`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
-                                        <h3 className="font-display text-white font-bold tracking-wider mb-1 uppercase">{item.name}</h3>
+                                        <div className="flex items-center gap-2 mb-1">
+                                            <h3 className="font-display text-white font-bold tracking-wider uppercase">{item.name}</h3>
+                                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
+                                                {item.stats?.ativacao || 'Passiva'}
+                                            </span>
+                                        </div>
                                         <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
                                     </div>
                                 </div>
@@ -557,12 +567,16 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Ativação</label>
-                                <input
-                                    className="w-full bg-black/20 border border-white/10 text-gray-200 rounded-lg px-4 py-2 text-sm"
+                                <select
+                                    className="w-full bg-black/20 border border-white/10 text-gray-200 rounded-lg px-4 py-2 text-sm focus:border-cyber-pink focus:outline-none"
                                     name="stats.ativacao"
-                                    value={formData?.stats?.ativacao || ''}
+                                    value={formData?.stats?.ativacao || 'Ação'}
                                     onChange={handleChange}
-                                />
+                                >
+                                    <option value="Ação">Ação</option>
+                                    <option value="Passiva">Passiva</option>
+                                    <option value="Ritual">Ritual</option>
+                                </select>
                             </div>
                             <div>
                                 <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Alcance</label>

@@ -47,7 +47,7 @@ export const CharacterProvider = ({ children }) => {
                     costs: { focus: 2, will: 0, vitality: 0 },
                     stats: {
                         duracao: "Instantânea",
-                        ativacao: "Ação Padrão",
+                        ativacao: "Ação",
                         alcance: "10 metros",
                         alvo: "Área Circular"
                     },
@@ -70,7 +70,7 @@ export const CharacterProvider = ({ children }) => {
                     costs: { focus: 1, will: 0, vitality: 1 },
                     stats: {
                         duracao: "Instantânea",
-                        ativacao: "Ação Padrão",
+                        ativacao: "Ação",
                         alcance: "15 metros",
                         alvo: "Pessoal"
                     },
@@ -92,7 +92,7 @@ export const CharacterProvider = ({ children }) => {
                     costs: { focus: 0, will: 5, vitality: 0 },
                     stats: {
                         duracao: "1 minuto",
-                        ativacao: "Ação Bônus",
+                        ativacao: "Ação",
                         alcance: "Pessoal",
                         alvo: "Pessoal"
                     },
