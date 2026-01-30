@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '../components/Modal';
+import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
 
 const SkillsTab = () => {
@@ -7,6 +7,7 @@ const SkillsTab = () => {
     const [viewingTalent, setViewingTalent] = useState(null);
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
     const [searchTerm, setSearchTerm] = useState("");
+    const [itemToDelete, setItemToDelete] = useState(null);
 
     const talents = characterData.talents || [];
 
@@ -20,8 +21,14 @@ const SkillsTab = () => {
 
     const handleDelete = (e, id) => {
         e.stopPropagation();
-        if (window.confirm("Deseja realmente excluir este item?")) {
-            deleteTalent(id);
+        const item = talents.find(t => t.id === id);
+        setItemToDelete(item);
+    };
+
+    const confirmDelete = () => {
+        if (itemToDelete) {
+            deleteTalent(itemToDelete.id);
+            setItemToDelete(null);
         }
     };
 
@@ -393,6 +400,16 @@ const SkillsTab = () => {
                 onClose={() => setEditingTalent(null)}
                 onSave={handleSave}
                 initialData={editingTalent}
+            />
+
+            <ConfirmationModal
+                isOpen={!!itemToDelete}
+                onClose={() => setItemToDelete(null)}
+                onConfirm={confirmDelete}
+                title="Excluir Item"
+                message={`Deseja realmente excluir "${itemToDelete?.name}"? Esta ação não pode ser desfeita.`}
+                confirmText="Excluir"
+                cancelText="Cancelar"
             />
         </div>
     );
