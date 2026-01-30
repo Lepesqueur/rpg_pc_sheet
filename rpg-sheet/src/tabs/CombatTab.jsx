@@ -744,7 +744,7 @@ const CombatTab = () => {
                     ))}
                 </ModalBody>
                 <ModalFooter className="bg-black/60 flex justify-end p-6 border-t border-white/10">
-                    <button onClick={() => setActiveModal(null)} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink hover:scale-105 active:scale-95 transition-all">Fechar</button>
+                    <button onClick={() => setActiveModal(null)} className="px-8 py-2 bg-gradient-to-r from-cyber-purple to-cyber-pink rounded text-sm font-bold uppercase tracking-widest text-white shadow-neon-pink hover:scale-105 active:scale-95 transition-all">Salvar</button>
                 </ModalFooter>
             </Modal>
 
