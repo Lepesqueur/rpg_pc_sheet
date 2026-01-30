@@ -333,7 +333,7 @@ const CombatTab = () => {
                 {/* 3. DEFESAS PRIMÁRIAS & 4. RESISTÊNCIAS ESPECIAIS */}
                 <div className="lg:col-span-4 flex flex-col gap-6">
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
-                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-purple font-display">Defesas Primárias</h3>
+                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-purple font-display">Salvaguardas</h3>
                         <div className="grid grid-cols-3 gap-3">
                             {[
                                 { key: 'fortitude', icon: 'fa-shield-halved', color: 'cyber-purple', label: 'Fortitude' },
@@ -360,7 +360,7 @@ const CombatTab = () => {
 
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card h-full">
                         <div className="flex justify-between items-center mb-4">
-                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistências Especiais</h3>
+                            <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistência a dano</h3>
                             <button onClick={() => setActiveModal('resistances')} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-pen-to-square text-xs"></i></button>
                         </div>
                         <div className="space-y-4">
