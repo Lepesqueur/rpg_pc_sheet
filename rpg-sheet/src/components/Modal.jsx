@@ -50,3 +50,31 @@ export const ModalFooter = ({ children, className = "" }) => (
         {children}
     </div>
 );
+
+export const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirmText = "Confirmar", cancelText = "Cancelar" }) => (
+    <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-md">
+        <ModalHeader onClose={onClose} className="bg-cyber-red/10 border-cyber-red/20 text-cyber-red">
+            <div className="flex items-center gap-3">
+                <i className="fa-solid fa-triangle-exclamation text-xl"></i>
+                <h3 className="text-xl font-bold uppercase tracking-tight font-display">{title}</h3>
+            </div>
+        </ModalHeader>
+        <ModalBody className="text-cyber-gray font-medium">
+            <p>{message}</p>
+        </ModalBody>
+        <ModalFooter className="bg-black/40">
+            <button
+                onClick={onClose}
+                className="px-6 py-2 rounded-lg border border-white/10 text-white font-bold uppercase text-xs hover:bg-white/5 transition-all"
+            >
+                {cancelText}
+            </button>
+            <button
+                onClick={onConfirm}
+                className="px-8 py-2 rounded-lg bg-cyber-red text-white font-extrabold uppercase text-xs shadow-neon-red hover:scale-105 transition-all"
+            >
+                {confirmText}
+            </button>
+        </ModalFooter>
+    </Modal>
+);

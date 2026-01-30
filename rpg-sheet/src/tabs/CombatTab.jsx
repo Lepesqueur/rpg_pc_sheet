@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Modal, ModalHeader, ModalBody, ModalFooter } from '../components/Modal';
+import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
 
 // Componente simples de progresso circular usando SVG
@@ -90,6 +90,8 @@ const CombatTab = () => {
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
     const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [attackToDelete, setAttackToDelete] = useState(null);
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -114,8 +116,17 @@ const CombatTab = () => {
 
     const handleDeleteAttack = () => {
         if (selectedAttack) {
-            deleteAttack(selectedAttack.id);
-            setActiveModal(null);
+            setAttackToDelete(selectedAttack);
+            setIsDeleteModalOpen(true);
+        }
+    };
+
+    const confirmDeleteAttack = () => {
+        if (attackToDelete) {
+            deleteAttack(attackToDelete.id);
+            setIsDeleteModalOpen(false);
+            setAttackToDelete(null);
+            if (activeModal === 'weapon') setActiveModal(null);
         }
     };
 
@@ -142,7 +153,31 @@ const CombatTab = () => {
                                 <tbody className="divide-y divide-white/5">
                                     {characterData.attacks.map((attack) => (
                                         <tr key={attack.id} onClick={() => openEditModal(attack)} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
-                                            <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">{attack.name}</td>
+                                            <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">
+                                                <div className="flex items-center gap-2">
+                                                    {isEditMode && (
+                                                        <div className="flex gap-2 mr-1">
+                                                            <button
+                                                                onClick={(e) => { e.stopPropagation(); openEditModal(attack); }}
+                                                                className="text-cyber-pink hover:text-white transition-colors p-1"
+                                                            >
+                                                                <i className="fa-solid fa-pen-to-square text-[10px]"></i>
+                                                            </button>
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    setAttackToDelete(attack);
+                                                                    setIsDeleteModalOpen(true);
+                                                                }}
+                                                                className="text-cyber-red hover:text-white transition-colors p-1"
+                                                            >
+                                                                <i className="fa-solid fa-trash text-[10px]"></i>
+                                                            </button>
+                                                        </div>
+                                                    )}
+                                                    {attack.name}
+                                                </div>
+                                            </td>
                                             <td className="py-3 text-center text-cyber-yellow font-mono font-bold">{attack.ap}</td>
                                             <td className="py-3 text-center">
                                                 <div className="flex items-center justify-center gap-1">
@@ -162,8 +197,8 @@ const CombatTab = () => {
                                                                 updateAttackWear(attack.id, level);
                                                             }}
                                                             className={`w-3 h-3 border rounded-sm transition-all hover:scale-110 cursor-pointer ${(attack.wear || 0) >= level
-                                                                    ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
-                                                                    : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
+                                                                ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
+                                                                : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
                                                                 }`}
                                                         ></div>
                                                     ))}
@@ -445,6 +480,15 @@ const CombatTab = () => {
                     <button onClick={() => setActiveModal(null)} className="px-8 py-2.5 rounded-lg bg-cyber-purple text-white font-extrabold uppercase text-xs shadow-neon-purple hover:scale-105 transition-all">Salvar Alterações</button>
                 </ModalFooter>
             </Modal>
+
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={() => setIsDeleteModalOpen(false)}
+                onConfirm={confirmDeleteAttack}
+                title="Confirmar Exclusão"
+                message={`Tem certeza que deseja excluir o ataque "${attackToDelete?.name}"? Esta ação não pode ser desfeita.`}
+                confirmText="Excluir"
+            />
         </div>
     );
 };
