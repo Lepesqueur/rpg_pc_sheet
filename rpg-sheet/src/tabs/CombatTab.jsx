@@ -708,8 +708,10 @@ const CombatTab = () => {
                                                     <i className={`fa-solid ${type.icon} text-${catColor}/80`}></i> {type.name}
                                                 </span>
                                                 <input
-                                                    className={`bg-black/40 border border-${catColor}/30 rounded px-2 py-1 text-center w-12 text-sm focus:outline-none focus:border-${catColor}/60 transition-colors font-mono text-${catColor}`}
+                                                    className={`bg-black/40 border border-${catColor}/30 rounded px-2 py-1 text-center w-12 text-sm focus:outline-none focus:border-${catColor}/60 transition-colors font-mono text-${catColor} ${res.immunity ? 'opacity-30 cursor-not-allowed' : ''}`}
                                                     type="number"
+                                                    min="0"
+                                                    disabled={res.immunity}
                                                     value={res.value}
                                                     onChange={(e) => updateResistance(type.key, 'value', e.target.value)}
                                                 />

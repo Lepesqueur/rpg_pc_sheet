@@ -267,23 +267,31 @@ export const CharacterProvider = ({ children }) => {
     const updateResistance = (type, field, newValue) => {
         setCharacterData(prev => {
             const currentRes = prev.resistances[type] || { value: 0, immunity: false, vulnerable: false };
-            const updatedRes = {
-                ...currentRes,
-                [field]: field === 'value' ? (parseInt(newValue) || 0) : newValue
-            };
+            let val = currentRes.value;
+            let immunity = currentRes.immunity;
+            let vulnerable = currentRes.vulnerable;
 
-            // Mutuamente exclusivo: Imunidade e Vulnerabilidade
-            if (field === 'immunity' && newValue === true) {
-                updatedRes.vulnerable = false;
-            } else if (field === 'vulnerable' && newValue === true) {
-                updatedRes.immunity = false;
+            if (field === 'value') {
+                // Impede valores negativos e bloqueia se estiver imune
+                val = immunity ? 0 : Math.max(0, parseInt(newValue) || 0);
+            } else if (field === 'immunity') {
+                immunity = newValue;
+                // Se ficar imune, desativa vulnerabilidade e zera valor
+                if (immunity) {
+                    vulnerable = false;
+                    val = 0;
+                }
+            } else if (field === 'vulnerable') {
+                vulnerable = newValue;
+                // Se ficar vulnerável, desativa imunidade
+                if (vulnerable) immunity = false;
             }
 
             return {
                 ...prev,
                 resistances: {
                     ...prev.resistances,
-                    [type]: updatedRes
+                    [type]: { value: val, immunity, vulnerable }
                 }
             };
         });
