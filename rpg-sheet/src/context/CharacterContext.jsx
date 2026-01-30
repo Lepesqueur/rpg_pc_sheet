@@ -47,7 +47,15 @@ export const CharacterProvider = ({ children }) => {
                     vitality: { ...defaultData.vitality, ...(parsed.vitality || {}) },
                     focus: { ...defaultData.focus, ...(parsed.focus || {}) },
                     will: { ...defaultData.will, ...(parsed.will || {}) },
-                    attacks: parsed.attacks || defaultData.attacks
+                    attacks: (parsed.attacks || defaultData.attacks).map(attack => {
+                        if (attack.costs && !attack.resource) {
+                            const type = attack.costs.focus > 0 ? 'focus' : (attack.costs.will > 0 ? 'will' : 'vitality');
+                            const value = attack.costs[type] || 0;
+                            const { costs, ...rest } = attack;
+                            return { ...rest, resource: { type, value } };
+                        }
+                        return { resource: { type: 'vitality', value: 0 }, ...attack };
+                    })
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
