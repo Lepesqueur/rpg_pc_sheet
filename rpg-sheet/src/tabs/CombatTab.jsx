@@ -89,7 +89,7 @@ const CombatTab = () => {
     const { characterData, isEditMode, updateDefense, addAttack, updateAttack, deleteAttack, updateAttackWear } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
-    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
+    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '', skill: 'Luta' });
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
 
@@ -101,7 +101,7 @@ const CombatTab = () => {
 
     const openAddModal = () => {
         setSelectedAttack(null);
-        setAttackForm({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
+        setAttackForm({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '', skill: 'Luta' });
         setActiveModal('weapon');
     };
 
@@ -443,6 +443,18 @@ const CombatTab = () => {
                                 value={attackForm.range}
                                 onChange={(e) => setAttackForm({ ...attackForm, range: e.target.value })}
                             />
+                        </div>
+                        <div className="flex flex-col gap-2 col-span-1 md:col-span-2">
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Perícia Associada</label>
+                            <select
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-pink transition-all"
+                                value={attackForm.skill}
+                                onChange={(e) => setAttackForm({ ...attackForm, skill: e.target.value })}
+                            >
+                                {Object.values(characterData.skillCategories).flatMap(cat => cat.skills).map(skill => (
+                                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                                ))}
+                            </select>
                         </div>
                     </div>
                 </ModalBody>

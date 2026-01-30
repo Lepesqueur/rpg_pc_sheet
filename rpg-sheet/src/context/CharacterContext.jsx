@@ -28,8 +28,8 @@ export const CharacterProvider = ({ children }) => {
                 tenacity: 14
             },
             attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0 },
-                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0 }
+                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas' },
+                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo' }
             ]
         };
 
@@ -54,7 +54,11 @@ export const CharacterProvider = ({ children }) => {
                             const { costs, ...rest } = attack;
                             return { ...rest, resource: { type, value } };
                         }
-                        return { resource: { type: 'vitality', value: 0 }, ...attack };
+                        return {
+                            resource: { type: 'vitality', value: 0 },
+                            skill: 'Luta', // Default generic skill
+                            ...attack
+                        };
                     })
                 };
 
