@@ -363,7 +363,11 @@ const CombatTab = () => {
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card h-full">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase pl-3 border-l-4 border-cyber-yellow font-display">Resistência a dano</h3>
-                            <button onClick={() => setActiveModal('resistances')} className="text-cyber-gray hover:text-white transition-colors"><i className="fa-solid fa-pen-to-square text-xs"></i></button>
+                            {isEditMode && (
+                                <button onClick={() => setActiveModal('resistances')} className="text-cyber-gray hover:text-white transition-colors">
+                                    <i className="fa-solid fa-pen-to-square text-xs"></i>
+                                </button>
+                            )}
                         </div>
                         <div className="space-y-4">
                             {/* Resistências (Valor > 0 e não vulnerável) */}
