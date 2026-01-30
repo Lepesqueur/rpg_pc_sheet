@@ -86,7 +86,7 @@ const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, sta
 };
 
 const CombatTab = () => {
-    const { characterData, isEditMode, updateDefense, addAttack, updateAttack, deleteAttack } = useCharacter();
+    const { characterData, isEditMode, updateDefense, addAttack, updateAttack, deleteAttack, updateAttackWear } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
     const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '' });
@@ -136,6 +136,7 @@ const CombatTab = () => {
                                         <th className="pb-2 font-semibold text-center">Recurso</th>
                                         <th className="pb-2 font-semibold text-center">Dano</th>
                                         <th className="pb-2 font-semibold text-center">Alcance</th>
+                                        <th className="pb-2 font-semibold text-center">Desgaste</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
@@ -151,11 +152,28 @@ const CombatTab = () => {
                                             </td>
                                             <td className="py-3 text-center text-white font-mono font-bold">{attack.damage}</td>
                                             <td className="py-3 text-center text-gray-400 font-mono">{attack.range}</td>
+                                            <td className="py-3 text-center">
+                                                <div className="flex items-center justify-center gap-1.5">
+                                                    {[1, 2].map(level => (
+                                                        <div
+                                                            key={level}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                updateAttackWear(attack.id, level);
+                                                            }}
+                                                            className={`w-3 h-3 border rounded-sm transition-all hover:scale-110 cursor-pointer ${(attack.wear || 0) >= level
+                                                                    ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_8px_rgba(255,215,0,0.5)]'
+                                                                    : 'bg-transparent border-white/20 hover:border-cyber-yellow/50'
+                                                                }`}
+                                                        ></div>
+                                                    ))}
+                                                </div>
+                                            </td>
                                         </tr>
                                     ))}
                                     {isEditMode && (
                                         <tr onClick={openAddModal} className="group hover:bg-cyber-pink/5 transition-colors cursor-pointer text-[13px] border-t border-dashed border-white/10">
-                                            <td colSpan="5" className="py-4 text-center text-cyber-pink font-bold uppercase tracking-widest text-[10px]">
+                                            <td colSpan="6" className="py-4 text-center text-cyber-pink font-bold uppercase tracking-widest text-[10px]">
                                                 <i className="fa-solid fa-plus mr-2"></i> Adicionar Novo Ataque
                                             </td>
                                         </tr>

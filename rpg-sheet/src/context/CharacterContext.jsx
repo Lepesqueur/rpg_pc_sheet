@@ -28,8 +28,8 @@ export const CharacterProvider = ({ children }) => {
                 tenacity: 14
             },
             attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.' },
-                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m' }
+                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0 },
+                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0 }
             ]
         };
 
@@ -166,7 +166,7 @@ export const CharacterProvider = ({ children }) => {
     const addAttack = (attack) => {
         setCharacterData(prev => ({
             ...prev,
-            attacks: [...(prev.attacks || []), { ...attack, id: Date.now().toString() }]
+            attacks: [...(prev.attacks || []), { ...attack, id: Date.now().toString(), wear: 0 }]
         }));
     };
 
@@ -184,6 +184,19 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    const updateAttackWear = (id, level) => {
+        setCharacterData(prev => ({
+            ...prev,
+            attacks: prev.attacks.map(attack => {
+                if (attack.id === id) {
+                    const newWear = attack.wear === level ? level - 1 : level;
+                    return { ...attack, wear: Math.max(0, newWear) };
+                }
+                return attack;
+            })
+        }));
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -196,7 +209,8 @@ export const CharacterProvider = ({ children }) => {
         updateSkillLevel,
         addAttack,
         updateAttack,
-        deleteAttack
+        deleteAttack,
+        updateAttackWear
     };
 
     return (
