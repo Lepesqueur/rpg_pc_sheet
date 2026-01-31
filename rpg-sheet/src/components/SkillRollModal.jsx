@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter } from './Modal';
+import { ATTR_MAP } from '../data/rules';
 
 const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
     const [selectedAttr, setSelectedAttr] = useState(null);
     const [advantage, setAdvantage] = useState(0);
 
-    // Get viable attributes for the skill based on data/rules or skill.attr
-    const skillAttrs = Array.isArray(skill?.attr) ? skill.attr : [skill?.attr];
-    const viableAttributes = (allAttributes || []).filter(attr =>
-        skillAttrs.includes(attr.label) || skillAttrs.includes(attr.name.toUpperCase()) ||
-        (attr.label === 'INTU' && skillAttrs.includes('INTUI')) ||
-        (attr.label === 'PRE' && skillAttrs.includes('PRES'))
-    );
+    // Map abbreviations from rules.js (DES, INTUI, etc) to attribute labels (Des, Intu, etc)
+    const skillAttrs = (Array.isArray(skill?.attr) ? skill.attr : [skill?.attr]).map(a => a?.toUpperCase());
+
+    const viableAttributes = (allAttributes || []).filter(attr => {
+        const normalizedLabel = attr.label;
+        return skillAttrs.some(sa => ATTR_MAP[sa] === normalizedLabel || sa === normalizedLabel.toUpperCase());
+    });
 
     useEffect(() => {
         if (viableAttributes.length > 0 && !selectedAttr) {
@@ -71,7 +72,6 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
                                 >
                                     <span className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">{attr.name}</span>
                                     <span className="text-2xl font-bold text-white mt-1">{attr.value}</span>
-                                    {/* Modificador é igual ao valor do atributo conforme solicitado */}
                                     <span className="text-[10px] bg-cyber-pink/20 text-cyber-pink px-2 py-0.5 rounded mt-2 font-black">+{attr.value}</span>
                                 </label>
                             </div>
@@ -132,7 +132,6 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
             <ModalFooter className="p-6 pt-0 bg-transparent border-none">
                 <button
                     onClick={() => {
-                        // Logic for rolling dice could be added here later
                         onClose();
                     }}
                     className="w-full py-4 bg-gradient-to-r from-cyber-pink to-cyber-purple text-white font-black uppercase tracking-[0.2em] rounded-xl shadow-[0_0_20px_rgba(255,0,153,0.4)] hover:shadow-[0_0_30px_rgba(255,0,153,0.6)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"

@@ -7,6 +7,16 @@ export const ATTRIBUTES = [
     { name: 'Presença', label: 'Pres', icon: 'fa-star', color: 'cyber-yellow', value: 14 },
 ];
 
+export const ATTR_MAP = {
+    'DES': 'Des',
+    'INTUI': 'Intu',
+    'VIG': 'Vig',
+    'INT': 'Int',
+    'TAM': 'Tam',
+    'PRE': 'Pres',
+    'PRES': 'Pres'
+};
+
 export const SKILLS_CATEGORIES = {
     weapons: {
         label: 'Armas',
