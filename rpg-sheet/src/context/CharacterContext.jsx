@@ -19,6 +19,8 @@ export const CharacterProvider = ({ children }) => {
         const defaultData = {
             attributes: ATTRIBUTES,
             skillCategories: SKILLS_CATEGORIES,
+            name: "Aeliana, a Arconte",
+            level: 5,
             vitality: { current: 80, max: 100, level: 0 },
             focus: { current: 45, max: 50, level: 0 },
             will: { current: 28, max: 40, level: 0 },
@@ -209,6 +211,8 @@ export const CharacterProvider = ({ children }) => {
                 const merged = {
                     ...defaultData,
                     ...parsed,
+                    name: parsed.name || defaultData.name,
+                    level: parsed.level || defaultData.level,
                     // Garante que sub-objetos também existam se o save for antigo
                     defenses: { ...defaultData.defenses, ...(parsed.defenses || {}) },
                     vitality: { ...defaultData.vitality, ...(parsed.vitality || {}) },
@@ -612,6 +616,22 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    const updateName = (newName) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            name: newName
+        }));
+    };
+
+    const updateLevel = (newLevel) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            level: parseInt(newLevel) || 1
+        }));
+    };
+
     // --- IMPORT / EXPORT ---
     const exportCharacter = () => {
         const dataStr = JSON.stringify(characterData, null, 2);
@@ -685,6 +705,8 @@ export const CharacterProvider = ({ children }) => {
         deletePeculiarity,
         updateBiography,
         updateCurrency,
+        updateName,
+        updateLevel,
         exportCharacter,
         importCharacter
     };
