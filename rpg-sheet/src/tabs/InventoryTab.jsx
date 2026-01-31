@@ -14,7 +14,7 @@ const InventoryTab = () => {
 
     // Inventory State
     const [editingItem, setEditingItem] = useState(null);
-    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, uses: '-', type: 'Item', price: '', weight: 0 });
+    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Item', price: '', weight: 0 });
     const [itemToDelete, setItemToDelete] = useState(null);
 
     // Peculiarities State
@@ -30,7 +30,7 @@ const InventoryTab = () => {
     // Item Handlers
     const openAddItemModal = () => {
         setEditingItem(null);
-        setItemForm({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, uses: '-', type: 'Item', price: '', weight: 0 });
+        setItemForm({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Item', price: '', weight: 0 });
         setEditingItem('new');
     };
 
@@ -170,7 +170,9 @@ const InventoryTab = () => {
                                                 </div>
                                             </td>
                                             <td className="p-2 text-center text-cyber-gray font-mono">x{item.qty}</td>
-                                            <td className="p-2 text-center text-xs text-[#00ff99] font-mono">{item.uses}</td>
+                                            <td className="p-2 text-center text-xs text-[#00ff99] font-mono">
+                                                {item.maxUses > 0 ? `${item.currentUses} / ${item.maxUses}` : '-'}
+                                            </td>
                                             <td className="p-2 text-xs text-[#aaaaaa] uppercase tracking-tighter">{item.type}</td>
                                             <td className="p-2 text-right text-cyber-gray text-xs font-mono">{item.weight}kg</td>
                                         </tr>
@@ -315,15 +317,25 @@ const InventoryTab = () => {
                                 />
                             </div>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Usos / Cargas</label>
-                            <input
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
-                                type="text"
-                                value={itemForm.uses}
-                                onChange={(e) => setItemForm({ ...itemForm, uses: e.target.value })}
-                                placeholder="ex: 3/3 ou -"
-                            />
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Uso Atual</label>
+                                <input
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
+                                    type="number"
+                                    value={itemForm.currentUses}
+                                    onChange={(e) => setItemForm({ ...itemForm, currentUses: parseInt(e.target.value) || 0 })}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Uso Total</label>
+                                <input
+                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
+                                    type="number"
+                                    value={itemForm.maxUses}
+                                    onChange={(e) => setItemForm({ ...itemForm, maxUses: parseInt(e.target.value) || 0 })}
+                                />
+                            </div>
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Ícone (FA)</label>
