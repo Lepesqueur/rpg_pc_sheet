@@ -965,7 +965,7 @@ const CombatTab = () => {
                                         const cond = tempConditions[item.key] || { active: false, level: 1 };
                                         const colorName = category.color.replace('cyber-', '');
                                         return (
-                                            <div key={item.key} className={`flex items-center justify-between p-4 rounded-xl bg-white/5 border transition-all group ${cond.active ? `border-${category.color}/40 bg-${category.color}/5` : 'border-white/5 hover:border-white/10'}`}>
+                                            <div key={item.key} className={`flex items-center justify-between p-4 rounded-xl bg-black/40 border transition-all group ${cond.active ? `border-${category.color}/40 bg-${category.color}/5` : 'border-white/5 hover:border-white/10'}`}>
                                                 <div className="flex items-center gap-4">
                                                     <label className="relative inline-flex items-center cursor-pointer">
                                                         <input

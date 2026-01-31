@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
+import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 
@@ -10,8 +11,11 @@ const FeatTab = () => {
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
     const [searchTerm, setSearchTerm] = useState("");
     const [itemToDelete, setItemToDelete] = useState(null);
+    const [rollingSkill, setRollingSkill] = useState(null);
+    const [rollingSource, setRollingSource] = useState(null);
 
     const talents = characterData.talents || [];
+    const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
 
     const handleActivateSkill = (skill) => {
         if (!skill.costs) return;
@@ -70,6 +74,31 @@ const FeatTab = () => {
         } else {
             setViewingTalent(item);
         }
+    };
+
+    const handleRollSkill = (skillName, source) => {
+        const skill = allSkills.find(s => s.name === skillName);
+        if (skill) {
+            setRollingSkill(skill);
+            setRollingSource(source);
+        }
+    };
+
+    const handleRollConfirm = () => {
+        if (rollingSource && rollingSource.costs) {
+            const hasCosts = Object.values(rollingSource.costs).some(cost => cost > 0);
+            if (hasCosts) {
+                const result = consumeResources(rollingSource.costs);
+                if (result.success) {
+                    showToast(`HABILIDADE "${rollingSource.name}" ATIVADA! RECURSOS CONSUMIDOS.`, 'success');
+                    return true;
+                } else {
+                    showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
+                    return false;
+                }
+            }
+        }
+        return true;
     };
 
     return (
@@ -242,7 +271,7 @@ const FeatTab = () => {
                 <div className="relative z-50 overflow-hidden rounded-3xl">
                     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${viewingTalent?.category === 'actions' ? 'via-cyber-pink' : 'via-cyber-yellow'} to-transparent opacity-50 z-20`}></div>
 
-                    <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-zinc-900/90 backdrop-blur-xl">
+                    <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-zinc-950/98 backdrop-blur-xl">
                         <div className="flex items-center gap-5">
                             <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center`}>
                                 <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'actions' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
@@ -312,7 +341,7 @@ const FeatTab = () => {
                         </div>
                     </div>
 
-                    <ModalBody className="p-6 md:p-8 space-y-8 overflow-y-auto max-h-[60vh] bg-zinc-900/90 backdrop-blur-xl custom-scrollbar">
+                    <ModalBody className="p-6 md:p-8 space-y-8 overflow-y-auto max-h-[60vh] bg-zinc-950/98 backdrop-blur-xl custom-scrollbar">
                         {/* Stats Grid */}
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                             {[
@@ -327,6 +356,28 @@ const FeatTab = () => {
                                 </div>
                             ))}
                         </div>
+
+                        {/* Perícia Relacionada */}
+                        {viewingTalent?.relatedSkill && (
+                            <div className="bg-black/40 border border-white/10 rounded-2xl p-5 flex items-center justify-between">
+                                <div className="flex items-center gap-4">
+                                    <div className="w-10 h-10 rounded-xl bg-cyber-blue/10 border border-cyber-blue/30 flex items-center justify-center text-cyber-blue">
+                                        <i className="fa-solid fa-graduation-cap"></i>
+                                    </div>
+                                    <div>
+                                        <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest block mb-1">Perícia Relacionada</span>
+                                        <span className="text-white font-bold uppercase tracking-wider">{viewingTalent.relatedSkill}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => handleRollSkill(viewingTalent.relatedSkill, viewingTalent)}
+                                    className="px-4 py-2 bg-cyber-blue/20 hover:bg-cyber-blue/30 border border-cyber-blue/40 text-cyber-blue text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center gap-2 group"
+                                >
+                                    <i className="fa-solid fa-dice-d20 transition-transform group-hover:rotate-45"></i>
+                                    Rolar Teste
+                                </button>
+                            </div>
+                        )}
 
                         {/* Descrição */}
                         <div className="space-y-3">
@@ -380,7 +431,7 @@ const FeatTab = () => {
                         )}
                     </ModalBody>
 
-                    <ModalFooter className="p-6 bg-zinc-900 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
+                    <ModalFooter className="p-6 bg-zinc-950 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
                         <button className="text-slate-400 hover:text-white text-sm font-medium transition-colors flex items-center gap-2 order-2 md:order-1">
                             <i className="fa-solid fa-circle-question text-sm"></i>
                             Ver Regras Detalhadas
@@ -408,6 +459,15 @@ const FeatTab = () => {
                 </div>
             </Modal>
 
+            <SkillRollModal
+                isOpen={!!rollingSkill}
+                onClose={() => { setRollingSkill(null); setRollingSource(null); }}
+                skill={rollingSkill}
+                allAttributes={characterData.attributes}
+                sourceItem={rollingSource}
+                onConfirm={handleRollConfirm}
+            />
+
             {/* TalentFormModal */}
             <TalentFormModal
                 isOpen={!!editingTalent}
@@ -430,7 +490,9 @@ const FeatTab = () => {
 };
 
 const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
+    const { characterData } = useCharacter();
     const [formData, setFormData] = useState(initialData);
+    const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
 
     // Sync state when initialData changes
     React.useEffect(() => {
@@ -548,8 +610,23 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                             />
                         </div>
 
+                        <div>
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Perícia Relacionada (Opcional)</label>
+                            <select
+                                className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
+                                name="relatedSkill"
+                                value={formData?.relatedSkill || ''}
+                                onChange={handleChange}
+                            >
+                                <option value="">Nenhuma</option>
+                                {allSkills.map(skill => (
+                                    <option key={skill.name} value={skill.name}>{skill.name}</option>
+                                ))}
+                            </select>
+                        </div>
+
                         {/* Resource Costs */}
-                        <div className="grid grid-cols-3 gap-3 bg-white/5 p-3 rounded-xl border border-white/5">
+                        <div className="grid grid-cols-3 gap-3 bg-black/40 p-3 rounded-xl border border-white/10">
                             <div>
                                 <label className="block text-[9px] font-bold text-cyber-purple uppercase mb-1">Custo Foco</label>
                                 <input
@@ -584,7 +661,7 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                     </div>
 
                     {/* Stats Grid Fields */}
-                    <div className="space-y-4 bg-white/5 p-4 rounded-2xl border border-white/5">
+                    <div className="space-y-4 bg-black/40 p-4 rounded-2xl border border-white/10">
                         <h3 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">Estatísticas</h3>
                         <div className="grid grid-cols-2 gap-4">
                             <div>
@@ -666,7 +743,7 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                     </div>
                     <div className="space-y-3">
                         {formData?.potencializacoes?.map((pot, idx) => (
-                            <div key={idx} className="bg-white/5 border border-white/10 p-4 rounded-xl space-y-3">
+                            <div key={idx} className="bg-black/40 border border-white/10 p-4 rounded-xl space-y-3">
                                 <div className="flex items-start justify-between gap-3">
                                     <div className="flex-grow space-y-3">
                                         <input

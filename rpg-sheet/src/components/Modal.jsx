@@ -18,7 +18,7 @@ export const Modal = ({ isOpen, onClose, children, maxWidth = "max-w-2xl" }) => 
                 if (e.target === e.currentTarget) onClose();
             }}
         >
-            <div className={`glass-card w-full ${maxWidth} max-h-[95vh] flex flex-col rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] relative overflow-hidden animate-scale-up`}>
+            <div className={`w-full ${maxWidth} max-h-[95vh] flex flex-col rounded-2xl border border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.8)] relative overflow-hidden animate-scale-up bg-[#0d0d12]/95 backdrop-blur-md`}>
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50 z-20"></div>
                 {children}
             </div>
