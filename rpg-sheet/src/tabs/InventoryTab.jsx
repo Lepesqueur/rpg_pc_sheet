@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
+import IconPicker from '../components/IconPicker';
 
 const InventoryTab = () => {
     const {
@@ -21,6 +22,8 @@ const InventoryTab = () => {
     const [editingPec, setEditingPec] = useState(null);
     const [pecForm, setPecForm] = useState({ name: '', val: '+0', description: '' });
     const [pecToDelete, setPecToDelete] = useState(null);
+
+    const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
 
     const items = characterData.inventory || [];
     const peculiarities = characterData.peculiarities || [];
@@ -346,14 +349,21 @@ const InventoryTab = () => {
                             </div>
                         </div>
                         <div className="space-y-2">
-                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Ícone (FA)</label>
-                            <input
-                                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
-                                type="text"
-                                value={itemForm.icon}
-                                onChange={(e) => setItemForm({ ...itemForm, icon: e.target.value })}
-                                placeholder="fa-box"
-                            />
+                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Ícone</label>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setIsIconPickerOpen(true)}
+                                    className="flex-grow flex items-center justify-between bg-black/40 border border-white/10 text-white rounded-lg px-4 py-2 hover:bg-white/5 hover:border-cyber-pink/50 transition-all group"
+                                >
+                                    <span className="flex items-center gap-3">
+                                        <div className="w-6 h-6 rounded bg-white/5 flex items-center justify-center">
+                                            <i className={`fa-solid ${itemForm.icon || 'fa-box'} text-cyber-pink`}></i>
+                                        </div>
+                                        <span className="text-sm font-mono">{itemForm.icon || 'Selecionar Ícone...'}</span>
+                                    </span>
+                                    <i className="fa-solid fa-chevron-down text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+                                </button>
+                            </div>
                         </div>
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Preço / Valor</label>
@@ -450,6 +460,14 @@ const InventoryTab = () => {
                     </div>
                 </ModalFooter>
             </Modal>
+
+            {/* SELECTOR DE ÍCONES (Nível Superior) */}
+            <IconPicker
+                isOpen={isIconPickerOpen}
+                onClose={() => setIsIconPickerOpen(false)}
+                onSelect={(iconName) => setItemForm({ ...itemForm, icon: iconName })}
+                currentIcon={itemForm?.icon}
+            />
 
             {/* CONFIRMAÇÃO DE EXCLUSÃO */}
             <ConfirmationModal

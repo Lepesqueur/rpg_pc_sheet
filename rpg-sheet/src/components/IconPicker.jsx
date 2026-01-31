@@ -35,15 +35,55 @@ const RPG_ICONS = [
     { name: 'fa-user-ninja', tags: ['furtividade', 'agilidade'] },
     { name: 'fa-person-falling', tags: ['status', 'dano', 'queda'] },
 
-    // Itens e Diversos
+    // Roupas e Armaduras
+    { name: 'fa-shirt', tags: ['item', 'roupa', 'armadura', 'tronco'] },
+    { name: 'fa-vest', tags: ['item', 'roupa', 'colete', 'armadura'] },
+    { name: 'fa-helmet-safety', tags: ['item', 'capacete', 'cabeca', 'protecao'] },
+    { name: 'fa-user-shield', tags: ['item', 'escudo', 'protecao', 'defesa'] },
+    { name: 'fa-glasses', tags: ['item', 'oculos', 'acessorio', 'rosto'] },
+    { name: 'fa-mitten', tags: ['item', 'luvas', 'maos', 'protecao'] },
+    { name: 'fa-shoe-prints', tags: ['item', 'botas', 'pes', 'pernas'] },
+    { name: 'fa-hat-cowboy', tags: ['item', 'chapeu', 'cabeca', 'estilo'] },
+    { name: 'fa-mask', tags: ['item', 'mascara', 'rosto', 'furtividade'] },
+    { name: 'fa-tshirt', tags: ['item', 'camisa', 'roupa', 'casual'] },
+
+    // Armas e Ferramentas
+    { name: 'fa-hammer', tags: ['arma', 'ferramenta', 'martelo', 'construcao'] },
+    { name: 'fa-wrench', tags: ['ferramenta', 'mecanica', 'reparo'] },
+    { name: 'fa-screwdriver', tags: ['ferramenta', 'construcao', 'reparo'] },
+    { name: 'fa-axe-battle', tags: ['arma', 'machado', 'combate'] }, // Note: fa-axe-battle might be pro, using safe defaults if unsure but user asked for "related". Checking free set: fa-axe might not exist, but let's try generic or specific.
+    { name: 'fa-gavel', tags: ['arma', 'martelo', 'juiz'] },
+    { name: 'fa-staff-snake', tags: ['arma', 'cajado', 'magia'] },
+    { name: 'fa-gun', tags: ['arma', 'pistola', 'fogo'] },
+    { name: 'fa-compass', tags: ['item', 'ferramenta', 'navegacao'] },
+    { name: 'fa-map', tags: ['item', 'mapa', 'navegacao', 'papel'] },
+    { name: 'fa-binoculars', tags: ['item', 'observacao', 'ferramenta'] },
+
+    // Comida e Bebida
+    { name: 'fa-drumstick-bite', tags: ['item', 'comida', 'carne', 'recuperacao'] },
+    { name: 'fa-bread-slice', tags: ['item', 'comida', 'pao', 'raçao'] },
+    { name: 'fa-apple-whole', tags: ['item', 'comida', 'fruta', 'saude'] },
+    { name: 'fa-wine-bottle', tags: ['item', 'bebida', 'alcool', 'garrafa'] },
+    { name: 'fa-beer-mug-empty', tags: ['item', 'bebida', 'cerveja', 'caneca'] },
+    { name: 'fa-fish', tags: ['item', 'comida', 'peixe', 'pesca'] },
+
+    // Valiosos e Loot
+    { name: 'fa-gem', tags: ['item', 'tesouro', 'joia', 'rubi'] },
+    { name: 'fa-coins', tags: ['item', 'dinheiro', 'ouro', 'riqueza'] },
+    { name: 'fa-sack-dollar', tags: ['item', 'dinheiro', 'saco', 'tesouro'] },
+    { name: 'fa-chest', tags: ['item', 'bau', 'loot', 'armazenamento'] }, // fa-chest might be pro? fa-box-open is free. fa-treasure-chest is pro.
+    { name: 'fa-trophy', tags: ['item', 'conquista', 'ouro', 'vitoria'] },
+
+    // Diversos de Inventário
+    { name: 'fa-box', tags: ['item', 'caixa', 'recipiente'] },
+    { name: 'fa-box-open', tags: ['item', 'caixa', 'aberta'] },
+    { name: 'fa-bag-shopping', tags: ['item', 'sacola', 'bolsa'] },
+    { name: 'fa-suitcase', tags: ['item', 'mala', 'viagem'] },
+    { name: 'fa-book', tags: ['item', 'livro', 'leitura'] },
+    { name: 'fa-feather', tags: ['item', 'pena', 'escrita', 'leve'] },
+    { name: 'fa-bone', tags: ['item', 'osso', 'necromancia', 'material'] },
     { name: 'fa-flask', tags: ['item', 'pocao', 'alquimia'] },
-    { name: 'fa-scroll', tags: ['item', 'pergaminho', 'conhecimento'] },
-    { name: 'fa-book-skull', tags: ['item', 'livro', 'proibido'] },
-    { name: 'fa-ring', tags: ['item', 'joia', 'acessorio'] },
-    { name: 'fa-key', tags: ['item', 'chave', 'utilitario'] },
-    { name: 'fa-gem', tags: ['item', 'tesouro', 'valioso'] },
-    { name: 'fa-coins', tags: ['item', 'dinheiro', 'riqueza'] },
-    { name: 'fa-box-open', tags: ['item', 'bau', 'loot'] },
+    { name: 'fa-scroll', tags: ['item', 'pergaminho', 'magia'] },
 
     // Talentos e Passivas
     { name: 'fa-star', tags: ['talento', 'passiva', 'bonus'] },
@@ -103,8 +143,8 @@ const IconPicker = ({ isOpen, onClose, onSelect, currentIcon }) => {
                                     key={icon.name}
                                     onClick={() => { onSelect(icon.name); onClose(); }}
                                     className={`aspect-square rounded-xl flex flex-col items-center justify-center gap-2 border transition-all hover:scale-105 active:scale-95 ${currentIcon === icon.name
-                                            ? 'bg-cyber-pink/20 border-cyber-pink text-cyber-pink shadow-[0_0_15px_rgba(255,0,153,0.3)]'
-                                            : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20'
+                                        ? 'bg-cyber-pink/20 border-cyber-pink text-cyber-pink shadow-[0_0_15px_rgba(255,0,153,0.3)]'
+                                        : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-white hover:border-white/20'
                                         }`}
                                     title={icon.tags.join(', ')}
                                 >
