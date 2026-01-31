@@ -165,7 +165,19 @@ export const CharacterProvider = ({ children }) => {
                     icon: "fa-head-side-virus",
                     color: "neon-yellow"
                 }
-            ]
+            ],
+            inventory: [
+                { id: 'i1', name: "Poção de Cura", icon: "fa-flask", color: "text-rpg-pink", qty: 3, uses: "1/1", type: "Consumível", price: "5 po", weight: 0.5 },
+                { id: 'i2', name: "Pergaminho de Mísseis", icon: "fa-scroll", color: "text-rpg-gold", qty: 2, uses: "3/3", type: "Consumível", price: "15 po", weight: 0.1 },
+                { id: 'i3', name: "Corda de Cânhamo", icon: "fa-dharmachakra", color: "text-rpg-gold", qty: 1, uses: "-", type: "Item", price: "2 po", weight: 2.0 },
+                { id: 'i4', name: "Adaga", icon: "fa-khanda", color: "text-gray-300", qty: 1, uses: "-", type: "Arma", price: "10 po", weight: 1.0 }
+            ],
+            peculiarities: [
+                { id: 'p1', name: "Sentidos Aguçados", icon: "fa-fingerprint", color: "text-cyber-purple", val: "+2", valColor: "text-[#00ff99]" },
+                { id: 'p2', name: "Fobia de Escuro", icon: "fa-ghost", color: "text-cyber-pink", val: "-3", valColor: "text-red-400" }
+            ],
+            biography: "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
+            currency: { po: 1250, pp: 45, pc: 0 }
         };
 
         // Populate initial conditions from rules
@@ -226,7 +238,11 @@ export const CharacterProvider = ({ children }) => {
                     })),
                     resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) },
                     conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) },
-                    talents: parsed.talents || defaultData.talents
+                    talents: parsed.talents || defaultData.talents,
+                    inventory: parsed.inventory || [],
+                    peculiarities: parsed.peculiarities || [],
+                    biography: parsed.biography || "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
+                    currency: parsed.currency || { po: 1250, pp: 45, pc: 0 }
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -513,6 +529,70 @@ export const CharacterProvider = ({ children }) => {
         return { success: true, missing: [] };
     };
 
+    // --- INVENTORY CRUD ---
+    const addInventoryItem = (item) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            inventory: [...(prev.inventory || []), { ...item, id: Date.now().toString() }]
+        }));
+    };
+
+    const updateInventoryItem = (id, updatedItem) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            inventory: (prev.inventory || []).map(item => item.id === id ? { ...item, ...updatedItem } : item)
+        }));
+    };
+
+    const deleteInventoryItem = (id) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            inventory: (prev.inventory || []).filter(item => item.id !== id)
+        }));
+    };
+
+    // --- PECULIARITIES CRUD ---
+    const addPeculiarity = (pec) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            peculiarities: [...(prev.peculiarities || []), { ...pec, id: Date.now().toString() }]
+        }));
+    };
+
+    const updatePeculiarity = (id, updatedPec) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            peculiarities: (prev.peculiarities || []).map(pec => pec.id === id ? { ...pec, ...updatedPec } : pec)
+        }));
+    };
+
+    const deletePeculiarity = (id) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            peculiarities: (prev.peculiarities || []).filter(pec => pec.id !== id)
+        }));
+    };
+
+    // --- BIOGRAPHY & CURRENCY ---
+    const updateBiography = (text) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({ ...prev, biography: text }));
+    };
+
+    const updateCurrency = (field, value) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            currency: { ...prev.currency, [field]: parseInt(value) || 0 }
+        }));
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -538,7 +618,15 @@ export const CharacterProvider = ({ children }) => {
         addTalent,
         updateTalent,
         deleteTalent,
-        consumeResources
+        consumeResources,
+        addInventoryItem,
+        updateInventoryItem,
+        deleteInventoryItem,
+        addPeculiarity,
+        updatePeculiarity,
+        deletePeculiarity,
+        updateBiography,
+        updateCurrency
     };
 
     return (
