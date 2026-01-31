@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
 import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
+import { useToast } from '../components/Toast';
 import { DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
 
 // Componente simples de progresso circular usando SVG
@@ -93,8 +94,9 @@ const CombatTab = () => {
         addAttack, updateAttack, deleteAttack, updateAttackWear,
         addArmor, updateArmor, deleteArmor, updateArmorCurrent,
         updateAllResistances,
-        updateActiveCondition, updateAllConditions
+        updateActiveCondition, updateAllConditions, consumeResources
     } = useCharacter();
+    const { showToast } = useToast();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
     const [attackForm, setAttackForm] = useState({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
@@ -259,6 +261,23 @@ const CombatTab = () => {
                 setRollingSource(attack);
             }
         }
+    };
+
+    const handleRollConfirm = () => {
+        if (rollingSource && rollingSource.costs) {
+            const hasCosts = Object.values(rollingSource.costs).some(cost => cost > 0);
+            if (hasCosts) {
+                const result = consumeResources(rollingSource.costs);
+                if (result.success) {
+                    showToast(`ATAQUE "${rollingSource.name}" REALIZADO! RECURSOS CONSUMIDOS.`, 'success');
+                    return true;
+                } else {
+                    showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
+                    return false;
+                }
+            }
+        }
+        return true;
     };
 
     return (
@@ -1013,6 +1032,7 @@ const CombatTab = () => {
                 skill={rollingSkill}
                 allAttributes={characterData.attributes}
                 sourceItem={rollingSource}
+                onConfirm={handleRollConfirm}
             />
         </div>
     );

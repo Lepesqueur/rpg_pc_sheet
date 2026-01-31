@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter } from './Modal';
 import { ATTR_MAP } from '../data/rules';
 
-const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem }) => {
+const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onConfirm }) => {
     const [selectedAttr, setSelectedAttr] = useState(null);
     const [advantage, setAdvantage] = useState(0);
 
@@ -162,7 +162,12 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem }) =
             <ModalFooter className="p-6 pt-0 bg-transparent border-none">
                 <button
                     onClick={() => {
-                        onClose();
+                        if (onConfirm) {
+                            const success = onConfirm();
+                            if (success !== false) onClose();
+                        } else {
+                            onClose();
+                        }
                     }}
                     className="w-full py-4 bg-gradient-to-r from-cyber-pink to-cyber-purple text-white font-black uppercase tracking-[0.2em] rounded-xl shadow-[0_0_20px_rgba(255,0,153,0.4)] hover:shadow-[0_0_30px_rgba(255,0,153,0.6)] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 active:scale-[0.98]"
                 >
