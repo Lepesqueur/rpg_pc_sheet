@@ -20,6 +20,7 @@ const InventoryTab = () => {
 
     // Peculiarities State
     const [editingPec, setEditingPec] = useState(null);
+    const [viewingPec, setViewingPec] = useState(null);
     const [pecForm, setPecForm] = useState({ name: '', val: '+0', description: '' });
     const [pecToDelete, setPecToDelete] = useState(null);
 
@@ -248,8 +249,8 @@ const InventoryTab = () => {
                                     return (
                                         <li
                                             key={p.id}
-                                            onClick={() => isEditMode && openEditPecModal(p)}
-                                            className={`flex items-center justify-between group bg-white/5 p-3 rounded border border-transparent hover:border-white/10 transition-all ${isEditMode ? 'cursor-pointer' : ''}`}
+                                            onClick={() => isEditMode ? openEditPecModal(p) : setViewingPec(p)}
+                                            className={`flex items-center justify-between group bg-white/5 p-3 rounded border border-transparent hover:border-white/10 transition-all cursor-pointer`}
                                         >
                                             <div className="flex items-center gap-3">
                                                 <i className={`fa-solid ${meta.icon} ${meta.color} text-lg`}></i>
@@ -458,6 +459,49 @@ const InventoryTab = () => {
                             SALVAR
                         </button>
                     </div>
+                </ModalFooter>
+            </Modal>
+
+            {/* MODAL DE VISUALIZAÇÃO DE PECULIARIDADE */}
+            <Modal isOpen={!!viewingPec} onClose={() => setViewingPec(null)} maxWidth="max-w-xl">
+                <ModalHeader onClose={() => setViewingPec(null)} className="bg-gradient-to-r from-cyber-yellow/10 to-transparent">
+                    <div className="flex items-center gap-4">
+                        <div className={`w-12 h-12 rounded-lg bg-black/40 flex items-center justify-center border border-cyber-yellow/20`}>
+                            <i className={`fa-solid ${viewingPec ? getPeculiaritiesMeta(viewingPec.val).icon : ''} text-2xl text-cyber-yellow`}></i>
+                        </div>
+                        <div className="flex flex-col">
+                            <h2 className="text-2xl font-bold text-white tracking-tight font-display uppercase italic">
+                                {viewingPec?.name}
+                            </h2>
+                            <span className="text-xs text-cyber-gray uppercase tracking-[0.3em] font-mono">Peculiaridade</span>
+                        </div>
+                    </div>
+                </ModalHeader>
+                <ModalBody className="p-8 space-y-6">
+                    <div className="flex items-center justify-between p-4 bg-white/5 rounded-lg border border-white/5">
+                        <span className="text-[10px] uppercase tracking-[0.2em] text-cyber-gray font-bold">Modificador / Efeito</span>
+                        <span className={`text-xl font-bold font-mono ${viewingPec ? getPeculiaritiesMeta(viewingPec.val).valColor : ''}`}>
+                            {viewingPec?.val}
+                        </span>
+                    </div>
+
+                    <div className="space-y-3">
+                        <label className="text-[10px] uppercase tracking-[0.2em] text-cyber-gray font-bold flex items-center gap-2">
+                            <i className="fa-solid fa-align-left text-cyber-yellow/50"></i>
+                            Descrição & Notas
+                        </label>
+                        <div className="bg-black/40 border border-white/5 rounded-xl p-6 text-sm text-gray-300 leading-relaxed font-sans min-h-[150px] whitespace-pre-wrap italic">
+                            {viewingPec?.description || "Nenhuma descrição fornecida para esta peculiaridade."}
+                        </div>
+                    </div>
+                </ModalBody>
+                <ModalFooter className="bg-black/40">
+                    <button
+                        onClick={() => setViewingPec(null)}
+                        className="bg-cyber-yellow text-black px-8 py-2.5 rounded-lg font-bold shadow-neon-yellow hover:scale-[1.02] transition-all uppercase text-[10px] tracking-widest active:scale-95"
+                    >
+                        FECHAR
+                    </button>
                 </ModalFooter>
             </Modal>
 
