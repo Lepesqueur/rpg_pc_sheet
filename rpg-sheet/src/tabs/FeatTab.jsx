@@ -44,12 +44,20 @@ const FeatTab = () => {
     };
 
     const calculateTotalCosts = (skill) => {
-        const base = { ...skill.costs };
+        const base = {
+            focus: parseInt(skill.costs?.focus || 0),
+            vitality: parseInt(skill.costs?.vitality || 0),
+            will: parseInt(skill.costs?.will || 0)
+        };
+
         if (skill.potencializacoes && selectedPots.length > 0) {
             selectedPots.forEach(idx => {
                 const pot = skill.potencializacoes[idx];
                 if (pot && pot.resource && pot.value) {
-                    base[pot.resource] = (base[pot.resource] || 0) + pot.value;
+                    const val = parseInt(pot.value);
+                    if (!isNaN(val)) {
+                        base[pot.resource] = (base[pot.resource] || 0) + val;
+                    }
                 }
             });
         }
