@@ -2,7 +2,7 @@ import React from 'react';
 import { useCharacter } from '../context/CharacterContext';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel } = useCharacter();
+    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception } = useCharacter();
 
     return (
         <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
@@ -94,6 +94,47 @@ const Header = () => {
                                 <span>XP: {characterData.xp}</span>
                                 <span>Próximo Nível: {characterData.nextLevel}</span>
                             </>
+                        )}
+                    </div>
+                </div>
+            </div>
+
+            {/* Speed and Perception - New Column */}
+            <div className="md:w-auto h-32 md:h-40 flex flex-col justify-center gap-3 shrink-0">
+                <div className="glass-panel p-2 rounded-lg border border-white/10 bg-black/40 flex items-center gap-3 min-w-[140px]">
+                    <div className="w-8 h-8 rounded bg-cyber-pink/20 flex items-center justify-center text-cyber-pink shrink-0">
+                        <i className="fa-solid fa-person-running"></i>
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase tracking-wider text-cyber-gray leading-none mb-1">Velocidade</span>
+                        {isEditMode ? (
+                            <input
+                                type="text"
+                                value={characterData.speed}
+                                onChange={(e) => updateSpeed(e.target.value)}
+                                className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-sm font-bold text-white leading-none"
+                            />
+                        ) : (
+                            <span className="text-sm font-bold text-white leading-none">{characterData.speed}</span>
+                        )}
+                    </div>
+                </div>
+
+                <div className="glass-panel p-2 rounded-lg border border-white/10 bg-black/40 flex items-center gap-3 min-w-[140px]">
+                    <div className="w-8 h-8 rounded bg-cyber-purple/20 flex items-center justify-center text-cyber-purple shrink-0">
+                        <i className="fa-solid fa-eye"></i>
+                    </div>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] uppercase tracking-wider text-cyber-gray leading-none mb-1">Percepção</span>
+                        {isEditMode ? (
+                            <input
+                                type="number"
+                                value={characterData.perception}
+                                onChange={(e) => updatePerception(e.target.value)}
+                                className="bg-transparent border-b border-white/20 focus:border-cyber-purple outline-none w-16 text-sm font-bold text-white leading-none"
+                            />
+                        ) : (
+                            <span className="text-sm font-bold text-white leading-none">{characterData.perception}</span>
                         )}
                     </div>
                 </div>
