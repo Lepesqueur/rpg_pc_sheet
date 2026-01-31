@@ -134,6 +134,7 @@ const InventoryTab = () => {
                                             <input
                                                 className="bg-transparent border-none p-0 w-16 text-right text-white text-sm font-mono focus:ring-0 outline-none"
                                                 type="number"
+                                                min="0"
                                                 value={currency[coin.key]}
                                                 onChange={(e) => updateCurrency(coin.key, e.target.value)}
                                             />

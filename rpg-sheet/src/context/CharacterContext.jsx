@@ -590,9 +590,10 @@ export const CharacterProvider = ({ children }) => {
 
     const updateCurrency = (field, value) => {
         if (!isEditMode) return;
+        const newValue = Math.max(0, parseInt(value) || 0);
         setCharacterData(prev => ({
             ...prev,
-            currency: { ...prev.currency, [field]: parseInt(value) || 0 }
+            currency: { ...prev.currency, [field]: newValue }
         }));
     };
 
