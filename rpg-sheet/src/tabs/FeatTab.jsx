@@ -13,6 +13,7 @@ const FeatTab = () => {
     const [itemToDelete, setItemToDelete] = useState(null);
     const [rollingSkill, setRollingSkill] = useState(null);
     const [rollingSource, setRollingSource] = useState(null);
+    const [selectedPots, setSelectedPots] = useState([]); // Selected enhancements indices
 
     const talents = characterData.talents || [];
     const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
@@ -20,14 +21,33 @@ const FeatTab = () => {
     const handleActivateSkill = (skill) => {
         if (!skill.costs) return;
 
-        const result = consumeResources(skill.costs);
+        const totalCosts = calculateTotalCosts(skill);
+        const result = consumeResources(totalCosts);
 
         if (result.success) {
             showToast(`HABILIDADE "${skill.name}" ATIVADA COM SUCESSO!`, 'success');
             setViewingTalent(null);
+            setSelectedPots([]);
         } else {
             showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
         }
+    };
+
+    const calculateTotalCosts = (skill) => {
+        const base = { ...skill.costs };
+        selectedPots.forEach(idx => {
+            const pot = skill.potencializacoes[idx];
+            if (pot && pot.resource && pot.value) {
+                base[pot.resource] = (base[pot.resource] || 0) + pot.value;
+            }
+        });
+        return base;
+    };
+
+    const togglePot = (idx) => {
+        setSelectedPots(prev =>
+            prev.includes(idx) ? prev.filter(i => i !== idx) : [...prev, idx]
+        );
     };
 
     const filteredTalents = talents.filter(t =>
@@ -85,12 +105,14 @@ const FeatTab = () => {
     };
 
     const handleRollConfirm = () => {
-        if (rollingSource && rollingSource.costs) {
-            const hasCosts = Object.values(rollingSource.costs).some(cost => cost > 0);
+        if (rollingSource) {
+            const totalCosts = calculateTotalCosts(rollingSource);
+            const hasCosts = Object.values(totalCosts).some(cost => cost > 0);
             if (hasCosts) {
-                const result = consumeResources(rollingSource.costs);
+                const result = consumeResources(totalCosts);
                 if (result.success) {
                     showToast(`HABILIDADE "${rollingSource.name}" ATIVADA! RECURSOS CONSUMIDOS.`, 'success');
+                    setSelectedPots([]);
                     return true;
                 } else {
                     showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
@@ -267,7 +289,7 @@ const FeatTab = () => {
             </section>
 
             {/* Modal de Detalhes - Baseado no modal_talento.html */}
-            <Modal isOpen={!!viewingTalent} onClose={() => setViewingTalent(null)} maxWidth="max-w-2xl">
+            <Modal isOpen={!!viewingTalent} onClose={() => { setViewingTalent(null); setSelectedPots([]); }} maxWidth="max-w-2xl">
                 <div className="relative z-50 overflow-hidden rounded-3xl">
                     <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${viewingTalent?.category === 'actions' ? 'via-cyber-pink' : 'via-cyber-yellow'} to-transparent opacity-50 z-20`}></div>
 
@@ -302,30 +324,37 @@ const FeatTab = () => {
                         </div>
                         <div className="flex items-center gap-4">
                             <div className="flex items-center gap-3">
-                                {viewingTalent?.costs?.focus > 0 && (
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-[10px] font-bold text-cyber-purple/70 uppercase tracking-tighter leading-none mb-1">Foco</span>
-                                        <div className="bg-cyber-purple text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-purple/20">
-                                            {viewingTalent.costs.focus}
-                                        </div>
-                                    </div>
-                                )}
-                                {viewingTalent?.costs?.will > 0 && (
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-[10px] font-bold text-cyber-yellow/70 uppercase tracking-tighter leading-none mb-1">Vontade</span>
-                                        <div className="bg-cyber-yellow text-zinc-900 font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-yellow/20">
-                                            {viewingTalent.costs.will}
-                                        </div>
-                                    </div>
-                                )}
-                                {viewingTalent?.costs?.vitality > 0 && (
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Vida</span>
-                                        <div className="bg-cyber-pink text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-pink/20">
-                                            {viewingTalent.costs.vitality}
-                                        </div>
-                                    </div>
-                                )}
+                                {(() => {
+                                    const totals = calculateTotalCosts(viewingTalent || {});
+                                    return (
+                                        <>
+                                            {totals.focus > 0 && (
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-[10px] font-bold text-cyber-purple/70 uppercase tracking-tighter leading-none mb-1">Foco</span>
+                                                    <div className="bg-cyber-purple text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-purple/20">
+                                                        {totals.focus}
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {totals.will > 0 && (
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-[10px] font-bold text-cyber-yellow/70 uppercase tracking-tighter leading-none mb-1">Vontade</span>
+                                                    <div className="bg-cyber-yellow text-zinc-900 font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-yellow/20">
+                                                        {totals.will}
+                                                    </div>
+                                                </div>
+                                            )}
+                                            {totals.vitality > 0 && (
+                                                <div className="flex flex-col items-end">
+                                                    <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Vida</span>
+                                                    <div className="bg-cyber-pink text-white font-display font-bold px-3 py-1 rounded-lg text-lg shadow-lg shadow-cyber-pink/20">
+                                                        {totals.vitality}
+                                                    </div>
+                                                </div>
+                                            )}
+                                        </>
+                                    );
+                                })()}
                                 {viewingTalent?.category === 'actions' && (
                                     <div className="flex flex-col items-end">
                                         <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Custo de Ação</span>
@@ -335,7 +364,7 @@ const FeatTab = () => {
                                     </div>
                                 )}
                             </div>
-                            <button onClick={() => setViewingTalent(null)} className="p-2 hover:bg-white/5 rounded-full transition-colors group">
+                            <button onClick={() => { setViewingTalent(null); setSelectedPots([]); }} className="p-2 hover:bg-white/5 rounded-full transition-colors group">
                                 <i className="fa-solid fa-xmark text-slate-400 group-hover:text-white"></i>
                             </button>
                         </div>
@@ -414,14 +443,30 @@ const FeatTab = () => {
                                             will: 'text-cyber-yellow',
                                             vitality: 'text-cyber-pink'
                                         };
+                                        const isSelected = selectedPots.includes(idx);
                                         return (
-                                            <div key={idx} className={`group flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/5 ${resourceColours[pot.resource]} transition-all cursor-pointer`}>
-                                                <div className="flex flex-col">
-                                                    <span className="text-slate-200 font-medium transition-colors">{pot.name}</span>
-                                                    <span className="text-xs text-slate-500 italic">{pot.effect}</span>
+                                            <div
+                                                key={idx}
+                                                onClick={() => togglePot(idx)}
+                                                className={`group flex items-center justify-between p-4 rounded-2xl bg-white/5 hover:bg-white/10 border transition-all cursor-pointer ${isSelected
+                                                    ? `border-${pot.resource === 'focus' ? 'cyber-purple' : pot.resource === 'will' ? 'cyber-yellow' : 'cyber-pink'} bg-white/10 shadow-[0_0_15px_rgba(255,255,255,0.05)]`
+                                                    : 'border-white/5'
+                                                    }`}
+                                            >
+                                                <div className="flex items-center gap-3 flex-grow">
+                                                    <div className={`w-5 h-5 rounded border-2 flex items-center justify-center transition-all ${isSelected
+                                                        ? `border-${pot.resource === 'focus' ? 'cyber-purple' : pot.resource === 'will' ? 'cyber-yellow' : 'cyber-pink'} bg-${pot.resource === 'focus' ? 'cyber-purple' : pot.resource === 'will' ? 'cyber-yellow' : 'cyber-pink'}`
+                                                        : 'border-white/20'
+                                                        }`}>
+                                                        {isSelected && <i className="fa-solid fa-check text-[10px] text-white"></i>}
+                                                    </div>
+                                                    <div className="flex flex-col">
+                                                        <span className={`font-medium transition-colors ${isSelected ? 'text-white' : 'text-slate-200'}`}>{pot.name}</span>
+                                                        <span className="text-xs text-slate-500 italic">{pot.effect}</span>
+                                                    </div>
                                                 </div>
-                                                <div className="flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-800 border border-white/10">
-                                                    <span className={`text-xs font-bold ${textColours[pot.resource]}`}>{pot.value} {pot.resource?.toUpperCase()}</span>
+                                                <div className={`flex items-center gap-2 px-3 py-1 rounded-lg bg-zinc-800 border ${isSelected ? 'border-white/20 shadow-inner' : 'border-white/10'}`}>
+                                                    <span className={`text-xs font-bold ${textColours[pot.resource]}`}>+{pot.value} {pot.resource?.toUpperCase()}</span>
                                                 </div>
                                             </div>
                                         );
@@ -437,7 +482,7 @@ const FeatTab = () => {
                             Ver Regras Detalhadas
                         </button>
                         <div className="flex flex-col sm:flex-row items-center gap-6 w-full md:w-auto order-1 md:order-2">
-                            <button onClick={() => setViewingTalent(null)} className="text-slate-400 hover:text-white text-sm font-medium transition-colors">Cancelar</button>
+                            <button onClick={() => { setViewingTalent(null); setSelectedPots([]); }} className="text-slate-400 hover:text-white text-sm font-medium transition-colors">Cancelar</button>
                             <div className="flex items-center gap-3 w-full sm:w-auto">
                                 {isEditMode && (
                                     <button
