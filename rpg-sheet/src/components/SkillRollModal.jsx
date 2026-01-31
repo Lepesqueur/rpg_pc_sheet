@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Modal, ModalBody, ModalFooter } from './Modal';
 import { ATTR_MAP } from '../data/rules';
 
-const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
+const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem }) => {
     const [selectedAttr, setSelectedAttr] = useState(null);
     const [advantage, setAdvantage] = useState(0);
 
@@ -40,6 +40,36 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
                             ))}
                         </div>
                     </div>
+                    {sourceItem && (
+                        <div className="flex flex-col gap-1 mt-3 pt-3 border-t border-white/5">
+                            <div className="flex items-center gap-2">
+                                <i className="fa-solid fa-crosshairs text-cyber-pink text-xs"></i>
+                                <span className="text-sm font-bold text-white uppercase tracking-wider">{sourceItem.name}</span>
+                            </div>
+                            {(sourceItem.costs?.focus > 0 || sourceItem.costs?.vitality > 0 || sourceItem.costs?.will > 0) && (
+                                <div className="flex items-center gap-3 mt-1">
+                                    {sourceItem.costs?.vitality > 0 && (
+                                        <div className="flex items-center gap-1 bg-cyber-pink/10 px-1.5 py-0.5 rounded border border-cyber-pink/20">
+                                            <i className="fa-solid fa-heart text-cyber-pink text-[9px]"></i>
+                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.vitality}</span>
+                                        </div>
+                                    )}
+                                    {sourceItem.costs?.focus > 0 && (
+                                        <div className="flex items-center gap-1 bg-cyber-purple/10 px-1.5 py-0.5 rounded border border-cyber-purple/20">
+                                            <i className="fa-solid fa-bolt-lightning text-cyber-purple text-[9px]"></i>
+                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.focus}</span>
+                                        </div>
+                                    )}
+                                    {sourceItem.costs?.will > 0 && (
+                                        <div className="flex items-center gap-1 bg-cyber-yellow/10 px-1.5 py-0.5 rounded border border-cyber-yellow/20">
+                                            <i className="fa-solid fa-brain text-cyber-yellow text-[9px]"></i>
+                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.will}</span>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
                 <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
                     <i className="fa-solid fa-xmark text-xl"></i>
@@ -66,8 +96,8 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes }) => {
                                 <label
                                     htmlFor={`attr_${attr.name}`}
                                     className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all cursor-pointer ${selectedAttr === attr.name
-                                            ? 'border-cyber-pink bg-cyber-pink/10 shadow-[0_0_15px_rgba(255,0,255,0.2)]'
-                                            : 'border-white/10 bg-white/5 hover:border-white/20'
+                                        ? 'border-cyber-pink bg-cyber-pink/10 shadow-[0_0_15px_rgba(255,0,255,0.2)]'
+                                        : 'border-white/10 bg-white/5 hover:border-white/20'
                                         }`}
                                 >
                                     <span className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">{attr.name}</span>

@@ -108,6 +108,7 @@ const CombatTab = () => {
     const [tempConditions, setTempConditions] = useState({});
     const [tempResistances, setTempResistances] = useState({});
     const [rollingSkill, setRollingSkill] = useState(null);
+    const [rollingSource, setRollingSource] = useState(null);
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -255,6 +256,7 @@ const CombatTab = () => {
             const skill = allSkills.find(s => s.name === attack.skill);
             if (skill) {
                 setRollingSkill(skill);
+                setRollingSource(attack);
             }
         }
     };
@@ -1007,9 +1009,10 @@ const CombatTab = () => {
 
             <SkillRollModal
                 isOpen={!!rollingSkill}
-                onClose={() => setRollingSkill(null)}
+                onClose={() => { setRollingSkill(null); setRollingSource(null); }}
                 skill={rollingSkill}
                 allAttributes={characterData.attributes}
+                sourceItem={rollingSource}
             />
         </div>
     );
