@@ -295,8 +295,13 @@ const FeatTab = () => {
 
                     <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-zinc-950/98 backdrop-blur-xl">
                         <div className="flex items-center gap-5">
-                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center`}>
+                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center relative`}>
                                 <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'actions' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
+                                {viewingTalent?.pa !== undefined && (
+                                    <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink border-white/20 text-white shadow-cyber-pink/40' : 'bg-cyber-yellow border-black/10 text-zinc-900 shadow-cyber-yellow/40'}`}>
+                                        {viewingTalent.pa} PA
+                                    </div>
+                                )}
                             </div>
                             <div>
                                 <div className="flex items-center gap-2">
@@ -355,14 +360,6 @@ const FeatTab = () => {
                                         </>
                                     );
                                 })()}
-                                {viewingTalent?.category === 'actions' && (
-                                    <div className="flex flex-col items-end">
-                                        <span className="text-[10px] font-bold text-cyber-pink/70 uppercase tracking-tighter leading-none mb-1">Custo de Ação</span>
-                                        <div className="bg-cyber-pink text-white font-display font-bold px-4 py-1 rounded-lg text-xl shadow-lg shadow-cyber-pink/20">
-                                            {viewingTalent?.pa} PA
-                                        </div>
-                                    </div>
-                                )}
                             </div>
                             <button onClick={() => { setViewingTalent(null); setSelectedPots([]); }} className="p-2 hover:bg-white/5 rounded-full transition-colors group">
                                 <i className="fa-solid fa-xmark text-slate-400 group-hover:text-white"></i>
