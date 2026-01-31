@@ -80,7 +80,7 @@ const Header = () => {
                                     />
                                 </div>
                                 <div className="flex items-center gap-1">
-                                    NEXT:
+                                    Próximo Nível:
                                     <input
                                         type="number"
                                         value={characterData.nextLevel}
@@ -92,7 +92,7 @@ const Header = () => {
                         ) : (
                             <>
                                 <span>XP: {characterData.xp}</span>
-                                <span>NEXT: {characterData.nextLevel}</span>
+                                <span>Próximo Nível: {characterData.nextLevel}</span>
                             </>
                         )}
                     </div>
