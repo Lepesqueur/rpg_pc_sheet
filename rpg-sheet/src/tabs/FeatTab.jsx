@@ -3,6 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '.
 import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
+import IconPicker from '../components/IconPicker';
 
 const FeatTab = () => {
     const { characterData, isEditMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
@@ -553,6 +554,7 @@ const FeatTab = () => {
 const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
     const { characterData } = useCharacter();
     const [formData, setFormData] = useState(initialData);
+    const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
     const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
 
     // Sync state when initialData changes
@@ -652,15 +654,29 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                             </div>
                         </div>
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Ícone (FontAwesome)</label>
-                            <input
-                                className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
-                                name="icon"
-                                placeholder="fa-burst"
-                                value={formData?.icon || ''}
-                                onChange={handleChange}
-                            />
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Ícone</label>
+                            <div className="flex gap-3">
+                                <button
+                                    onClick={() => setIsIconPickerOpen(true)}
+                                    className="flex-grow flex items-center justify-between bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 hover:bg-white/5 hover:border-cyber-pink/50 transition-all group"
+                                >
+                                    <span className="flex items-center gap-3">
+                                        <div className="w-6 h-6 rounded bg-white/5 flex items-center justify-center">
+                                            <i className={`fa-solid ${formData?.icon || 'fa-question'} text-cyber-pink`}></i>
+                                        </div>
+                                        <span className="text-sm">{formData?.icon || 'Selecionar Ícone...'}</span>
+                                    </span>
+                                    <i className="fa-solid fa-chevron-down text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+                                </button>
+                            </div>
                         </div>
+
+                        <IconPicker
+                            isOpen={isIconPickerOpen}
+                            onClose={() => setIsIconPickerOpen(false)}
+                            onSelect={(iconName) => handleChange({ target: { name: 'icon', value: iconName } })}
+                            currentIcon={formData?.icon}
+                        />
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tags (separadas por vírgula)</label>
                             <input
