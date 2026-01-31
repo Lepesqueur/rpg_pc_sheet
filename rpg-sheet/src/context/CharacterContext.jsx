@@ -612,6 +612,42 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    // --- IMPORT / EXPORT ---
+    const exportCharacter = () => {
+        const dataStr = JSON.stringify(characterData, null, 2);
+        const blob = new Blob([dataStr], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.download = `character_${new Date().toISOString().slice(0, 10)}.json`;
+        link.href = url;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
+    const importCharacter = (jsonData) => {
+        try {
+            const parsed = JSON.parse(jsonData);
+            // Basic validation: check if crucial keys exist or merge defensively
+            if (!parsed || typeof parsed !== 'object') throw new Error("Invalid JSON");
+
+            setCharacterData(prev => ({
+                ...prev,
+                ...parsed, // Merge imported data over current
+                // Ensure nested objects are merged correctly if missing in import
+                vitality: { ...prev.vitality, ...(parsed.vitality || {}) },
+                focus: { ...prev.focus, ...(parsed.focus || {}) },
+                will: { ...prev.will, ...(parsed.will || {}) },
+                defenses: { ...prev.defenses, ...(parsed.defenses || {}) },
+                skillCategories: parsed.skillCategories || prev.skillCategories, // Full replace or keep existing
+            }));
+            return true;
+        } catch (e) {
+            console.error("Failed to import character:", e);
+            return false;
+        }
+    };
+
     const value = {
         characterData,
         isEditMode,
@@ -645,7 +681,12 @@ export const CharacterProvider = ({ children }) => {
         updatePeculiarity,
         deletePeculiarity,
         updateBiography,
-        updateCurrency
+        updatePeculiarity,
+        deletePeculiarity,
+        updateBiography,
+        updateCurrency,
+        exportCharacter,
+        importCharacter
     };
 
     return (
