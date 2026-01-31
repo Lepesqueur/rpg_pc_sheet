@@ -188,15 +188,6 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
 
                         return (
                             <div className="text-sm space-y-2 font-mono">
-                                <div className="flex justify-between items-center text-xs text-gray-400 uppercase font-bold">
-                                    <span>Pool Base (Prof + 1)</span>
-                                    <span>{baseDice}d8</span>
-                                </div>
-                                <div className="flex justify-between items-center text-xs text-gray-400 uppercase font-bold text-cyber-pink">
-                                    <span>Modificador</span>
-                                    <span>{advantage > 0 ? `+${advantage}` : advantage}</span>
-                                </div>
-                                <div className="h-[1px] bg-white/10 my-1"></div>
                                 <div className="flex justify-between items-center font-bold">
                                     <span className="text-white uppercase text-xs">Total de Dados (X)</span>
                                     <span className={`text-lg ${modeColor}`}>{displayDice}d8</span>
