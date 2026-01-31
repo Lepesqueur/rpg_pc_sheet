@@ -267,7 +267,7 @@ const CombatTab = () => {
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {characterData.attacks.map((attack) => (
-                                        <tr key={attack.id} onClick={() => openEditModal(attack)} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
+                                        <tr key={attack.id} onClick={() => isEditMode && openEditModal(attack)} className={`group hover:bg-white/5 transition-colors text-[13px] ${isEditMode ? 'cursor-pointer' : 'cursor-default'}`}>
                                             <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">
                                                 <div className="flex items-center gap-2">
                                                     {isEditMode && (
@@ -365,7 +365,7 @@ const CombatTab = () => {
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {(characterData.armors || []).map((armor) => (
-                                        <tr key={armor.id} onClick={() => openArmorEditModal(armor)} className="group hover:bg-white/5 transition-colors cursor-pointer text-[13px]">
+                                        <tr key={armor.id} onClick={() => isEditMode && openArmorEditModal(armor)} className={`group hover:bg-white/5 transition-colors text-[13px] ${isEditMode ? 'cursor-pointer' : 'cursor-default'}`}>
                                             <td className="py-3 flex items-center gap-3">
                                                 <div className="flex gap-2 items-center">
                                                     {isEditMode && (
@@ -645,7 +645,7 @@ const CombatTab = () => {
                                 className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
                                 type="number"
                                 value={attackForm.ap}
-                                onChange={(e) => setAttackForm({ ...attackForm, ap: parseInt(e.target.value) || 0 })}
+                                onChange={(e) => setAttackForm({ ...attackForm, ap: Math.max(0, parseInt(e.target.value) || 0) })}
                             />
                         </div>
                         <div className="grid grid-cols-3 gap-3 bg-white/5 p-3 rounded-xl border border-white/5 col-span-1 md:col-span-2">
@@ -655,7 +655,7 @@ const CombatTab = () => {
                                     type="number"
                                     className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-purple focus:outline-none transition-all"
                                     value={attackForm.costs.focus || 0}
-                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, focus: parseInt(e.target.value) || 0 } })}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, focus: Math.max(0, parseInt(e.target.value) || 0) } })}
                                 />
                             </div>
                             <div>
@@ -664,7 +664,7 @@ const CombatTab = () => {
                                     type="number"
                                     className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-yellow focus:outline-none transition-all"
                                     value={attackForm.costs.will || 0}
-                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, will: parseInt(e.target.value) || 0 } })}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, will: Math.max(0, parseInt(e.target.value) || 0) } })}
                                 />
                             </div>
                             <div>
@@ -673,7 +673,7 @@ const CombatTab = () => {
                                     type="number"
                                     className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-pink focus:outline-none transition-all"
                                     value={attackForm.costs.vitality || 0}
-                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, vitality: parseInt(e.target.value) || 0 } })}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, vitality: Math.max(0, parseInt(e.target.value) || 0) } })}
                                 />
                             </div>
                         </div>
