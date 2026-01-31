@@ -64,6 +64,14 @@ const FeatTab = () => {
         }
     };
 
+    const handleItemClick = (item) => {
+        if (isEditMode) {
+            setEditingTalent(item);
+        } else {
+            setViewingTalent(item);
+        }
+    };
+
     return (
         <div className="animate-fade-in">
             <section className="glass-card rounded-2xl p-6 min-h-[500px] flex flex-col">
@@ -101,8 +109,8 @@ const FeatTab = () => {
                         {actions.map((item) => (
                             <div
                                 key={item.id}
-                                onClick={() => setViewingTalent(item)}
-                                className="group relative bg-white/5 border border-white/10 hover:border-cyber-pink/50 rounded-xl p-5 transition-all duration-300 cursor-pointer"
+                                onClick={() => handleItemClick(item)}
+                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-pink bg-cyber-pink/5 shadow-[0_0_15px_rgba(255,0,153,0.1)]' : 'hover:border-cyber-pink/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -128,14 +136,8 @@ const FeatTab = () => {
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
-                                                onClick={(e) => handleEdit(e, item)}
-                                                className="text-gray-500 hover:text-white transition-colors"
-                                            >
-                                                <i className="fa-solid fa-pen-to-square text-xs"></i>
-                                            </button>
-                                            <button
                                                 onClick={(e) => handleDelete(e, item.id)}
-                                                className="text-gray-500 hover:text-cyber-pink transition-colors"
+                                                className="text-gray-500 hover:text-cyber-pink transition-colors p-1"
                                             >
                                                 <i className="fa-solid fa-trash text-xs"></i>
                                             </button>
@@ -180,8 +182,8 @@ const FeatTab = () => {
                         {specificTalents.map((item) => (
                             <div
                                 key={item.id}
-                                onClick={() => setViewingTalent(item)}
-                                className="group relative bg-white/5 border border-white/10 hover:border-cyber-yellow/50 rounded-xl p-5 transition-all duration-300 cursor-pointer"
+                                onClick={() => handleItemClick(item)}
+                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-yellow bg-cyber-yellow/5 shadow-[0_0_15px_rgba(255,215,0,0.1)]' : 'hover:border-cyber-yellow/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -207,14 +209,8 @@ const FeatTab = () => {
                                     {isEditMode && (
                                         <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
                                             <button
-                                                onClick={(e) => handleEdit(e, item)}
-                                                className="text-gray-500 hover:text-white transition-colors"
-                                            >
-                                                <i className="fa-solid fa-pen-to-square text-xs"></i>
-                                            </button>
-                                            <button
                                                 onClick={(e) => handleDelete(e, item.id)}
-                                                className="text-gray-500 hover:text-cyber-yellow transition-colors"
+                                                className="text-gray-500 hover:text-cyber-yellow transition-colors p-1"
                                             >
                                                 <i className="fa-solid fa-trash text-xs"></i>
                                             </button>
