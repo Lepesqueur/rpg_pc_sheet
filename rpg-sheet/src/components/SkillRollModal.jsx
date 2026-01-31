@@ -163,6 +163,68 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
                         </div>
                     </div>
                 </section>
+
+                {/* Orientação de Rolagem */}
+                <section className="bg-cyber-bg/50 border border-white/10 rounded-xl p-4 space-y-3">
+                    <h3 className="text-[10px] font-bold text-white uppercase tracking-[0.2em] flex items-center gap-2 border-b border-white/10 pb-2">
+                        <i className="fa-solid fa-book-open text-cyber-yellow"></i> Guia da Rolagem
+                    </h3>
+
+                    {(() => {
+                        const baseDice = Math.min((skill?.level || 0) + 1, 3);
+                        const finalX = baseDice + advantage;
+                        const isDisadvantage = finalX <= 0;
+                        const diceCount = isDisadvantage ? Math.abs(finalX) || 1 : finalX; // Se X=0, assume 1 dado em desvantagem? Ou 2? Usuário disse "X D8". Assumindo abs(X). Se 0, assumo 2 (padrão D&D) ou 1? "X negativo" => X < 0. Se X=0? Tratarei como 1 dado normal ou desvantagem? Vou assumir 2 dados delete menor se X<=0.
+                        // Ajuste lógico: Se X > 0, rola X dados. Se X <= 0, rola abs(X) + 2 dados e pega o menor? 
+                        // O usuário disse: "Se o X for negativo o jogador joga X D8 em desvantagem". "X" aqui deve ser interpretado como magnitude.
+                        // Se X = -2 -> joga 2d8 desvantagem.
+                        // Se X = 0 -> joga 1d8 desvantagem? 
+                        // Vou usar: Dados = Math.max(1, Math.abs(finalX)) apenas para exibição, e explicar o modo.
+
+                        const displayDice = finalX > 0 ? finalX : (finalX === 0 ? 1 : Math.abs(finalX));
+                        const modeLabel = finalX > 0 ? "VANTAGEM (SOMA TUDO)" : "DESVANTAGEM (O MENOR)";
+                        const modeColor = finalX > 0 ? "text-cyber-green" : "text-cyber-red";
+                        const masterReroll = (skill?.level || 0) >= 3;
+
+                        return (
+                            <div className="text-sm space-y-2 font-mono">
+                                <div className="flex justify-between items-center text-xs text-gray-400 uppercase font-bold">
+                                    <span>Pool Base (Prof + 1)</span>
+                                    <span>{baseDice}d8</span>
+                                </div>
+                                <div className="flex justify-between items-center text-xs text-gray-400 uppercase font-bold text-cyber-pink">
+                                    <span>Modificador</span>
+                                    <span>{advantage > 0 ? `+${advantage}` : advantage}</span>
+                                </div>
+                                <div className="h-[1px] bg-white/10 my-1"></div>
+                                <div className="flex justify-between items-center font-bold">
+                                    <span className="text-white uppercase text-xs">Total de Dados (X)</span>
+                                    <span className={`text-lg ${modeColor}`}>{displayDice}d8</span>
+                                </div>
+
+                                <div className="mt-2 text-xs bg-black/40 p-3 rounded text-gray-300 leading-relaxed border-l-2 border-cyber-yellow">
+                                    <p className="mb-1">
+                                        <strong className={modeColor}>MODO: {modeLabel}</strong>
+                                    </p>
+                                    <ul className="list-disc pl-4 space-y-1 text-[11px] text-gray-400">
+                                        {finalX > 0 ? (
+                                            <li>Role <strong>{displayDice}d8</strong> e considere <strong>TODOS</strong> os resultados.</li>
+                                        ) : (
+                                            <li>Role <strong>{displayDice === 0 ? "1" : displayDice}d8</strong> e escolha APENAS o <strong>MENOR</strong> resultado.</li>
+                                        )}
+                                        <li>Some <strong>+{currentAttr?.value || 0}</strong> ({selectedAttr}) ao valor de cada dado mantido.</li>
+                                        {masterReroll && (
+                                            <li className="text-cyber-yellow">
+                                                <strong>MESTRE:</strong> Você pode rerolar o pior dado uma vez!
+                                            </li>
+                                        )}
+                                        <li>Verifique quantos resultados superaram a CD.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        );
+                    })()}
+                </section>
             </ModalBody>
 
             <ModalFooter className="p-6 pt-0 bg-transparent border-none">
