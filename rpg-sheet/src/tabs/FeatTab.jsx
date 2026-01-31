@@ -19,15 +19,26 @@ const FeatTab = () => {
     const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
 
     const handleActivateSkill = (skill) => {
-        if (!skill.costs) return;
-
-        const totalCosts = calculateTotalCosts(skill);
+        // Safe check for costs, defaulting to free if undefined
+        const safeSkill = { ...skill, costs: skill.costs || {} };
+        const totalCosts = calculateTotalCosts(safeSkill);
         const result = consumeResources(totalCosts);
 
         if (result.success) {
             showToast(`HABILIDADE "${skill.name}" ATIVADA COM SUCESSO!`, 'success');
+
+            const related = skill.relatedSkill;
+            const skillSource = { ...skill, costs: totalCosts }; // Pass totals to roll modal
+
+            // Close the description modal
             setViewingTalent(null);
-            setSelectedPots([]);
+
+            if (related) {
+                // Open roll modal with the already "paid" source
+                handleRollSkill(related, skillSource);
+            } else {
+                setSelectedPots([]);
+            }
         } else {
             showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
         }
@@ -101,25 +112,14 @@ const FeatTab = () => {
         if (skill) {
             setRollingSkill(skill);
             setRollingSource(source);
+        } else {
+            showToast(`ERRO: Perícia "${skillName}" não encontrada! Verifique o nome da perícia.`, 'error');
         }
     };
 
     const handleRollConfirm = () => {
-        if (rollingSource) {
-            const totalCosts = calculateTotalCosts(rollingSource);
-            const hasCosts = Object.values(totalCosts).some(cost => cost > 0);
-            if (hasCosts) {
-                const result = consumeResources(totalCosts);
-                if (result.success) {
-                    showToast(`HABILIDADE "${rollingSource.name}" ATIVADA! RECURSOS CONSUMIDOS.`, 'success');
-                    setSelectedPots([]);
-                    return true;
-                } else {
-                    showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
-                    return false;
-                }
-            }
-        }
+        // Resources already consumed in handleActivateSkill
+        setSelectedPots([]);
         return true;
     };
 
@@ -395,13 +395,9 @@ const FeatTab = () => {
                                         <span className="text-white font-bold uppercase tracking-wider">{viewingTalent.relatedSkill}</span>
                                     </div>
                                 </div>
-                                <button
-                                    onClick={() => handleRollSkill(viewingTalent.relatedSkill, viewingTalent)}
-                                    className="px-4 py-2 bg-cyber-blue/20 hover:bg-cyber-blue/30 border border-cyber-blue/40 text-cyber-blue text-[10px] font-black uppercase tracking-[0.2em] rounded-lg transition-all flex items-center gap-2 group"
-                                >
-                                    <i className="fa-solid fa-dice-d20 transition-transform group-hover:rotate-45"></i>
-                                    Rolar Teste
-                                </button>
+                                <div className="text-[10px] text-cyber-blue/50 font-black uppercase tracking-widest italic pr-2">
+                                    Teste automático ao ativar
+                                </div>
                             </div>
                         )}
 
