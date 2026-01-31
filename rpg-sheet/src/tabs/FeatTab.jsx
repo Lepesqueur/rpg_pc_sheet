@@ -81,12 +81,12 @@ const FeatTab = () => {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    {/* Habilidades de Ação */}
+                    {/* Ações Basicas */}
                     <div className="space-y-4">
                         <div className="flex items-center justify-between mb-4">
                             <div className="flex items-center gap-3">
                                 <div className="w-2 h-6 bg-cyber-pink shadow-neon-pink"></div>
-                                <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Habilidades de Ação</h2>
+                                <h2 className="text-white font-display font-bold text-lg tracking-widest uppercase">Ações Basicas</h2>
                             </div>
                             {isEditMode && (
                                 <button
