@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '../components/Modal';
+import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
 import { DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
 
@@ -106,6 +107,7 @@ const CombatTab = () => {
     const [armorToDelete, setArmorToDelete] = useState(null);
     const [tempConditions, setTempConditions] = useState({});
     const [tempResistances, setTempResistances] = useState({});
+    const [rollingSkill, setRollingSkill] = useState(null);
 
     const openEditModal = (attack) => {
         setSelectedAttack(attack);
@@ -245,6 +247,18 @@ const CombatTab = () => {
         }
     };
 
+    const handleAttackClick = (attack) => {
+        if (isEditMode) {
+            openEditModal(attack);
+        } else {
+            const allSkills = Object.values(characterData.skillCategories).flatMap(cat => cat.skills);
+            const skill = allSkills.find(s => s.name === attack.skill);
+            if (skill) {
+                setRollingSkill(skill);
+            }
+        }
+    };
+
     return (
         <div className="animate-fade-in">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 min-h-[500px]">
@@ -267,7 +281,7 @@ const CombatTab = () => {
                                 </thead>
                                 <tbody className="divide-y divide-white/5">
                                     {characterData.attacks.map((attack) => (
-                                        <tr key={attack.id} onClick={() => isEditMode && openEditModal(attack)} className={`group hover:bg-white/5 transition-colors text-[13px] ${isEditMode ? 'cursor-pointer' : 'cursor-default'}`}>
+                                        <tr key={attack.id} onClick={() => handleAttackClick(attack)} className={`group hover:bg-white/5 transition-colors text-[13px] cursor-pointer`}>
                                             <td className="py-3 font-bold text-white group-hover:text-cyber-pink transition-colors">
                                                 <div className="flex items-center gap-2">
                                                     {isEditMode && (
@@ -989,6 +1003,14 @@ const CombatTab = () => {
                     </button>
                 </ModalFooter>
             </Modal>
+
+
+            <SkillRollModal
+                isOpen={!!rollingSkill}
+                onClose={() => setRollingSkill(null)}
+                skill={rollingSkill}
+                allAttributes={characterData.attributes}
+            />
         </div>
     );
 };
