@@ -163,7 +163,8 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
                 <button
                     onClick={() => {
                         if (onConfirm) {
-                            const success = onConfirm();
+                            // Pass the selected attribute name and advantage value to the callback
+                            const success = onConfirm(selectedAttr, advantage);
                             if (success !== false) onClose();
                         } else {
                             onClose();

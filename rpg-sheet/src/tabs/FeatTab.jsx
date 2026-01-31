@@ -36,9 +36,8 @@ const FeatTab = () => {
             if (related) {
                 // Open roll modal with the already "paid" source
                 handleRollSkill(related, skillSource);
-            } else {
-                setSelectedPots([]);
             }
+            setSelectedPots([]);
         } else {
             showToast(`RECURSOS INSUFICIENTES: ${result.missing.join(', ')}`, 'error');
         }
@@ -46,12 +45,14 @@ const FeatTab = () => {
 
     const calculateTotalCosts = (skill) => {
         const base = { ...skill.costs };
-        selectedPots.forEach(idx => {
-            const pot = skill.potencializacoes[idx];
-            if (pot && pot.resource && pot.value) {
-                base[pot.resource] = (base[pot.resource] || 0) + pot.value;
-            }
-        });
+        if (skill.potencializacoes && selectedPots.length > 0) {
+            selectedPots.forEach(idx => {
+                const pot = skill.potencializacoes[idx];
+                if (pot && pot.resource && pot.value) {
+                    base[pot.resource] = (base[pot.resource] || 0) + pot.value;
+                }
+            });
+        }
         return base;
     };
 
@@ -117,8 +118,22 @@ const FeatTab = () => {
         }
     };
 
-    const handleRollConfirm = () => {
-        // Resources already consumed in handleActivateSkill
+    const handleRollConfirm = (selectedAttrName, advantage) => {
+        // Resources are already consumed in handleActivateSkill
+        if (!rollingSkill || !selectedAttrName) return true;
+
+        const attr = characterData.attributes.find(a => a.name === selectedAttrName);
+        const attrValue = attr ? attr.value : 0;
+        const skillLevel = rollingSkill.level || 0;
+
+        const d20 = Math.floor(Math.random() * 20) + 1;
+        const total = d20 + attrValue + skillLevel + advantage;
+
+        showToast(
+            `RESULTADO: ${total} (d20: ${d20} + ${selectedAttrName}: ${attrValue} + Perícia: ${skillLevel} + Ajuste: ${advantage})`,
+            'success'
+        );
+
         setSelectedPots([]);
         return true;
     };
