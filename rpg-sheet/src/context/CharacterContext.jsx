@@ -173,8 +173,8 @@ export const CharacterProvider = ({ children }) => {
                 { id: 'i4', name: "Adaga", icon: "fa-khanda", color: "text-gray-300", qty: 1, uses: "-", type: "Arma", price: "10 po", weight: 1.0 }
             ],
             peculiarities: [
-                { id: 'p1', name: "Sentidos Aguçados", icon: "fa-fingerprint", color: "text-cyber-purple", val: "+2", valColor: "text-[#00ff99]" },
-                { id: 'p2', name: "Fobia de Escuro", icon: "fa-ghost", color: "text-cyber-pink", val: "-3", valColor: "text-red-400" }
+                { id: 'p1', name: "Sentidos Aguçados", val: "+2", description: "Seus sentidos são extremamente treinados." },
+                { id: 'p2', name: "Fobia de Escuro", val: "-3", description: "O personagem entra em pânico em escuridão total." }
             ],
             biography: "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
             currency: { po: 1250, pp: 45, pc: 0 }
@@ -240,7 +240,10 @@ export const CharacterProvider = ({ children }) => {
                     conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) },
                     talents: parsed.talents || defaultData.talents,
                     inventory: parsed.inventory || [],
-                    peculiarities: parsed.peculiarities || [],
+                    peculiarities: (parsed.peculiarities || []).map(pec => ({
+                        description: "",
+                        ...pec
+                    })),
                     biography: parsed.biography || "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
                     currency: parsed.currency || { po: 1250, pp: 45, pc: 0 }
                 };

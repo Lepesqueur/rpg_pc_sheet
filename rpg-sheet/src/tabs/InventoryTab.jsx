@@ -19,7 +19,7 @@ const InventoryTab = () => {
 
     // Peculiarities State
     const [editingPec, setEditingPec] = useState(null);
-    const [pecForm, setPecForm] = useState({ name: '', icon: 'fa-star', color: 'text-cyber-yellow', val: '+0', valColor: 'text-[#00ff99]' });
+    const [pecForm, setPecForm] = useState({ name: '', val: '+0', description: '' });
     const [pecToDelete, setPecToDelete] = useState(null);
 
     const items = characterData.inventory || [];
@@ -62,7 +62,7 @@ const InventoryTab = () => {
     // Peculiarity Handlers
     const openAddPecModal = () => {
         setEditingPec(null);
-        setPecForm({ name: '', icon: 'fa-star', color: 'text-cyber-yellow', val: '+0', valColor: 'text-[#00ff99]' });
+        setPecForm({ name: '', val: '+0', description: '' });
         setEditingPec('new');
     };
 
@@ -89,6 +89,13 @@ const InventoryTab = () => {
             setPecToDelete(null);
             setEditingPec(null);
         }
+    };
+
+    const getPeculiaritiesMeta = (val) => {
+        const numVal = parseInt(val.replace(/[^\d-]/g, '')) || 0;
+        if (numVal > 0) return { icon: 'fa-circle-plus', color: 'text-cyber-yellow', valColor: 'text-[#00ff99]' };
+        if (numVal < 0) return { icon: 'fa-circle-minus', color: 'text-cyber-pink', valColor: 'text-red-400' };
+        return { icon: 'fa-circle-dot', color: 'text-cyber-gray', valColor: 'text-cyber-gray' };
     };
 
     const totalWeight = items.reduce((acc, item) => acc + (parseFloat(item.weight) * parseInt(item.qty) || 0), 0);
@@ -225,22 +232,25 @@ const InventoryTab = () => {
                         </div>
                         <div className="overflow-y-auto custom-scrollbar pr-2 flex-grow">
                             <ul className="space-y-3">
-                                {peculiarities.map((p) => (
-                                    <li
-                                        key={p.id}
-                                        onClick={() => isEditMode && openEditPecModal(p)}
-                                        className={`flex items-center justify-between group bg-white/5 p-3 rounded border border-transparent hover:border-white/10 transition-all ${isEditMode ? 'cursor-pointer' : ''}`}
-                                    >
-                                        <div className="flex items-center gap-3">
-                                            <i className={`fa-solid ${p.icon} ${p.color} text-lg`}></i>
-                                            <div className="flex flex-col">
-                                                <span className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">{p.name}</span>
-                                                {isEditMode && <span className="text-[9px] text-cyber-gray uppercase tracking-tighter flex items-center gap-1"><i className="fa-solid fa-pen-to-square"></i> Editar</span>}
+                                {peculiarities.map((p) => {
+                                    const meta = getPeculiaritiesMeta(p.val);
+                                    return (
+                                        <li
+                                            key={p.id}
+                                            onClick={() => isEditMode && openEditPecModal(p)}
+                                            className={`flex items-center justify-between group bg-white/5 p-3 rounded border border-transparent hover:border-white/10 transition-all ${isEditMode ? 'cursor-pointer' : ''}`}
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <i className={`fa-solid ${meta.icon} ${meta.color} text-lg`}></i>
+                                                <div className="flex flex-col">
+                                                    <span className="text-sm font-medium text-gray-200 group-hover:text-white transition-colors">{p.name}</span>
+                                                    {isEditMode && <span className="text-[9px] text-cyber-gray uppercase tracking-tighter flex items-center gap-1"><i className="fa-solid fa-pen-to-square"></i> Editar</span>}
+                                                </div>
                                             </div>
-                                        </div>
-                                        <span className={`text-sm font-bold ${p.valColor} bg-white/5 px-2 py-0.5 rounded border border-white/10 font-mono`}>{p.val}</span>
-                                    </li>
-                                ))}
+                                            <span className={`text-sm font-bold ${meta.valColor} bg-white/5 px-2 py-0.5 rounded border border-white/10 font-mono`}>{p.val}</span>
+                                        </li>
+                                    );
+                                })}
                                 {peculiarities.length === 0 && (
                                     <li className="text-center text-cyber-gray/50 italic text-[11px] uppercase tracking-widest py-4">Nenhuma peculiaridade registrada</li>
                                 )}
@@ -376,7 +386,7 @@ const InventoryTab = () => {
                                 onChange={(e) => setPecForm({ ...pecForm, name: e.target.value })}
                             />
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 gap-6">
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Valor / Modificador</label>
                                 <input
@@ -384,45 +394,18 @@ const InventoryTab = () => {
                                     type="text"
                                     value={pecForm.val}
                                     onChange={(e) => setPecForm({ ...pecForm, val: e.target.value })}
+                                    placeholder="ex: +2 ou -3"
                                 />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Cor do Modificador</label>
-                                <select
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-cyber-yellow outline-none"
-                                    value={pecForm.valColor}
-                                    onChange={(e) => setPecForm({ ...pecForm, valColor: e.target.value })}
-                                >
-                                    <option value="text-[#00ff99]">Verde (Bônus)</option>
-                                    <option value="text-red-400">Vermelho (Penalidade)</option>
-                                    <option value="text-cyber-gray">Cinza (Neutro)</option>
-                                </select>
                             </div>
                         </div>
-                        <div className="grid grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Ícone (FA)</label>
-                                <input
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-yellow outline-none"
-                                    type="text"
-                                    value={pecForm.icon}
-                                    onChange={(e) => setPecForm({ ...pecForm, icon: e.target.value })}
-                                />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Cor Sugerida</label>
-                                <select
-                                    className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-cyber-yellow outline-none"
-                                    value={pecForm.color}
-                                    onChange={(e) => setPecForm({ ...pecForm, color: e.target.value })}
-                                >
-                                    <option value="text-cyber-yellow">Amarelo</option>
-                                    <option value="text-cyber-pink">Rosa</option>
-                                    <option value="text-cyber-purple">Roxo</option>
-                                    <option value="text-cyber-cyan">Ciano</option>
-                                    <option value="text-white">Branco</option>
-                                </select>
-                            </div>
+                        <div className="space-y-2">
+                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Descrição</label>
+                            <textarea
+                                className="w-full h-32 bg-black/40 border border-white/10 rounded-lg p-4 text-sm text-gray-200 focus:border-cyber-yellow outline-none resize-none custom-scrollbar font-sans leading-relaxed"
+                                value={pecForm.description}
+                                onChange={(e) => setPecForm({ ...pecForm, description: e.target.value })}
+                                placeholder="Descreva os detalhes desta peculiaridade..."
+                            />
                         </div>
                     </div>
                 </ModalBody>
