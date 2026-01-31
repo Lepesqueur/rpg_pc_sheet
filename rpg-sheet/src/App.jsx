@@ -4,7 +4,7 @@ import StatsGrid from './components/StatsGrid';
 import Navigation from './components/Navigation';
 import AttributesTab from './tabs/AttributesTab';
 import CombatTab from './tabs/CombatTab';
-import SkillsTab from './tabs/SkillsTab';
+import FeatTab from './tabs/FeatTab';
 import InventoryTab from './tabs/InventoryTab';
 import { CharacterProvider } from './context/CharacterContext';
 import { ToastProvider } from './components/Toast';
@@ -16,7 +16,7 @@ function App() {
     switch (activeTab) {
       case 'attributes': return <AttributesTab />;
       case 'combat': return <CombatTab />;
-      case 'skills': return <SkillsTab />;
+      case 'skills': return <FeatTab />;
       case 'inventory': return <InventoryTab />;
       default: return <AttributesTab />;
     }

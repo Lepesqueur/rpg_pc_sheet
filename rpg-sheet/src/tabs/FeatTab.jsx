@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '.
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 
-const SkillsTab = () => {
+const FeatTab = () => {
     const { characterData, isEditMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
     const { showToast } = useToast();
     const [viewingTalent, setViewingTalent] = useState(null);
@@ -733,4 +733,4 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
     );
 };
 
-export default SkillsTab;
+export default FeatTab;
