@@ -27,54 +27,57 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
     return (
         <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-lg">
             {/* Header Area */}
-            <div className="bg-black/40 p-6 border-b border-white/10 flex justify-between items-center shrink-0">
+            <div className="bg-black/40 p-6 border-b border-white/10 flex justify-between items-center shrink-0 relative overflow-hidden">
+                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-cyber-pink to-transparent opacity-70"></div>
                 <div>
-                    <h2 className="text-2xl font-bold text-white tracking-wider uppercase drop-shadow-[0_0_8px_rgba(255,0,255,0.5)]">
+                    <h2 className="text-2xl font-bold text-white tracking-wider uppercase drop-shadow-[0_0_8px_rgba(255,0,255,0.5)] font-display">
                         Rolagem: {skill.name}
                     </h2>
-                    <div className="flex items-center gap-2 mt-1">
-                        <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold">Proficiência</span>
-                        <div className="flex gap-1 text-cyber-yellow text-[10px]">
+                    <div className="flex items-center gap-3 mt-2">
+                        <span className="text-[10px] text-gray-400 uppercase tracking-widest font-bold bg-white/5 px-2 py-0.5 rounded border border-white/5">Proficiência</span>
+                        <div className="flex gap-1.5">
                             {[1, 2, 3].map(i => (
-                                <i key={i} className={`fa-solid fa-diamond ${i <= skill.level ? 'text-[#f1c40f] drop-shadow-[0_0_3px_#f1c40f]' : 'text-white/10'}`}></i>
+                                <div key={i} className={`transform rotate-45 w-2.5 h-2.5 border transition-all duration-300 ${i <= skill.level ? 'bg-cyber-yellow border-cyber-yellow shadow-[0_0_6px_#f1c40f]' : 'border-white/20 bg-transparent'}`}></div>
                             ))}
                         </div>
                     </div>
-                    {sourceItem && (
-                        <div className="flex flex-col gap-1 mt-3 pt-3 border-t border-white/5">
-                            <div className="flex items-center gap-2">
-                                <i className="fa-solid fa-crosshairs text-cyber-pink text-xs"></i>
-                                <span className="text-sm font-bold text-white uppercase tracking-wider">{sourceItem.name}</span>
-                            </div>
-                            {(sourceItem.costs?.focus > 0 || sourceItem.costs?.vitality > 0 || sourceItem.costs?.will > 0) && (
-                                <div className="flex items-center gap-3 mt-1">
-                                    {sourceItem.costs?.vitality > 0 && (
-                                        <div className="flex items-center gap-1 bg-cyber-pink/10 px-1.5 py-0.5 rounded border border-cyber-pink/20">
-                                            <i className="fa-solid fa-heart text-cyber-pink text-[9px]"></i>
-                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.vitality}</span>
-                                        </div>
-                                    )}
-                                    {sourceItem.costs?.focus > 0 && (
-                                        <div className="flex items-center gap-1 bg-cyber-purple/10 px-1.5 py-0.5 rounded border border-cyber-purple/20">
-                                            <i className="fa-solid fa-bolt-lightning text-cyber-purple text-[9px]"></i>
-                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.focus}</span>
-                                        </div>
-                                    )}
-                                    {sourceItem.costs?.will > 0 && (
-                                        <div className="flex items-center gap-1 bg-cyber-yellow/10 px-1.5 py-0.5 rounded border border-cyber-yellow/20">
-                                            <i className="fa-solid fa-brain text-cyber-yellow text-[9px]"></i>
-                                            <span className="text-white font-mono font-bold text-[10px]">{sourceItem.costs.will}</span>
-                                        </div>
-                                    )}
+                </div>
+                <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-gray-500 hover:text-white transition-colors">
+                    <i className="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            {sourceItem && (
+                <div className="bg-white/5 px-6 py-3 border-b border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                        <i className="fa-solid fa-crosshairs text-cyber-pink text-xs"></i>
+                        <span className="text-xs font-bold text-white uppercase tracking-wider">{sourceItem.name}</span>
+                    </div>
+                    {(sourceItem.costs?.focus > 0 || sourceItem.costs?.vitality > 0 || sourceItem.costs?.will > 0) && (
+                        <div className="flex items-center gap-3">
+                            <span className="text-[9px] text-gray-500 uppercase font-bold tracking-widest">Custo:</span>
+                            {sourceItem.costs?.vitality > 0 && (
+                                <div className="flex items-center gap-1 text-cyber-pink">
+                                    <i className="fa-solid fa-heart text-[10px]"></i>
+                                    <span className="font-mono font-bold text-[10px]">{sourceItem.costs.vitality}</span>
+                                </div>
+                            )}
+                            {sourceItem.costs?.focus > 0 && (
+                                <div className="flex items-center gap-1 text-cyber-purple">
+                                    <i className="fa-solid fa-bolt-lightning text-[10px]"></i>
+                                    <span className="font-mono font-bold text-[10px]">{sourceItem.costs.focus}</span>
+                                </div>
+                            )}
+                            {sourceItem.costs?.will > 0 && (
+                                <div className="flex items-center gap-1 text-cyber-yellow">
+                                    <i className="fa-solid fa-brain text-[10px]"></i>
+                                    <span className="font-mono font-bold text-[10px]">{sourceItem.costs.will}</span>
                                 </div>
                             )}
                         </div>
                     )}
                 </div>
-                <button onClick={onClose} className="text-gray-500 hover:text-white transition-colors">
-                    <i className="fa-solid fa-xmark text-xl"></i>
-                </button>
-            </div>
+            )}
 
             <ModalBody className="p-6 space-y-8 overflow-y-auto">
                 {/* Atributo Base Section */}
@@ -95,14 +98,17 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
                                 />
                                 <label
                                     htmlFor={`attr_${attr.name}`}
-                                    className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all cursor-pointer ${selectedAttr === attr.name
+                                    className={`flex flex-col items-center justify-center p-4 rounded-xl border transition-all cursor-pointer group relative overflow-hidden ${selectedAttr === attr.name
                                         ? 'border-cyber-pink bg-cyber-pink/10 shadow-[0_0_15px_rgba(255,0,255,0.2)]'
-                                        : 'border-white/10 bg-white/5 hover:border-white/20'
+                                        : 'border-white/10 bg-white/5 hover:border-white/30 hover:bg-white/10'
                                         }`}
                                 >
-                                    <span className="text-[10px] text-gray-400 font-mono uppercase tracking-widest">{attr.name}</span>
-                                    <span className="text-2xl font-bold text-white mt-1">{attr.value}</span>
-                                    <span className="text-[10px] bg-cyber-pink/20 text-cyber-pink px-2 py-0.5 rounded mt-2 font-black">+{attr.value}</span>
+                                    <div className={`absolute inset-0 bg-gradient-to-br from-cyber-pink/20 to-transparent opacity-0 transition-opacity duration-300 ${selectedAttr === attr.name ? 'opacity-100' : ''}`}></div>
+                                    <span className="text-[10px] text-gray-400 font-mono uppercase tracking-widest relative z-10">{attr.name}</span>
+                                    <span className="text-3xl font-bold text-white mt-1 relative z-10 font-display">{attr.value}</span>
+                                    <div className={`text-[10px] px-2 py-0.5 rounded mt-2 font-black relative z-10 transition-colors ${selectedAttr === attr.name ? 'bg-cyber-pink text-white' : 'bg-white/10 text-gray-400 group-hover:bg-white/20 group-hover:text-white'}`}>
+                                        +{attr.value} TESTE
+                                    </div>
                                 </label>
                             </div>
                         ))}
