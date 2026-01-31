@@ -14,7 +14,7 @@ const InventoryTab = () => {
 
     // Inventory State
     const [editingItem, setEditingItem] = useState(null);
-    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Item', price: '', weight: 0 });
+    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
     const [itemToDelete, setItemToDelete] = useState(null);
 
     // Peculiarities State
@@ -30,7 +30,7 @@ const InventoryTab = () => {
     // Item Handlers
     const openAddItemModal = () => {
         setEditingItem(null);
-        setItemForm({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Item', price: '', weight: 0 });
+        setItemForm({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
         setEditingItem('new');
     };
 
@@ -40,12 +40,17 @@ const InventoryTab = () => {
     };
 
     const handleSaveItem = () => {
+        const validatedItem = {
+            ...itemForm,
+            currentUses: Math.min(Math.max(0, itemForm.currentUses), itemForm.maxUses)
+        };
+
         if (editingItem === 'new') {
-            addInventoryItem(itemForm);
-            showToast(`ITEM "${itemForm.name}" ADICIONADO`, 'success');
+            addInventoryItem(validatedItem);
+            showToast(`ITEM "${validatedItem.name}" ADICIONADO`, 'success');
         } else {
-            updateInventoryItem(editingItem.id, itemForm);
-            showToast(`ITEM "${itemForm.name}" ATUALIZADO`, 'success');
+            updateInventoryItem(editingItem.id, validatedItem);
+            showToast(`ITEM "${validatedItem.name}" ATUALIZADO`, 'success');
         }
         setEditingItem(null);
     };
@@ -289,11 +294,11 @@ const InventoryTab = () => {
                                 value={itemForm.type}
                                 onChange={(e) => setItemForm({ ...itemForm, type: e.target.value })}
                             >
-                                <option value="Item">Geral</option>
                                 <option value="Consumível">Consumível</option>
                                 <option value="Arma">Arma</option>
+                                <option value="Armadura">Armadura</option>
                                 <option value="Ferramenta">Ferramenta</option>
-                                <option value="Quest">Missão</option>
+                                <option value="Outro">Outro</option>
                             </select>
                         </div>
                         <div className="grid grid-cols-2 gap-4">
@@ -323,6 +328,8 @@ const InventoryTab = () => {
                                 <input
                                     className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
                                     type="number"
+                                    min="0"
+                                    max={itemForm.maxUses}
                                     value={itemForm.currentUses}
                                     onChange={(e) => setItemForm({ ...itemForm, currentUses: parseInt(e.target.value) || 0 })}
                                 />
@@ -332,6 +339,7 @@ const InventoryTab = () => {
                                 <input
                                     className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white font-mono focus:ring-1 focus:ring-cyber-pink outline-none"
                                     type="number"
+                                    min="0"
                                     value={itemForm.maxUses}
                                     onChange={(e) => setItemForm({ ...itemForm, maxUses: parseInt(e.target.value) || 0 })}
                                 />
