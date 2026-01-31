@@ -28,8 +28,8 @@ export const CharacterProvider = ({ children }) => {
                 tenacity: 14
             },
             attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, resource: { type: 'vitality', value: 2 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
-                { id: '2', name: 'Arco Curto', ap: 4, resource: { type: 'focus', value: 5 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
+                { id: '1', name: 'Espada Longa', ap: 3, costs: { vitality: 2, focus: 0, will: 0 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
+                { id: '2', name: 'Arco Curto', ap: 4, costs: { vitality: 0, focus: 5, will: 0 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
             ],
             armors: [
                 { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
@@ -215,14 +215,18 @@ export const CharacterProvider = ({ children }) => {
                     focus: { ...defaultData.focus, ...(parsed.focus || {}) },
                     will: { ...defaultData.will, ...(parsed.will || {}) },
                     attacks: (parsed.attacks || defaultData.attacks).map(attack => {
-                        if (attack.costs && !attack.resource) {
-                            const type = attack.costs.focus > 0 ? 'focus' : (attack.costs.will > 0 ? 'will' : 'vitality');
-                            const value = attack.costs[type] || 0;
-                            const { costs, ...rest } = attack;
-                            return { ...rest, resource: { type, value } };
+                        // Migração de resource: { type, value } para costs: { focus, will, vitality }
+                        if (attack.resource && !attack.costs) {
+                            const newCosts = { focus: 0, will: 0, vitality: 0 };
+                            if (attack.resource.type === 'focus') newCosts.focus = attack.resource.value;
+                            else if (attack.resource.type === 'will') newCosts.will = attack.resource.value;
+                            else newCosts.vitality = attack.resource.value;
+
+                            const { resource, ...rest } = attack;
+                            return { ...rest, costs: newCosts };
                         }
                         return {
-                            resource: { type: 'vitality', value: 0 },
+                            costs: { focus: 0, will: 0, vitality: 0 },
                             skill: 'Luta', // Default generic skill
                             properties: '', // Default empty properties
                             damageType: 'impacto', // Default damage type

@@ -96,7 +96,7 @@ const CombatTab = () => {
     } = useCharacter();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
-    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
+    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
 
@@ -115,7 +115,7 @@ const CombatTab = () => {
 
     const openAddModal = () => {
         setSelectedAttack(null);
-        setAttackForm({ name: '', ap: 0, resource: { type: 'vitality', value: 0 }, damage: '', range: '', skill: 'Luta', properties: '' });
+        setAttackForm({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
         setActiveModal('weapon');
     };
 
@@ -295,9 +295,28 @@ const CombatTab = () => {
                                             </td>
                                             <td className="py-3 text-center text-cyber-yellow font-mono font-bold">{attack.ap}</td>
                                             <td className="py-3 text-center">
-                                                <div className="flex items-center justify-center gap-1">
-                                                    <i className={`fa-solid ${attack.resource.type === 'focus' ? 'fa-bolt-lightning text-cyber-purple' : 'fa-heart text-cyber-pink'} text-[8px] font-bold`}></i>
-                                                    <span className="text-white font-mono font-bold">{attack.resource.value}</span>
+                                                <div className="flex flex-col items-center justify-center gap-1">
+                                                    {attack.costs.vitality > 0 && (
+                                                        <div className="flex items-center gap-1">
+                                                            <i className="fa-solid fa-heart text-cyber-pink text-[8px] font-bold"></i>
+                                                            <span className="text-white font-mono font-bold text-[11px]">{attack.costs.vitality}</span>
+                                                        </div>
+                                                    )}
+                                                    {attack.costs.focus > 0 && (
+                                                        <div className="flex items-center gap-1">
+                                                            <i className="fa-solid fa-bolt-lightning text-cyber-purple text-[8px] font-bold"></i>
+                                                            <span className="text-white font-mono font-bold text-[11px]">{attack.costs.focus}</span>
+                                                        </div>
+                                                    )}
+                                                    {attack.costs.will > 0 && (
+                                                        <div className="flex items-center gap-1">
+                                                            <i className="fa-solid fa-brain text-cyber-yellow text-[8px] font-bold"></i>
+                                                            <span className="text-white font-mono font-bold text-[11px]">{attack.costs.will}</span>
+                                                        </div>
+                                                    )}
+                                                    {(!attack.costs.vitality && !attack.costs.focus && !attack.costs.will) && (
+                                                        <span className="text-gray-500 font-mono text-[11px]">0</span>
+                                                    )}
                                                 </div>
                                             </td>
                                             <td className="py-3 text-center text-white font-mono font-bold">{attack.damage}</td>
@@ -629,25 +648,34 @@ const CombatTab = () => {
                                 onChange={(e) => setAttackForm({ ...attackForm, ap: parseInt(e.target.value) || 0 })}
                             />
                         </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Recurso (Tipo)</label>
-                            <select
-                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-pink transition-all"
-                                value={attackForm.resource.type}
-                                onChange={(e) => setAttackForm({ ...attackForm, resource: { ...attackForm.resource, type: e.target.value } })}
-                            >
-                                <option value="vitality">Vitalidade</option>
-                                <option value="focus">Foco</option>
-                            </select>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Custo de Recurso</label>
-                            <input
-                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
-                                type="number"
-                                value={attackForm.resource.value}
-                                onChange={(e) => setAttackForm({ ...attackForm, resource: { ...attackForm.resource, value: parseInt(e.target.value) || 0 } })}
-                            />
+                        <div className="grid grid-cols-3 gap-3 bg-white/5 p-3 rounded-xl border border-white/5 col-span-1 md:col-span-2">
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-purple uppercase mb-1 ml-1 tracking-widest">Custo Foco</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-purple focus:outline-none transition-all"
+                                    value={attackForm.costs.focus || 0}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, focus: parseInt(e.target.value) || 0 } })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-yellow uppercase mb-1 ml-1 tracking-widest">Custo Vontade</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-yellow focus:outline-none transition-all"
+                                    value={attackForm.costs.will || 0}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, will: parseInt(e.target.value) || 0 } })}
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-[9px] font-bold text-cyber-pink uppercase mb-1 ml-1 tracking-widest">Custo Vida</label>
+                                <input
+                                    type="number"
+                                    className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-3 py-1.5 font-mono text-sm focus:border-cyber-pink focus:outline-none transition-all"
+                                    value={attackForm.costs.vitality || 0}
+                                    onChange={(e) => setAttackForm({ ...attackForm, costs: { ...attackForm.costs, vitality: parseInt(e.target.value) || 0 } })}
+                                />
+                            </div>
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Dano</label>
