@@ -21,6 +21,8 @@ export const CharacterProvider = ({ children }) => {
             skillCategories: SKILLS_CATEGORIES,
             name: "Aeliana, a Arconte",
             level: 5,
+            xp: 14500,
+            nextLevel: 18000,
             vitality: { current: 80, max: 100, level: 0 },
             focus: { current: 45, max: 50, level: 0 },
             will: { current: 28, max: 40, level: 0 },
@@ -213,6 +215,8 @@ export const CharacterProvider = ({ children }) => {
                     ...parsed,
                     name: parsed.name || defaultData.name,
                     level: parsed.level || defaultData.level,
+                    xp: parsed.xp !== undefined ? parsed.xp : defaultData.xp,
+                    nextLevel: parsed.nextLevel !== undefined ? parsed.nextLevel : defaultData.nextLevel,
                     // Garante que sub-objetos também existam se o save for antigo
                     defenses: { ...defaultData.defenses, ...(parsed.defenses || {}) },
                     vitality: { ...defaultData.vitality, ...(parsed.vitality || {}) },
@@ -632,6 +636,22 @@ export const CharacterProvider = ({ children }) => {
         }));
     };
 
+    const updateXp = (newXp) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            xp: parseInt(newXp) || 0
+        }));
+    };
+
+    const updateNextLevel = (newNext) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({
+            ...prev,
+            nextLevel: parseInt(newNext) || 0
+        }));
+    };
+
     // --- IMPORT / EXPORT ---
     const exportCharacter = () => {
         const dataStr = JSON.stringify(characterData, null, 2);
@@ -707,6 +727,8 @@ export const CharacterProvider = ({ children }) => {
         updateCurrency,
         updateName,
         updateLevel,
+        updateXp,
+        updateNextLevel,
         exportCharacter,
         importCharacter
     };

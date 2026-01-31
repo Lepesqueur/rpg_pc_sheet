@@ -2,7 +2,7 @@ import React from 'react';
 import { useCharacter } from '../context/CharacterContext';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel } = useCharacter();
+    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel } = useCharacter();
 
     return (
         <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
@@ -62,11 +62,39 @@ const Header = () => {
                 </div>
                 <div className="w-full max-w-md mx-auto md:mx-0">
                     <div className="h-2 w-full bg-gray-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow w-3/4 shadow-[0_0_10px_#ff007f]"></div>
+                        <div
+                            className="h-full bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow shadow-[0_0_10px_#ff007f] transition-all duration-500"
+                            style={{ width: `${Math.min(100, Math.max(0, (characterData.xp / characterData.nextLevel) * 100))}%` }}
+                        ></div>
                     </div>
                     <div className="flex justify-between text-xs text-cyber-gray mt-1 font-mono">
-                        <span>XP: 14500</span>
-                        <span>NEXT: 18000</span>
+                        {isEditMode ? (
+                            <>
+                                <div className="flex items-center gap-1">
+                                    XP:
+                                    <input
+                                        type="number"
+                                        value={characterData.xp}
+                                        onChange={(e) => updateXp(e.target.value)}
+                                        className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-xs text-cyber-gray"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-1">
+                                    NEXT:
+                                    <input
+                                        type="number"
+                                        value={characterData.nextLevel}
+                                        onChange={(e) => updateNextLevel(e.target.value)}
+                                        className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-xs text-cyber-gray text-right"
+                                    />
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <span>XP: {characterData.xp}</span>
+                                <span>NEXT: {characterData.nextLevel}</span>
+                            </>
+                        )}
                     </div>
                 </div>
             </div>
