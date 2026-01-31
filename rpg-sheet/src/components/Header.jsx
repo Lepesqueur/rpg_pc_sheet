@@ -100,7 +100,7 @@ const Header = () => {
             </div>
 
             {/* Speed and Perception - New Column */}
-            <div className="md:w-auto h-32 md:h-40 flex flex-col justify-center gap-3 shrink-0">
+            <div className="w-full md:w-auto flex flex-row items-center justify-center gap-4 shrink-0 md:absolute md:bottom-6 md:right-6">
                 <div className="glass-panel p-2 rounded-lg border border-white/10 bg-black/40 flex items-center gap-3 min-w-[140px]">
                     <div className="w-8 h-8 rounded bg-cyber-pink/20 flex items-center justify-center text-cyber-pink shrink-0">
                         <i className="fa-solid fa-person-running"></i>
