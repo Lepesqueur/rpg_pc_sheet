@@ -3,7 +3,7 @@ import { useCharacter } from '../context/CharacterContext';
 import SkillRollModal from '../components/SkillRollModal';
 
 const AttributesTab = () => {
-    const { characterData, updateSkillLevel } = useCharacter();
+    const { characterData, updateSkillLevel, isEditMode } = useCharacter();
     const [rollingSkill, setRollingSkill] = React.useState(null);
 
     const getAttrColor = (attr) => {
@@ -35,8 +35,8 @@ const AttributesTab = () => {
                                 {category.skills.map((skill) => (
                                     <li
                                         key={skill.name}
-                                        onClick={() => setRollingSkill(skill)}
-                                        className="flex items-center justify-between group p-1 rounded transition-colors cursor-pointer hover:bg-white/5 active:scale-[0.99]"
+                                        onClick={() => !isEditMode && setRollingSkill(skill)}
+                                        className={`flex items-center justify-between group p-1 rounded transition-colors ${!isEditMode ? 'cursor-pointer hover:bg-white/5 active:scale-[0.99]' : ''}`}
                                     >
                                         <div className="flex items-center gap-3">
                                             <div className="w-8 h-8 rounded bg-white/5 flex items-center justify-center text-[#ff00ff] group-hover:bg-[#ff00ff] group-hover:text-black transition-all shadow-sm">
