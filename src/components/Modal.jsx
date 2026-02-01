@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 export const Modal = ({ isOpen, onClose, children, maxWidth = "max-w-2xl" }) => {
     if (!isOpen) return null;
@@ -11,7 +12,7 @@ export const Modal = ({ isOpen, onClose, children, maxWidth = "max-w-2xl" }) => 
         return () => window.removeEventListener('keydown', handleEsc);
     }, [onClose]);
 
-    return (
+    return createPortal(
         <div
             className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fade-in"
             onClick={(e) => {
@@ -22,7 +23,8 @@ export const Modal = ({ isOpen, onClose, children, maxWidth = "max-w-2xl" }) => 
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-50 z-20"></div>
                 {children}
             </div>
-        </div>
+        </div>,
+        document.body
     );
 };
 
