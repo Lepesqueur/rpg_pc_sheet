@@ -43,7 +43,7 @@ Acesse esse link no seu celular.
 ## Resolução de Problemas
 
 - **Tela Branca?**
-  Se o site abrir em branco, pode ser necessário configurar a "base" no `vite.config.js`. Se o seu repositório não for na raiz (ex: `usuario.github.io` é raiz, `usuario.github.io/projeto` não é), me avise para ajustarmos o `base: '/nome-do-repo/'`.
+  Se o site abrir em branco, verifique se o repositório no GitHub se chama exatamente `rpg_pc_sheet`. Se tiver outro nome, altere a propriedade `base` no arquivo `vite.config.js` para `/nome-do-seu-repo/`.
 
 - **Ícones não aparecem?**
   Verifique se os arquivos `pwa-192x192.png` e `pwa-512x512.png` estão na pasta `public`.
