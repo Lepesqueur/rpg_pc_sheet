@@ -735,9 +735,7 @@ export const CharacterProvider = ({ children }) => {
         updatePeculiarity,
         deletePeculiarity,
         updateBiography,
-        updatePeculiarity,
-        deletePeculiarity,
-        updateBiography,
+
         updateCurrency,
         updateName,
         updateLevel,
