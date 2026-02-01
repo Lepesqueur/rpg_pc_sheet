@@ -58,7 +58,12 @@ const AttributesTab = () => {
                                                 <button
                                                     key={i}
                                                     onClick={() => updateSkillLevel(key, skill.name, i)}
-                                                    className={`w-3.5 h-3.5 flex items-center justify-center transition-all duration-300 transform hover:scale-125 focus:outline-none ${i > skill.level ? 'opacity-20 hover:opacity-50' : 'text-[#f1c40f] drop-shadow-[0_0_5px_rgba(241,196,15,0.5)]'}`}
+                                                    className={`w-3.5 h-3.5 flex items-center justify-center transition-all duration-300 transform hover:scale-125 focus:outline-none ${i > skill.level
+                                                            ? 'opacity-20 hover:opacity-50'
+                                                            : i === 3
+                                                                ? 'text-[#00ffff] drop-shadow-[0_0_8px_rgba(0,255,255,0.8)] scale-110'
+                                                                : 'text-[#f1c40f] drop-shadow-[0_0_5px_rgba(241,196,15,0.5)]'
+                                                        }`}
                                                 >
                                                     <i className="fa-solid fa-diamond text-[10px]"></i>
                                                 </button>
