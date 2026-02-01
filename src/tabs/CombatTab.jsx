@@ -5,6 +5,13 @@ import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import { DAMAGE_RESISTANCES, CONDITIONS } from '../data/rules';
 
+const ARMOR_TYPES = {
+    armadura: { label: 'Armadura', icon: 'fa-shirt' },
+    escudo: { label: 'Escudo', icon: 'fa-shield-halved' },
+    elmo: { label: 'Elmo', icon: 'fa-helmet-safety' },
+    outros: { label: 'Outros', icon: 'fa-box-open' }
+};
+
 // Componente simples de progresso circular usando SVG
 const CircularProgress = ({ value, max, color, label, sublabel, shadowColor, statusKey, isEditMode }) => {
     const { characterData, updateStatusMax, updateStatus, updateConditionLevel } = useCharacter();
@@ -103,7 +110,7 @@ const CombatTab = () => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
 
-    const [armorForm, setArmorForm] = useState({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved', reflexBonus: 0, properties: '' });
+    const [armorForm, setArmorForm] = useState({ name: '', max: 0, current: 0, notes: '', type: 'armadura', reflexBonus: 0, properties: '' });
     const [selectedArmor, setSelectedArmor] = useState(null);
     const [isArmorDeleteModalOpen, setIsArmorDeleteModalOpen] = useState(false);
     const [armorToDelete, setArmorToDelete] = useState(null);
@@ -215,13 +222,13 @@ const CombatTab = () => {
 
     const openArmorEditModal = (armor) => {
         setSelectedArmor(armor);
-        setArmorForm(armor);
+        setArmorForm({ ...armor, type: armor.type || 'armadura' });
         setActiveModal('armor');
     };
 
     const openArmorAddModal = () => {
         setSelectedArmor(null);
-        setArmorForm({ name: '', max: 0, current: 0, notes: '', icon: 'fa-shield-halved', reflexBonus: 0, properties: '' });
+        setArmorForm({ name: '', max: 0, current: 0, notes: '', type: 'armadura', reflexBonus: 0, properties: '' });
         setActiveModal('armor');
     };
 
@@ -388,7 +395,7 @@ const CombatTab = () => {
                     </div>
 
                     <div className="border border-white/10 rounded-xl p-4 flex flex-col glass-card">
-                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow font-display">Armaduras</h3>
+                        <h3 className="text-cyber-gray text-xs font-bold tracking-[0.2em] uppercase mb-4 pl-3 border-l-4 border-cyber-yellow font-display">Defesas</h3>
                         <div className="overflow-x-auto">
                             <table className="w-full text-left text-sm">
                                 <thead className="text-[10px] text-cyber-gray uppercase tracking-wider border-b border-white/5">
@@ -419,7 +426,7 @@ const CombatTab = () => {
                                                             </button>
                                                         </div>
                                                     )}
-                                                    <i className={`fa-solid ${armor.icon || 'fa-shield-halved'} text-cyber-yellow text-xs`}></i>
+                                                    <i className={`fa-solid ${ARMOR_TYPES[armor.type || 'armadura']?.icon || 'fa-shield-halved'} text-cyber-yellow text-xs`}></i>
                                                     <span className="font-bold text-white group-hover:text-cyber-yellow transition-colors">{armor.name}</span>
                                                 </div>
                                             </td>
@@ -443,7 +450,7 @@ const CombatTab = () => {
                                     {isEditMode && (
                                         <tr onClick={openArmorAddModal} className="group hover:bg-cyber-yellow/5 transition-colors cursor-pointer text-[13px] border-t border-dashed border-white/10">
                                             <td colSpan="3" className="py-4 text-center text-cyber-yellow font-bold uppercase tracking-widest text-[10px]">
-                                                <i className="fa-solid fa-plus mr-2"></i> Adicionar Nova Armadura
+                                                <i className="fa-solid fa-plus mr-2"></i> Adicionar Nova Defesa
                                             </td>
                                         </tr>
                                     )}
@@ -804,17 +811,19 @@ const CombatTab = () => {
             <Modal isOpen={activeModal === 'armor'} onClose={() => setActiveModal(null)} maxWidth="max-w-2xl">
                 <ModalHeader onClose={() => setActiveModal(null)} className="bg-white/5">
                     <div className="flex items-center gap-4">
-                        <div className="w-12 h-12 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/50 flex items-center justify-center shadow-neon-yellow text-cyber-yellow-shadow"><i className="fa-solid fa-shield-halved text-cyber-yellow text-xl text-glow-yellow"></i></div>
+                        <div className="w-12 h-12 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/50 flex items-center justify-center shadow-neon-yellow text-cyber-yellow-shadow">
+                            <i className={`fa-solid ${ARMOR_TYPES[armorForm.type]?.icon || 'fa-shield-halved'} text-cyber-yellow text-xl text-glow-yellow`}></i>
+                        </div>
                         <div>
-                            <h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">{selectedArmor ? 'Editar Armadura' : 'Nova Armadura'}</h2>
-                            <p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">{armorForm.name || 'Nova Armadura'}</p>
+                            <h2 className="text-2xl font-bold tracking-tight text-white uppercase font-display">{selectedArmor ? 'Editar Defesa' : 'Nova Defesa'}</h2>
+                            <p className="text-cyber-gray text-xs font-semibold tracking-widest uppercase font-mono">{armorForm.name || 'Nova Defesa'}</p>
                         </div>
                     </div>
                 </ModalHeader>
                 <ModalBody>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Nome da Armadura</label>
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Nome da Defesa</label>
                             <input
                                 className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all"
                                 type="text"
@@ -832,13 +841,16 @@ const CombatTab = () => {
                             />
                         </div>
                         <div className="flex flex-col gap-2">
-                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Ícone (FontAwesome class)</label>
-                            <input
-                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all font-mono text-sm"
-                                type="text"
-                                value={armorForm.icon}
-                                onChange={(e) => setArmorForm({ ...armorForm, icon: e.target.value })}
-                            />
+                            <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Tipo</label>
+                            <select
+                                className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white outline-none focus:border-cyber-yellow transition-all font-sans"
+                                value={armorForm.type}
+                                onChange={(e) => setArmorForm({ ...armorForm, type: e.target.value })}
+                            >
+                                {Object.entries(ARMOR_TYPES).map(([key, info]) => (
+                                    <option key={key} value={key}>{info.label}</option>
+                                ))}
+                            </select>
                         </div>
                         <div className="flex flex-col gap-2">
                             <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Bônus de Reflexo</label>
