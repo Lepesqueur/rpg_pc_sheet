@@ -19,11 +19,17 @@ A parte mais legal? **Fazer este app foi a minha maneira de aprender as regras.*
 
 Ao transformar as mecânicas de jogo em lógica de código (`if`, `else`, `state`), fui obrigado a entender cada minúcia do sistema. Se o código funciona, é porque eu entendi a regra. É a engenharia reversa do RPG: aprender jogando... linhas de código.
 
-Tudo no sistema gira em torno da **centralidade da gestão de recursos**. Esqueça os cooldowns arbitrários; aqui a "economia" é baseada em três pilares: **Vitalidade, Vontade e Foco**. Cada ação consome algo, e gerenciar essa escassez é o que separa os heróis dos cadáveres. O app brilha ao tirar a matemática da frente e deixar só o desespero da decisão tática.
+Tudo no sistema gira em torno da **centralidade da gestão de recursos**. Aqui a "economia" é baseada em três pilares: **Vitalidade, Vontade e Foco**. Cada ação consome algo, e gerenciar essa escassez é o que separa os heróis dos cadáveres. 
 
 📚 **Em Breve no Mundo Real**: O sistema é tão bom que vai transcender o digital. Um **Livro Físico** está sendo preparado para espalhar a palavra pelo mundo. Fiquem ligados.
 
-## 📋 Natureza e Propósito
+## � Status: Obras & Updates (Acalmem os ânimos)
+
+O app está funcional, mas não está finalizado. Por quê? Porque o sistema do RPG ainda está em fase de "Beta Test Raiz".
+
+Estamos esperando as regras se estabilizarem nas mesas de jogo antes de implementar novas funcionalidades. Afinal, ninguém quer codar um sistema complexo hoje para ter que refazer tudo amanhã.
+
+## �📋 Natureza e Propósito
 
 A ideia é simples: substituir aquela ficha de papel amassada e cheia de marcas de borracha por algo digital que roda no seu celular ou PC. Além de salvar árvores, serve como meu atestado de que sei fazer **PWAs** bonitas e funcionais.
 
