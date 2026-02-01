@@ -1,10 +1,19 @@
 # Ficha de RPG - PC (PWA)
 
-Este projeto é uma **Ficha de Personagem de RPG** para um sistema proprio  criado pelo meu amigo Arthur Lobato, interativa, desenvolvida como uma Progressive Web App (PWA). Ela funciona como uma ferramenta digital completa para jogadores gerenciarem seus personagens durante sessões de RPG, com foco em usabilidade, automação e estética.
+Bem-vindo à **Ficha de Personagem de RPG** do futuro (ou quase isso). Trata-se de uma PWA (Progressive Web App) — ou seja, um site que finge muito bem ser um aplicativo nativo — criada para gerenciar fichas de RPG com estilo, automação e zero papelada. O sistema de regras é *homebrew*, idealizado pelo meu amigo **Arthur Lobato**.
+
+> **⚠️ SPOILER / DISCLAIMER**: Sim, este projeto serve como portfólio, mas também foi uma ótima desculpa para eu brincar com as novas IAs do Google e ver se elas aguentam o tranco no "mundo real".
+
+## 🤖 Humans + AI (O tal do Tech Showcase)
+
+Basicamente, este repositório é a prova de que humanos e inteligências artificiais podem trabalhar juntos sem que a Skynet tome conta de tudo (por enquanto).
+
+*   **A Cara (UI/UX)**: Cozinhada no **Google Stitch**. Eu pedi "algo moderno", ele entregou Glassmorphism, temas Cyberpunk e transições suaves. Não reclamei.
+*   **O Cérebro (Code)**: A arquitetura e o código pesado foram feitos em *pair programming* com o **Google Antigravity**. Eu arquitetava e validava, ele codava e sugeria as melhores práticas. Uma dupla dinâmica.
 
 ## 📋 Natureza e Propósito
 
-A aplicação foi criada para substituir ou complementar as fichas de papel tradicionais. Sendo uma **PWA**, ela pode ser acessada via navegador ou instalada como um aplicativo nativo em desktops e dispositivos móveis (Android/iOS), permitindo uso offline e acesso rápido.
+A ideia é simples: substituir aquela ficha de papel amassada e cheia de marcas de borracha por algo digital que roda no seu celular ou PC. Além de salvar árvores, serve como meu atestado de que sei fazer **PWAs** bonitas e funcionais.
 
 O objetivo principal é agilizar a matemática e a gestão de recursos do jogo, permitindo que o jogador foque na narrativa e na interpretação.
 
@@ -57,4 +66,4 @@ Os arquivos gerados estarão na pasta `dist/`.
 ## ℹ️ Informações Importantes
 
 *   **Edição**: A ficha possui um "Modo de Edição" (ícone de lápis) que deve ser ativado para modificar atributos base e informações estruturais do personagem. Durante o jogo, o modo de edição geralmente fica desligado para evitar alterações acidentais.
-*   **Dados**: Como os dados ficam no LocalStorage, limpar o cache do navegador pode apagar sua ficha. Exporte seus dados (se a funcionalidade estiver disponível) ou evite limpar dados de site para este domínio.
+*   **Dados**: Como os dados (não dos D20) ficam no LocalStorage, limpar o cache do navegador pode apagar sua ficha. Exporte seus dados ou evite limpar dados de site para este domínio.
