@@ -106,7 +106,7 @@ const CombatTab = () => {
     const { showToast } = useToast();
     const [activeModal, setActiveModal] = useState(null);
     const [selectedAttack, setSelectedAttack] = useState(null);
-    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
+    const [attackForm, setAttackForm] = useState({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: 1, range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [attackToDelete, setAttackToDelete] = useState(null);
 
@@ -127,7 +127,7 @@ const CombatTab = () => {
 
     const openAddModal = () => {
         setSelectedAttack(null);
-        setAttackForm({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: '', range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
+        setAttackForm({ name: '', ap: 0, costs: { focus: 0, will: 0, vitality: 0 }, damage: 1, range: '', skill: 'Luta', properties: '', damageType: 'impacto' });
         setActiveModal('weapon');
     };
 
@@ -746,9 +746,10 @@ const CombatTab = () => {
                             <label className="text-[10px] text-cyber-gray uppercase font-bold ml-1 tracking-widest">Dano</label>
                             <input
                                 className="bg-black/40 border border-white/10 rounded-lg py-2 px-4 text-white font-mono outline-none focus:border-cyber-pink transition-all"
-                                type="text"
+                                type="number"
+                                min="0"
                                 value={attackForm.damage}
-                                onChange={(e) => setAttackForm({ ...attackForm, damage: e.target.value })}
+                                onChange={(e) => setAttackForm({ ...attackForm, damage: Math.max(0, parseInt(e.target.value) || 0) })}
                             />
                         </div>
                         <div className="flex flex-col gap-2">

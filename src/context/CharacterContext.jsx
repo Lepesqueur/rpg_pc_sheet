@@ -34,8 +34,8 @@ export const CharacterProvider = ({ children }) => {
                 tenacity: 14
             },
             attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, costs: { vitality: 2, focus: 0, will: 0 }, damage: '2d8+4', range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
-                { id: '2', name: 'Arco Curto', ap: 4, costs: { vitality: 0, focus: 5, will: 0 }, damage: '1d6+3', range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
+                { id: '1', name: 'Espada Longa', ap: 3, costs: { vitality: 2, focus: 0, will: 0 }, damage: 13, range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
+                { id: '2', name: 'Arco Curto', ap: 4, costs: { vitality: 0, focus: 5, will: 0 }, damage: 7, range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
             ],
             armors: [
                 { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
