@@ -11,6 +11,18 @@ Basicamente, este repositório é a prova de que humanos e inteligências artifi
 *   **A Cara (UI/UX)**: Cozinhada no **Google Stitch**. Eu pedi "algo moderno", ele entregou Glassmorphism, temas Cyberpunk e transições suaves. Não reclamei.
 *   **O Cérebro (Code)**: A arquitetura e o código pesado foram feitos em *pair programming* com o **Google Antigravity**. Eu arquitetava e validava, ele codava e sugeria as melhores práticas. Uma dupla dinâmica.
 
+## 🎲 O Sistema (Genialidade na Simplicidade)
+
+O sistema de regras, criado pelo **Arthur Lobato**, é aquele tipo de *homebrew* que parece simples à primeira vista, mas esconde uma profundidade mecânica brilhante.
+
+A parte mais legal? **Fazer este app foi a minha maneira de aprender as regras.**
+
+Ao transformar as mecânicas de jogo em lógica de código (`if`, `else`, `state`), fui obrigado a entender cada minúcia do sistema. Se o código funciona, é porque eu entendi a regra. É a engenharia reversa do RPG: aprender jogando... linhas de código.
+
+Tudo no sistema gira em torno da **centralidade da gestão de recursos**. Esqueça os cooldowns arbitrários; aqui a "economia" é baseada em três pilares: **Vitalidade, Vontade e Foco**. Cada ação consome algo, e gerenciar essa escassez é o que separa os heróis dos cadáveres. O app brilha ao tirar a matemática da frente e deixar só o desespero da decisão tática.
+
+📚 **Em Breve no Mundo Real**: O sistema é tão bom que vai transcender o digital. Um **Livro Físico** está sendo preparado para espalhar a palavra pelo mundo. Fiquem ligados.
+
 ## 📋 Natureza e Propósito
 
 A ideia é simples: substituir aquela ficha de papel amassada e cheia de marcas de borracha por algo digital que roda no seu celular ou PC. Além de salvar árvores, serve como meu atestado de que sei fazer **PWAs** bonitas e funcionais.
