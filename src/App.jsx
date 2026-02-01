@@ -36,7 +36,7 @@ function App() {
             </div>
 
             <footer className="mt-20 pt-8 border-t border-white/5 text-center">
-              <p className="text-[10px] text-cyber-gray opacity-50 uppercase tracking-[0.5em]">SYSTEM VERSION 3.0.0 // REACT MIGRATION PRTCL</p>
+
             </footer>
           </div>
         </div>
