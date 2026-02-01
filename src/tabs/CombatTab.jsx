@@ -361,7 +361,16 @@ const CombatTab = () => {
                                                     )}
                                                 </div>
                                             </td>
-                                            <td className="py-3 text-center text-white font-mono font-bold">{attack.damage}</td>
+                                            <td className="py-3 text-center text-white font-mono font-bold">
+                                                {attack.wear > 0 ? (
+                                                    <div className="flex flex-col items-center leading-none">
+                                                        <span className="text-cyber-red">{Math.max(0, attack.damage - attack.wear)}</span>
+                                                        <span className="text-[9px] text-gray-500 line-through opacity-60">{attack.damage}</span>
+                                                    </div>
+                                                ) : (
+                                                    attack.damage
+                                                )}
+                                            </td>
                                             <td className="py-3 text-center text-gray-400 font-mono">{attack.range}</td>
                                             <td className="py-3 text-center">
                                                 <div className="flex items-center justify-center gap-1.5">

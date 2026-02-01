@@ -28,9 +28,12 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
         if (isOpen) {
             setStep('setup');
             setRollResults(null);
-            setAdvantage(0);
+
+            // Apply Wear penalty if applicable (Desgaste)
+            const wearPenalty = sourceItem?.wear ? parseInt(sourceItem.wear) : 0;
+            setAdvantage(-wearPenalty);
         }
-    }, [isOpen]);
+    }, [isOpen, sourceItem]);
 
     if (!skill) return null;
 
