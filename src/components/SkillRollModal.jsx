@@ -241,6 +241,15 @@ const SkillRollModal = ({ isOpen, onClose, skill, allAttributes, sourceItem, onC
                                 ))}
                             </div>
                         </div>
+
+                        {sourceItem?.wear > 0 && (
+                            <div className="mt-4 flex items-center justify-center gap-2 text-cyber-red bg-cyber-red/10 border border-cyber-red/20 py-2 rounded-lg animate-pulse">
+                                <i className="fa-solid fa-triangle-exclamation text-xs"></i>
+                                <span className="text-[10px] uppercase font-bold tracking-widest">
+                                    Desgaste Aplicado: -{sourceItem.wear} na rolagem
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </section>
 
