@@ -109,7 +109,7 @@ const Header = () => {
                         <span className="text-[10px] uppercase tracking-wider text-cyber-gray leading-none mb-1">Velocidade</span>
                         {isEditMode ? (
                             <input
-                                type="text"
+                                type="number"
                                 value={characterData.speed}
                                 onChange={(e) => updateSpeed(e.target.value)}
                                 className="bg-transparent border-b border-white/20 focus:border-cyber-pink outline-none w-16 text-sm font-bold text-white leading-none"
