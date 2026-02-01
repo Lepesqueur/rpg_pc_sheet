@@ -610,7 +610,14 @@ const CombatTab = () => {
                                         <span>{condInfo.name}</span>
                                         <div className="flex items-center bg-black/30 rounded px-1 ml-1 border border-white/5">
                                             <button
-                                                onClick={(e) => { e.stopPropagation(); updateActiveCondition(key, 'level', Math.max(1, cond.level - 1)); }}
+                                                onClick={(e) => {
+                                                    e.stopPropagation();
+                                                    if (cond.level > 1) {
+                                                        updateActiveCondition(key, 'level', cond.level - 1);
+                                                    } else {
+                                                        updateActiveCondition(key, 'active', false);
+                                                    }
+                                                }}
                                                 className="w-4 h-4 flex items-center justify-center hover:text-white transition-colors"
                                             >
                                                 -
