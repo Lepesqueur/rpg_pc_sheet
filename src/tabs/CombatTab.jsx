@@ -602,12 +602,28 @@ const CombatTab = () => {
                                 const rgb = rgbMap[colorClass] || '136,136,153';
 
                                 return (
-                                    <span
+                                    <div
                                         key={key}
-                                        className={`px-2 py-1 bg-${colorClass}/10 border border-${colorClass}/30 text-${colorClass} rounded text-[10px] font-bold uppercase flex items-center gap-1 shadow-[0_0_5px_rgba(${rgb},0.3)]`}
+                                        className={`px-2 py-1 bg-${colorClass}/10 border border-${colorClass}/30 text-${colorClass} rounded text-[10px] font-bold uppercase flex items-center gap-2 shadow-[0_0_5px_rgba(${rgb},0.3)]`}
                                     >
-                                        <i className={`fa-solid ${condInfo.icon}`}></i> {condInfo.name} {cond.level > 1 ? `(${cond.level})` : ''}
-                                    </span>
+                                        <i className={`fa-solid ${condInfo.icon}`}></i>
+                                        <span>{condInfo.name}</span>
+                                        <div className="flex items-center bg-black/30 rounded px-1 ml-1 border border-white/5">
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); updateActiveCondition(key, 'level', Math.max(1, cond.level - 1)); }}
+                                                className="w-4 h-4 flex items-center justify-center hover:text-white transition-colors"
+                                            >
+                                                -
+                                            </button>
+                                            <span className="min-w-[12px] text-center text-white">{cond.level}</span>
+                                            <button
+                                                onClick={(e) => { e.stopPropagation(); updateActiveCondition(key, 'level', cond.level + 1); }}
+                                                className="w-4 h-4 flex items-center justify-center hover:text-white transition-colors"
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    </div>
                                 );
                             })}
                             {!Object.values(characterData.conditions || {}).some(c => c.active) && (
