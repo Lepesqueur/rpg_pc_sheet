@@ -85,3 +85,11 @@ Os arquivos gerados estarão na pasta `dist/`.
 
 *   **Edição**: A ficha possui um "Modo de Edição" (ícone de lápis) que deve ser ativado para modificar atributos base e informações estruturais do personagem. Durante o jogo, o modo de edição geralmente fica desligado para evitar alterações acidentais.
 *   **Dados**: Como os dados (não dos D20) ficam no LocalStorage, limpar o cache do navegador pode apagar sua ficha. Exporte seus dados ou evite limpar dados de site para este domínio.
+
+## 🛠️ Ferramentas de Desenvolvedor (Dev Mode)
+
+Para facilitar a manutenção do compêndio de itens e talentos, o projeto inclui um **Modo Desenvolvedor**:
+
+1.  **Visibilidade**: O botão (ícone `</>`) só aparece quando o app está rodando localmente (`npm run dev`). Ele é automaticamente removido e desativado nas versões de produção (como no GitHub Pages).
+2.  **Funcionalidade**: Ao ativar o Modo Dev, botões de **"Exportar para o Compêndio"** aparecem nos detalhes de Itens e Talentos.
+3.  **Uso**: Esses botões geram o código JavaScript formatado (sem aspas desnecessárias nas chaves) pronto para ser copiado e colado no arquivo `src/data/compendium.js`, agilizando a expansão da biblioteca padrão do app.

@@ -85,16 +85,18 @@ const Header = () => {
                 </button>
 
                 {/* Dev Mode Toggle */}
-                <button
-                    onClick={toggleDevMode}
-                    className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-all duration-300 ${isDevMode
-                        ? 'bg-cyber-blue/20 border-cyber-blue text-cyber-blue shadow-neon-blue'
-                        : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
-                        }`}
-                    title="Modo Desenvolvedor"
-                >
-                    <i className="fa-solid fa-code text-xs"></i>
-                </button>
+                {import.meta.env.DEV && (
+                    <button
+                        onClick={toggleDevMode}
+                        className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-all duration-300 ${isDevMode
+                            ? 'bg-cyber-blue/20 border-cyber-blue text-cyber-blue shadow-neon-blue'
+                            : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
+                            }`}
+                        title="Modo Desenvolvedor"
+                    >
+                        <i className="fa-solid fa-code text-xs"></i>
+                    </button>
+                )}
             </div>
 
             <div className="relative shrink-0 group">

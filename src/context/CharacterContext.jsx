@@ -304,7 +304,10 @@ export const CharacterProvider = ({ children }) => {
     }, [characterData]);
 
     const toggleEditMode = () => setIsEditMode(prev => !prev);
-    const toggleDevMode = () => setIsDevMode(prev => !prev);
+    const toggleDevMode = () => {
+        if (import.meta.env.PROD) return;
+        setIsDevMode(prev => !prev);
+    };
 
     const updateAttribute = (name, newValue) => {
         setCharacterData(prev => ({
