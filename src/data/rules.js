@@ -178,3 +178,13 @@ export const TALENT_GROUP_COLORS = {
     "TELECINESE": "cyber-blue",
     "TELEPATIA": "cyber-purple"
 };
+export const ITEM_COLORS = {
+    'Arma': 'rose-400',
+    'Armadura': 'blue-400',
+    'Escudo': 'cyan-400',
+    'Elmo': 'sky-400',
+    'Ferramenta': 'amber-400',
+    'Consumível': 'emerald-400',
+    'Item': 'slate-400',
+    'Outro': 'slate-400'
+};

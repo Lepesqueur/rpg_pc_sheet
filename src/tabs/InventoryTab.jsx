@@ -4,6 +4,7 @@ import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
 import { stringifyForCompendium } from '../utils/exportUtils';
+import { ITEM_COLORS } from '../data/rules';
 
 const InventoryTab = () => {
     const {
@@ -132,6 +133,10 @@ const InventoryTab = () => {
         return { icon, color: 'text-cyber-gray', valColor: 'text-cyber-gray' };
     };
 
+    const getItemColor = (item) => {
+        return ITEM_COLORS[item.type] || 'slate-400';
+    };
+
     const totalWeight = items.reduce((acc, item) => acc + (parseFloat(item.weight) * parseInt(item.qty) || 0), 0);
 
     const groupedItems = items.reduce((acc, item) => {
@@ -220,9 +225,9 @@ const InventoryTab = () => {
                                             {groupedItems[type].map((item) => (
                                                 <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-cyan-900/10 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group border-b border-white/5 last:border-0`}>
                                                     <td className="p-2 text-center text-lg">
-                                                        <i className={`fa-solid ${item.icon} ${item.color}`}></i>
+                                                        <i className={`fa-solid ${item.icon} text-${getItemColor(item)}`}></i>
                                                     </td>
-                                                    <td className="p-2 font-medium text-white group-hover:text-cyber-pink transition-colors">
+                                                    <td className="p-2 font-medium text-white group-hover:text-white transition-colors">
                                                         <div className="flex items-center gap-2">
                                                             {item.name}
                                                             {isEditMode && <i className="fa-solid fa-pen-to-square text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>}
@@ -350,10 +355,13 @@ const InventoryTab = () => {
                                 value={itemForm.type}
                                 onChange={(e) => setItemForm({ ...itemForm, type: e.target.value })}
                             >
-                                <option value="Consumível">Consumível</option>
                                 <option value="Arma">Arma</option>
                                 <option value="Armadura">Armadura</option>
+                                <option value="Escudo">Escudo</option>
+                                <option value="Elmo">Elmo</option>
                                 <option value="Ferramenta">Ferramenta</option>
+                                <option value="Consumível">Consumível</option>
+                                <option value="Item">Item</option>
                                 <option value="Outro">Outro</option>
                             </select>
                         </div>
@@ -410,7 +418,7 @@ const InventoryTab = () => {
                                 >
                                     <span className="flex items-center gap-3">
                                         <div className="w-6 h-6 rounded bg-white/5 flex items-center justify-center">
-                                            <i className={`fa-solid ${itemForm.icon || 'fa-box'} text-cyber-pink`}></i>
+                                            <i className={`fa-solid ${itemForm.icon || 'fa-box'} text-${getItemColor(itemForm)}`}></i>
                                         </div>
                                         <span className="text-sm font-mono">{itemForm.icon || 'Selecionar Ícone...'}</span>
                                     </span>
