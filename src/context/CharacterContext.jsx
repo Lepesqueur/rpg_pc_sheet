@@ -48,8 +48,7 @@ export const CharacterProvider = ({ children }) => {
                 {
                     id: 't1',
                     name: "EXPLOSÃO ARCANA",
-                    category: "actions",
-                    category: "actions",
+                    category: "Ação Básica",
                     pa: 3,
                     costs: { focus: 2, will: 0, vitality: 0 },
                     stats: {
@@ -65,13 +64,12 @@ export const CharacterProvider = ({ children }) => {
                         { name: "Aumentar Alcance (+5m)", effect: "Expande a projeção da onda de choque", resource: "will", value: 1 },
                         { name: "Efeito de Atordoamento", effect: "Inimigos falham automaticamente em reações", resource: "vitality", value: 3 }
                     ],
-                    icon: "fa-burst",
-                    color: "neon-pink"
+                    icon: "fa-burst"
                 },
                 {
                     id: 't2',
                     name: "TELETRANSPORTE MENOR",
-                    category: "actions",
+                    category: "Ação Básica",
                     pa: 2,
                     costs: { focus: 1, will: 0, vitality: 1 },
                     stats: {
@@ -86,13 +84,12 @@ export const CharacterProvider = ({ children }) => {
                         { name: "Custo de Foco", effect: "Custo reduzido", resource: "focus", value: 1 },
                         { name: "Custo de Vitalidade", effect: "Custo reduzido", resource: "vitality", value: 1 }
                     ],
-                    icon: "fa-door-open",
-                    color: "neon-pink"
+                    icon: "fa-door-open"
                 },
                 {
                     id: 't3',
                     name: "ESCUDO PROTETOR",
-                    category: "actions",
+                    category: "Ação Básica",
                     pa: 1,
                     costs: { focus: 0, will: 5, vitality: 0 },
                     stats: {
@@ -106,13 +103,12 @@ export const CharacterProvider = ({ children }) => {
                     potencializacoes: [
                         { name: "Custo de Vontade", effect: "Aumenta durabilidade", resource: "will", value: 5 }
                     ],
-                    icon: "fa-shield-halved",
-                    color: "neon-pink"
+                    icon: "fa-shield-halved"
                 },
                 {
                     id: 't4',
                     name: "MESTRE DE ARMAS",
-                    category: "talent",
+                    category: "Ação Básica",
                     pa: 0,
                     costs: { focus: 0, will: 0, vitality: 0 },
                     stats: {
@@ -124,13 +120,12 @@ export const CharacterProvider = ({ children }) => {
                     description: "Adiciona +2 em jogadas de ataque com armas pesadas ou de haste.",
                     fullDescription: "Sua maestria com armas grandes é inigualável.",
                     potencializacoes: [],
-                    icon: "fa-gavel",
-                    color: "neon-yellow"
+                    icon: "fa-gavel"
                 },
                 {
                     id: 't5',
                     name: "SENTIDOS AGUÇADOS",
-                    category: "talent",
+                    category: "Ação Básica",
                     pa: 0,
                     costs: { focus: 1, will: 0, vitality: 0 },
                     stats: {
@@ -144,13 +139,12 @@ export const CharacterProvider = ({ children }) => {
                     potencializacoes: [
                         { name: "Custo de Foco", effect: "Foco aprofundado", resource: "focus", value: 1 }
                     ],
-                    icon: "fa-ear-listen",
-                    color: "neon-yellow"
+                    icon: "fa-ear-listen"
                 },
                 {
                     id: 't6',
                     name: "RESILIÊNCIA MENTAL",
-                    category: "talent",
+                    category: "Ação Básica",
                     pa: 0,
                     costs: { focus: 0, will: 2, vitality: 0 },
                     stats: {
@@ -164,8 +158,7 @@ export const CharacterProvider = ({ children }) => {
                     potencializacoes: [
                         { name: "Custo de Vontade", effect: "Proteção extra", resource: "will", value: 2 }
                     ],
-                    icon: "fa-head-side-virus",
-                    color: "neon-yellow"
+                    icon: "fa-head-side-virus"
                 }
             ],
             inventory: [
@@ -250,7 +243,16 @@ export const CharacterProvider = ({ children }) => {
                     })),
                     resistances: { ...defaultData.resistances, ...(parsed.resistances || {}) },
                     conditions: { ...defaultData.conditions, ...(parsed.conditions || {}) },
-                    talents: parsed.talents || defaultData.talents,
+                    talents: (parsed.talents || defaultData.talents).map(t => {
+                        // Migration logic
+                        if (t.group) {
+                            return { ...t, category: t.group };
+                        }
+                        if (t.category === 'actions' || t.category === 'talent' || !t.category) {
+                            return { ...t, category: 'Ação Básica' };
+                        }
+                        return t;
+                    }),
                     inventory: (parsed.inventory || []).map(item => {
                         if (item.uses && item.currentUses === undefined) {
                             const [curr, max] = item.uses.split('/').map(v => parseInt(v.trim()));
@@ -515,7 +517,7 @@ export const CharacterProvider = ({ children }) => {
     const addTalent = (talent) => {
         setCharacterData(prev => ({
             ...prev,
-            talents: [...(prev.talents || []), { ...talent, id: Date.now().toString() }]
+            talents: [...(prev.talents || []), { category: 'Ação Básica', ...talent, id: Date.now().toString() }]
         }));
     };
 

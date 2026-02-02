@@ -76,11 +76,11 @@ const FeatTab = () => {
     const filteredTalents = talents.filter(t =>
         t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (t.group && t.group.toLowerCase().includes(searchTerm.toLowerCase()))
+        (t.category && t.category.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
-    const actions = filteredTalents.filter(t => t.category === 'actions');
-    const specificTalents = filteredTalents.filter(t => t.category === 'talent');
+    const actions = filteredTalents.filter(t => t.category === 'Ação Básica');
+    const specificTalents = filteredTalents.filter(t => t.category !== 'Ação Básica');
 
     const handleDelete = (e, id) => {
         e.stopPropagation();
@@ -159,10 +159,10 @@ const FeatTab = () => {
     };
 
     const getGroupColor = (item) => {
-        if (item.group && TALENT_GROUP_COLORS[item.group]) {
-            return TALENT_GROUP_COLORS[item.group];
+        if (item.category && TALENT_GROUP_COLORS[item.category]) {
+            return TALENT_GROUP_COLORS[item.category];
         }
-        return item.category === 'actions' ? 'cyber-pink' : 'cyber-yellow';
+        return 'cyber-pink';
     };
 
     return (
@@ -191,7 +191,7 @@ const FeatTab = () => {
                             </div>
                             {isEditMode && (
                                 <button
-                                    onClick={() => setEditingTalent({ category: 'actions', stats: {}, potencializacoes: [] })}
+                                    onClick={() => setEditingTalent({ category: 'Ação Básica', stats: {}, potencializacoes: [] })}
                                     className="w-8 h-8 rounded-lg bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/30 transition-all flex items-center justify-center"
                                 >
                                     <i className="fa-solid fa-plus text-xs"></i>
@@ -247,9 +247,9 @@ const FeatTab = () => {
                                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
                                                 {item.stats?.ativacao || 'Ação'}
                                             </span>
-                                            {item.group && (
+                                            {item.category && item.category !== 'Ação Básica' && (
                                                 <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
-                                                    {item.group}
+                                                    {item.category}
                                                 </span>
                                             )}
                                         </div>
@@ -269,7 +269,7 @@ const FeatTab = () => {
                             </div>
                             {isEditMode && (
                                 <button
-                                    onClick={() => setEditingTalent({ category: 'talent', stats: {}, potencializacoes: [] })}
+                                    onClick={() => setEditingTalent({ category: TALENT_GROUPS[1] || 'Ação Básica', stats: {}, potencializacoes: [] })}
                                     className="w-8 h-8 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/40 text-cyber-yellow hover:bg-cyber-yellow/30 transition-all flex items-center justify-center"
                                 >
                                     <i className="fa-solid fa-plus text-xs"></i>
@@ -325,9 +325,9 @@ const FeatTab = () => {
                                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
                                                 {item.stats?.ativacao || 'Passiva'}
                                             </span>
-                                            {item.group && (
+                                            {item.category && item.category !== 'Ação Básica' && (
                                                 <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
-                                                    {item.group}
+                                                    {item.category}
                                                 </span>
                                             )}
                                         </div>
@@ -343,14 +343,14 @@ const FeatTab = () => {
             {/* Modal de Detalhes - Baseado no modal_talento.html */}
             <Modal isOpen={!!viewingTalent} onClose={() => { setViewingTalent(null); setSelectedPots([]); }} maxWidth="max-w-2xl">
                 <div className="relative z-50 overflow-hidden rounded-3xl">
-                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${viewingTalent?.category === 'actions' ? 'via-cyber-pink' : 'via-cyber-yellow'} to-transparent opacity-50 z-20`}></div>
+                    <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent ${viewingTalent?.category === 'Ação Básica' ? 'via-cyber-pink' : 'via-cyber-yellow'} to-transparent opacity-50 z-20`}></div>
 
                     <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-zinc-950/98 backdrop-blur-xl">
                         <div className="flex items-center gap-5">
-                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center relative`}>
-                                <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'actions' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
+                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'Ação Básica' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center relative`}>
+                                <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'Ação Básica' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
                                 {viewingTalent?.pa !== undefined && (
-                                    <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg bg-${getGroupColor(viewingTalent || {})} ${getGroupColor(viewingTalent || {}) === 'cyber-yellow' ? 'border-black/10 text-zinc-900' : 'border-white/20 text-white'} shadow-${getGroupColor(viewingTalent || {})}/40`}>
+                                    <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg bg-${getGroupColor(viewingTalent || {})} ${['cyber-yellow', 'cyber-cyan'].includes(getGroupColor(viewingTalent || {})) ? 'border-black/10 text-zinc-900' : 'border-white/20 text-white'} shadow-${getGroupColor(viewingTalent || {})}/40`}>
                                         {viewingTalent.pa} PA
                                     </div>
                                 )}
@@ -368,9 +368,9 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                                    {viewingTalent?.group && (
+                                    {viewingTalent?.category && viewingTalent.category !== 'Ação Básica' && (
                                         <span className={`px-2.5 py-0.5 rounded-md bg-${getGroupColor(viewingTalent)}/20 border border-${getGroupColor(viewingTalent)}/40 text-${getGroupColor(viewingTalent)} border text-[10px] font-bold uppercase tracking-widest`}>
-                                            {viewingTalent.group}
+                                            {viewingTalent.category}
                                         </span>
                                     )}
                                 </div>
@@ -597,7 +597,6 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
         if (initialData) {
             setFormData({
                 ...initialData,
-                group: initialData.group || '',
                 stats: initialData.stats || {},
                 potencializacoes: initialData.potencializacoes || []
             });
@@ -619,9 +618,7 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
         }
     };
 
-    const handleGroupChange = (e) => {
-        setFormData(prev => ({ ...prev, group: e.target.value }));
-    };
+
 
     const addPotencializacao = () => {
         setFormData(prev => ({
@@ -669,11 +666,12 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
                                 <select
                                     className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
                                     name="category"
-                                    value={formData?.category || 'actions'}
+                                    value={formData?.category || 'Ação Básica'}
                                     onChange={handleChange}
                                 >
-                                    <option value="actions">Ação</option>
-                                    <option value="talent">Talento</option>
+                                    {TALENT_GROUPS.map(group => (
+                                        <option key={group} value={group}>{group}</option>
+                                    ))}
                                 </select>
                             </div>
                             <div>
@@ -711,20 +709,7 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
                             onSelect={(iconName) => handleChange({ target: { name: 'icon', value: iconName } })}
                             currentIcon={formData?.icon}
                         />
-                        <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo</label>
-                            <select
-                                className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
-                                name="group"
-                                value={formData?.group || ''}
-                                onChange={handleChange}
-                            >
-                                <option value="">Sem Grupo</option>
-                                {TALENT_GROUPS.map(group => (
-                                    <option key={group} value={group}>{group}</option>
-                                ))}
-                            </select>
-                        </div>
+                        {/* Remove redundant Group selector */}
 
                         <div>
                             <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Perícia Relacionada (Opcional)</label>

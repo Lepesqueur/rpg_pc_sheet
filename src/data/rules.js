@@ -158,12 +158,13 @@ export const CONDITIONS = {
 };
 
 export const TALENT_GROUPS = [
-    "OFUSCAR", "RESPLANDECER", "ARTES MARCIAIS", "COMBATE ARMADO",
+    "Ação Básica", "OFUSCAR", "RESPLANDECER", "ARTES MARCIAIS", "COMBATE ARMADO",
     "ELETRICIDADE", "ELOQUÊNCIA", "ESPREITAR", "NATUREZA",
     "PIROMANCIA", "PRESERVAR", "TELECINESE", "TELEPATIA"
 ];
 
 export const TALENT_GROUP_COLORS = {
+    "Ação Básica": "cyber-pink",
     "OFUSCAR": "cyber-purple",
     "RESPLANDECER": "cyber-yellow",
     "ARTES MARCIAIS": "cyber-pink",

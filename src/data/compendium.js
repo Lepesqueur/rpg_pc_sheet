@@ -217,15 +217,14 @@ export const COMPENDIUM = {
             talents: [
                 {
                     name: "ATAQUE GIRATÓRIO",
-                    category: "actions",
+                    category: "Ação Básica",
                     pa: 3,
                     costs: { focus: 0, will: 0, vitality: 4 },
                     stats: { duracao: "Instantânea", ativacao: "Ação", alcance: "Adjacente", alvo: "Todos os inimigos" },
                     description: "Realiza um ataque contra todos os inimigos adjacentes.",
                     fullDescription: "Giro mortal com arma.",
                     potencializacoes: [],
-                    icon: "fa-arrows-spin",
-                    color: "neon-blue"
+                    icon: "fa-arrows-spin"
                 }
             ],
             peculiarities: [
