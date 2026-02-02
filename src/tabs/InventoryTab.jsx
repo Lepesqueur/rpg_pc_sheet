@@ -120,6 +120,23 @@ const InventoryTab = () => {
 
     const totalWeight = items.reduce((acc, item) => acc + (parseFloat(item.weight) * parseInt(item.qty) || 0), 0);
 
+    const groupedItems = items.reduce((acc, item) => {
+        const type = item.type || 'Outro';
+        if (!acc[type]) acc[type] = [];
+        acc[type].push(item);
+        return acc;
+    }, {});
+
+    const itemTypeOrder = ['Arma', 'Armadura', 'Ferramenta', 'Consumível', 'Outro'];
+    const sortedTypes = Object.keys(groupedItems).sort((a, b) => {
+        const indexA = itemTypeOrder.indexOf(a);
+        const indexB = itemTypeOrder.indexOf(b);
+        if (indexA !== -1 && indexB !== -1) return indexA - indexB;
+        if (indexA !== -1) return -1;
+        if (indexB !== -1) return 1;
+        return a.localeCompare(b);
+    });
+
     return (
         <div className="animate-fade-in">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-auto min-h-[600px]">
@@ -177,29 +194,39 @@ const InventoryTab = () => {
                                         <th className="p-2 text-right">Peso</th>
                                     </tr>
                                 </thead>
-                                <tbody className="text-sm divide-y divide-white/5">
-                                    {items.map((item) => (
-                                        <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-white/5 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group`}>
-                                            <td className="p-2 text-center text-lg">
-                                                <i className={`fa-solid ${item.icon} ${item.color}`}></i>
-                                            </td>
-                                            <td className="p-2 font-medium text-white group-hover:text-cyber-pink transition-colors">
-                                                <div className="flex items-center gap-2">
-                                                    {item.name}
-                                                    {isEditMode && <i className="fa-solid fa-pen-to-square text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>}
-                                                </div>
-                                            </td>
-                                            <td className="p-2 text-center text-cyber-gray font-mono">x{item.qty}</td>
-                                            <td className="p-2 text-center text-xs text-[#00ff99] font-mono">
-                                                {item.maxUses > 0 ? `${item.currentUses} / ${item.maxUses}` : '-'}
-                                            </td>
-                                            <td className="p-2 text-xs text-[#aaaaaa] uppercase tracking-tighter">{item.type}</td>
-                                            <td className="p-2 text-right text-cyber-gray text-xs font-mono">{item.weight}kg</td>
-                                        </tr>
+                                <tbody className="text-sm">
+                                    {sortedTypes.map(type => (
+                                        <React.Fragment key={type}>
+                                            <tr className="bg-white/5 border-y border-white/10">
+                                                <td colSpan="6" className="px-4 py-2 text-[10px] font-bold text-cyber-yellow tracking-[0.2em] uppercase italic">
+                                                    <i className="fa-solid fa-layer-group mr-2 opacity-50"></i>
+                                                    {type}
+                                                </td>
+                                            </tr>
+                                            {groupedItems[type].map((item) => (
+                                                <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-cyan-900/10 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group border-b border-white/5 last:border-0`}>
+                                                    <td className="p-2 text-center text-lg">
+                                                        <i className={`fa-solid ${item.icon} ${item.color}`}></i>
+                                                    </td>
+                                                    <td className="p-2 font-medium text-white group-hover:text-cyber-pink transition-colors">
+                                                        <div className="flex items-center gap-2">
+                                                            {item.name}
+                                                            {isEditMode && <i className="fa-solid fa-pen-to-square text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>}
+                                                        </div>
+                                                    </td>
+                                                    <td className="p-2 text-center text-cyber-gray font-mono">x{item.qty}</td>
+                                                    <td className="p-2 text-center text-xs text-[#00ff99] font-mono">
+                                                        {item.maxUses > 0 ? `${item.currentUses} / ${item.maxUses}` : '-'}
+                                                    </td>
+                                                    <td className="p-2 text-xs text-[#aaaaaa] uppercase tracking-tighter opacity-50">{item.type}</td>
+                                                    <td className="p-2 text-right text-cyber-gray text-xs font-mono">{item.weight}kg</td>
+                                                </tr>
+                                            ))}
+                                        </React.Fragment>
                                     ))}
                                     {items.length === 0 && (
                                         <tr>
-                                            <td colSpan="6" className="p-8 text-center text-cyber-gray/50 italic text-xs uppercase tracking-widest">Inventário Vazio</td>
+                                            <td colSpan="6" className="p-8 text-center text-cyber-gray/50 italic text-xs uppercase tracking-widest font-mono">Inventário Vazio</td>
                                         </tr>
                                     )}
                                 </tbody>
