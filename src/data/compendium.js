@@ -93,6 +93,7 @@ export const COMPENDIUM = {
         { name: "Armadura de Placas", icon: "fa-shield-halved", color: "text-gray-200", qty: 1, currentUses: 0, maxUses: 0, type: "Armadura", price: "5000 pp", weight: 30.0, description: "PA: 6 | Vigor Mín: 4 | Reflexos: -3 | Categoria: Completa | Propriedades: Metal, Pesada, Rígida" },
     ],
     talents: [
+
         {
             name: "ATAQUE GIRATÓRIO",
             category: "actions",

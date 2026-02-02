@@ -6,7 +6,7 @@ import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
 
 const FeatTab = () => {
-    const { characterData, isEditMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
+    const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
     const { showToast } = useToast();
     const [viewingTalent, setViewingTalent] = useState(null);
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
@@ -145,6 +145,14 @@ const FeatTab = () => {
 
         setSelectedPots([]);
         return true;
+    };
+    const handleExportToCompendium = (data) => {
+        let exportData = { ...data };
+        delete exportData.id;
+
+        const code = JSON.stringify(exportData, null, 4);
+        navigator.clipboard.writeText(code + ',');
+        showToast('CÓDIGO COPIADO PARA O COMPÊNDIO!', 'success');
     };
 
     return (
@@ -509,6 +517,14 @@ const FeatTab = () => {
                                         Editar Talento
                                     </button>
                                 )}
+                                {isDevMode && (
+                                    <button
+                                        onClick={() => handleExportToCompendium(viewingTalent)}
+                                        className="flex-1 sm:flex-none px-6 py-3 rounded-xl border border-cyber-blue text-cyber-blue hover:bg-cyber-blue/10 font-bold uppercase tracking-wide text-sm transition-all active:scale-95 shadow-[0_0_10px_rgba(0,186,255,0.1)]"
+                                    >
+                                        <i className="fa-solid fa-code mr-2"></i> Exportar
+                                    </button>
+                                )}
                                 <button
                                     onClick={() => handleActivateSkill(viewingTalent)}
                                     className="flex-1 sm:flex-none px-8 py-3 rounded-xl bg-cyber-pink hover:brightness-110 text-white font-bold text-sm shadow-lg shadow-cyber-pink/20 transition-all active:scale-95 uppercase tracking-wide"
@@ -536,6 +552,8 @@ const FeatTab = () => {
                 onClose={() => setEditingTalent(null)}
                 onSave={handleSave}
                 initialData={editingTalent}
+                isDevMode={isDevMode}
+                onExport={handleExportToCompendium}
             />
 
             <ConfirmationModal
@@ -551,7 +569,7 @@ const FeatTab = () => {
     );
 };
 
-const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
+const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onExport }) => {
     const { characterData } = useCharacter();
     const [formData, setFormData] = useState(initialData);
     const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
@@ -872,6 +890,14 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData }) => {
                 >
                     Cancelar
                 </button>
+                {isDevMode && (
+                    <button
+                        onClick={() => onExport(formData)}
+                        className="px-6 py-2 text-cyber-blue hover:text-white transition-colors text-sm font-bold uppercase border border-cyber-blue/20 rounded"
+                    >
+                        <i className="fa-solid fa-code mr-2"></i> Exportar
+                    </button>
+                )}
                 <button
                     onClick={() => onSave(formData)}
                     className="px-8 py-2 bg-cyber-pink hover:brightness-110 text-white font-bold text-sm rounded-xl shadow-lg shadow-cyber-pink/20 transition-all uppercase"

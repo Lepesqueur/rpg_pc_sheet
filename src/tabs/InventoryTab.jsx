@@ -6,7 +6,7 @@ import IconPicker from '../components/IconPicker';
 
 const InventoryTab = () => {
     const {
-        characterData, isEditMode,
+        characterData, isEditMode, isDevMode,
         addInventoryItem, updateInventoryItem, deleteInventoryItem,
         addPeculiarity, updatePeculiarity, deletePeculiarity,
         updateBiography, updateCurrency
@@ -98,6 +98,19 @@ const InventoryTab = () => {
             setPecToDelete(null);
             setEditingPec(null);
         }
+    };
+
+    const handleExportToCompendium = (data, type) => {
+        let exportData = { ...data };
+        delete exportData.id;
+
+        if (type === 'item') {
+            delete exportData.currentUses;
+        }
+
+        const code = JSON.stringify(exportData, null, 4);
+        navigator.clipboard.writeText(code + ',');
+        showToast('CÓDIGO COPIADO PARA O COMPÊNDIO!', 'success');
     };
 
     const getPeculiaritiesMeta = (val, type) => {
@@ -417,14 +430,24 @@ const InventoryTab = () => {
                     </div>
                 </ModalBody>
                 <ModalFooter className="bg-black/60 flex justify-between">
-                    {editingItem !== 'new' ? (
-                        <button
-                            onClick={() => setItemToDelete(editingItem)}
-                            className="flex items-center gap-2 text-cyber-pink hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4"
-                        >
-                            <i className="fa-solid fa-trash-can"></i> EXCLUIR
-                        </button>
-                    ) : <div></div>}
+                    <div className="flex gap-4">
+                        {editingItem !== 'new' && (
+                            <button
+                                onClick={() => setItemToDelete(editingItem)}
+                                className="flex items-center gap-2 text-cyber-pink hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4"
+                            >
+                                <i className="fa-solid fa-trash-can"></i> EXCLUIR
+                            </button>
+                        )}
+                        {isDevMode && (
+                            <button
+                                onClick={() => handleExportToCompendium(itemForm, 'item')}
+                                className="text-cyber-blue hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4 flex items-center gap-2 border border-cyber-blue/20 rounded"
+                            >
+                                <i className="fa-solid fa-code"></i> EXPORTAR
+                            </button>
+                        )}
+                    </div>
                     <div className="flex gap-4">
                         <button onClick={() => setEditingItem(null)} className="text-cyber-gray hover:text-white uppercase text-[10px] font-bold tracking-widest px-4">CANCELAR</button>
                         <button
@@ -494,14 +517,24 @@ const InventoryTab = () => {
                     </div>
                 </ModalBody>
                 <ModalFooter className="bg-black/60 flex justify-between">
-                    {editingPec !== 'new' ? (
-                        <button
-                            onClick={() => setPecToDelete(editingPec)}
-                            className="flex items-center gap-2 text-cyber-pink hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4"
-                        >
-                            <i className="fa-solid fa-trash-can"></i> EXCLUIR
-                        </button>
-                    ) : <div></div>}
+                    <div className="flex gap-4">
+                        {editingPec !== 'new' && (
+                            <button
+                                onClick={() => setPecToDelete(editingPec)}
+                                className="flex items-center gap-2 text-cyber-pink hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4"
+                            >
+                                <i className="fa-solid fa-trash-can"></i> EXCLUIR
+                            </button>
+                        )}
+                        {isDevMode && (
+                            <button
+                                onClick={() => handleExportToCompendium(pecForm, 'peculiarity')}
+                                className="text-cyber-blue hover:text-white transition-all font-bold uppercase text-[10px] tracking-widest px-4 flex items-center gap-2 border border-cyber-blue/20 rounded"
+                            >
+                                <i className="fa-solid fa-code"></i> EXPORTAR
+                            </button>
+                        )}
+                    </div>
                     <div className="flex gap-4">
                         <button onClick={() => setEditingPec(null)} className="text-cyber-gray hover:text-white uppercase text-[10px] font-bold tracking-widest px-4">CANCELAR</button>
                         <button
@@ -512,10 +545,10 @@ const InventoryTab = () => {
                         </button>
                     </div>
                 </ModalFooter>
-            </Modal>
+            </Modal >
 
             {/* MODAL DE VISUALIZAÇÃO DE PECULIARIDADE */}
-            <Modal isOpen={!!viewingPec} onClose={() => setViewingPec(null)} maxWidth="max-w-xl">
+            < Modal isOpen={!!viewingPec} onClose={() => setViewingPec(null)} maxWidth="max-w-xl" >
                 <ModalHeader onClose={() => setViewingPec(null)} className="bg-gradient-to-r from-cyber-yellow/10 to-transparent">
                     <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-lg bg-black/40 flex items-center justify-center border border-cyber-yellow/20`}>
@@ -558,7 +591,7 @@ const InventoryTab = () => {
             </Modal>
 
             {/* SELECTOR DE ÍCONES (Nível Superior) */}
-            <IconPicker
+            < IconPicker
                 isOpen={isIconPickerOpen}
                 onClose={() => setIsIconPickerOpen(false)}
                 onSelect={(iconName) => setItemForm({ ...itemForm, icon: iconName })}
@@ -566,7 +599,7 @@ const InventoryTab = () => {
             />
 
             {/* CONFIRMAÇÃO DE EXCLUSÃO */}
-            <ConfirmationModal
+            < ConfirmationModal
                 isOpen={!!itemToDelete || !!pecToDelete}
                 onClose={() => { setItemToDelete(null); setPecToDelete(null); }}
                 onConfirm={itemToDelete ? confirmDeleteItem : confirmDeletePec}
@@ -575,7 +608,7 @@ const InventoryTab = () => {
                 confirmText="ELIMINAR"
                 cancelText="ABORTAR"
             />
-        </div>
+        </div >
     );
 };
 

@@ -9,6 +9,7 @@ const CompendiumModal = ({ isOpen, onClose }) => {
     const { showToast } = useToast();
     const [activeCategory, setActiveCategory] = useState('items');
     const [searchTerm, setSearchTerm] = useState('');
+    const [subFilter, setSubFilter] = useState('all');
 
     const categories = [
         { id: 'items', label: 'Itens', icon: 'fa-box-open' },
@@ -66,10 +67,26 @@ const CompendiumModal = ({ isOpen, onClose }) => {
         }
     };
 
-    const filteredData = COMPENDIUM[activeCategory].filter(item =>
-        item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
-    );
+    const filteredData = COMPENDIUM[activeCategory].filter(item => {
+        const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
+
+        const matchesSubFilter = subFilter === 'all' || item.type === subFilter;
+
+        return matchesSearch && matchesSubFilter;
+    });
+
+    const getSubFilters = () => {
+        if (activeCategory === 'items') {
+            return ['Arma', 'Armadura', 'Escudo', 'Elmo', 'Ferramenta', 'Consumível', 'Item'];
+        }
+        if (activeCategory === 'peculiarities') {
+            return ['Mundana', 'Bestial', 'Extraordinária', 'Sobrenatural', 'Mágica'];
+        }
+        return [];
+    };
+
+    const subFilters = getSubFilters();
 
     return (
         <Modal isOpen={isOpen} onClose={onClose} maxWidth="max-w-4xl">
@@ -108,6 +125,7 @@ const CompendiumModal = ({ isOpen, onClose }) => {
                                 onClick={() => {
                                     setActiveCategory(cat.id);
                                     setSearchTerm('');
+                                    setSubFilter('all');
                                 }}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeCategory === cat.id
                                     ? 'bg-cyber-blue text-white shadow-neon-blue'
@@ -119,6 +137,33 @@ const CompendiumModal = ({ isOpen, onClose }) => {
                             </button>
                         ))}
                     </div>
+
+                    {/* Sub-Filters */}
+                    {subFilters.length > 0 && (
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                            <button
+                                onClick={() => setSubFilter('all')}
+                                className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${subFilter === 'all'
+                                    ? 'bg-white/20 border-white/40 text-white'
+                                    : 'bg-white/5 border-white/5 text-cyber-gray hover:text-white'
+                                    }`}
+                            >
+                                Todos
+                            </button>
+                            {subFilters.map(filter => (
+                                <button
+                                    key={filter}
+                                    onClick={() => setSubFilter(filter)}
+                                    className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${subFilter === filter
+                                        ? 'bg-cyber-blue/20 border-cyber-blue/40 text-cyber-blue shadow-[0_0_10px_rgba(0,186,255,0.2)]'
+                                        : 'bg-white/5 border-white/5 text-cyber-gray hover:text-white'
+                                        }`}
+                                >
+                                    {filter}
+                                </button>
+                            ))}
+                        </div>
+                    )}
 
                     {/* Content List */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">

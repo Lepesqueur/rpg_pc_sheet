@@ -5,7 +5,7 @@ import { useToast } from './Toast';
 import CompendiumModal from './CompendiumModal';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception, updateStatus } = useCharacter();
+    const { isEditMode, toggleEditMode, isDevMode, toggleDevMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception, updateStatus } = useCharacter();
 
     const { showToast } = useToast();
     const [restModal, setRestModal] = useState({ isOpen: false, type: null });
@@ -82,6 +82,18 @@ const Header = () => {
                         {isEditMode ? 'Modo Edição' : 'Modo Leitura'}
                     </span>
                     <div className={`w-2 h-2 rounded-full ${isEditMode ? 'bg-cyber-yellow animate-pulse' : 'bg-gray-600'}`}></div>
+                </button>
+
+                {/* Dev Mode Toggle */}
+                <button
+                    onClick={toggleDevMode}
+                    className={`flex items-center justify-center w-8 h-8 rounded-lg border transition-all duration-300 ${isDevMode
+                        ? 'bg-cyber-blue/20 border-cyber-blue text-cyber-blue shadow-neon-blue'
+                        : 'bg-white/5 border-white/10 text-cyber-gray hover:border-white/30 hover:text-white'
+                        }`}
+                    title="Modo Desenvolvedor"
+                >
+                    <i className="fa-solid fa-code text-xs"></i>
                 </button>
             </div>
 

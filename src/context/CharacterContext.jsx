@@ -13,6 +13,7 @@ export const useCharacter = () => {
 
 export const CharacterProvider = ({ children }) => {
     const [isEditMode, setIsEditMode] = useState(false);
+    const [isDevMode, setIsDevMode] = useState(false);
 
     // Inicializar estado com dados das regras
     const [characterData, setCharacterData] = useState(() => {
@@ -308,6 +309,7 @@ export const CharacterProvider = ({ children }) => {
     }, [characterData]);
 
     const toggleEditMode = () => setIsEditMode(prev => !prev);
+    const toggleDevMode = () => setIsDevMode(prev => !prev);
 
     const updateAttribute = (name, newValue) => {
         setCharacterData(prev => ({
@@ -741,7 +743,9 @@ export const CharacterProvider = ({ children }) => {
     const value = {
         characterData,
         isEditMode,
+        isDevMode,
         toggleEditMode,
+        toggleDevMode,
         updateAttribute,
         updateDefense,
         updateStatusMax,
