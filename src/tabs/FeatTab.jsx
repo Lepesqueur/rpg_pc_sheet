@@ -4,6 +4,7 @@ import SkillRollModal from '../components/SkillRollModal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
+import { stringifyForCompendium } from '../utils/exportUtils';
 
 const FeatTab = () => {
     const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
@@ -150,7 +151,7 @@ const FeatTab = () => {
         let exportData = { ...data };
         delete exportData.id;
 
-        const code = JSON.stringify(exportData, null, 4);
+        const code = stringifyForCompendium(exportData);
         navigator.clipboard.writeText(code + ',');
         showToast('CÓDIGO COPIADO PARA O COMPÊNDIO!', 'success');
     };

@@ -95,6 +95,39 @@ export const COMPENDIUM = {
     talents: [
 
         {
+            name: "ESCUDO PROTETOR",
+            category: "actions",
+            tags: [
+                "Habilidade Ativa"
+            ],
+            pa: 1,
+            stats: {
+                duracao: "1 minuto",
+                ativacao: "Passiva",
+                alcance: "Pessoal",
+                alvo: "Pessoal"
+            },
+            description: "Conjura uma barreira translúcida que absorve os próximos 10 pontos de dano físico.",
+            fullDescription: "Proteção física básica.",
+            potencializacoes: [
+                {
+                    name: "Custo de Vontade",
+                    effect: "Aumenta durabilidade",
+                    resource: "will",
+                    value: 5
+                }
+            ],
+            icon: "fa-shield-halved",
+            color: "neon-pink",
+            costs: {
+                will: "1",
+                focus: "1",
+                vitality: "1"
+            },
+            relatedSkill: ""
+        },
+
+        {
             name: "ATAQUE GIRATÓRIO",
             category: "actions",
             tags: ["Habilidade Ativa", "Marcial"],

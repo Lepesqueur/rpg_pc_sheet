@@ -3,6 +3,7 @@ import { Modal, ModalHeader, ModalBody, ModalFooter, ConfirmationModal } from '.
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
+import { stringifyForCompendium } from '../utils/exportUtils';
 
 const InventoryTab = () => {
     const {
@@ -108,7 +109,7 @@ const InventoryTab = () => {
             delete exportData.currentUses;
         }
 
-        const code = JSON.stringify(exportData, null, 4);
+        const code = stringifyForCompendium(exportData);
         navigator.clipboard.writeText(code + ',');
         showToast('CÓDIGO COPIADO PARA O COMPÊNDIO!', 'success');
     };
