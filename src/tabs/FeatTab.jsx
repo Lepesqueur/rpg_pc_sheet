@@ -5,6 +5,7 @@ import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
 import { stringifyForCompendium } from '../utils/exportUtils';
+import { TALENT_GROUPS } from '../data/rules';
 
 const FeatTab = () => {
     const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
@@ -74,7 +75,8 @@ const FeatTab = () => {
 
     const filteredTalents = talents.filter(t =>
         t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        t.description.toLowerCase().includes(searchTerm.toLowerCase())
+        t.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (t.group && t.group.toLowerCase().includes(searchTerm.toLowerCase()))
     );
 
     const actions = filteredTalents.filter(t => t.category === 'actions');
@@ -182,7 +184,7 @@ const FeatTab = () => {
                             </div>
                             {isEditMode && (
                                 <button
-                                    onClick={() => setEditingTalent({ category: 'actions', tags: ['Habilidade Ativa'], stats: {}, potencializacoes: [] })}
+                                    onClick={() => setEditingTalent({ category: 'actions', stats: {}, potencializacoes: [] })}
                                     className="w-8 h-8 rounded-lg bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink hover:bg-cyber-pink/30 transition-all flex items-center justify-center"
                                 >
                                     <i className="fa-solid fa-plus text-xs"></i>
@@ -238,6 +240,11 @@ const FeatTab = () => {
                                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
                                                 {item.stats?.ativacao || 'Ação'}
                                             </span>
+                                            {item.group && (
+                                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink font-bold uppercase tracking-tighter">
+                                                    {item.group}
+                                                </span>
+                                            )}
                                         </div>
                                         <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
                                     </div>
@@ -255,7 +262,7 @@ const FeatTab = () => {
                             </div>
                             {isEditMode && (
                                 <button
-                                    onClick={() => setEditingTalent({ category: 'talent', tags: ['Passiva'], stats: {}, potencializacoes: [] })}
+                                    onClick={() => setEditingTalent({ category: 'talent', stats: {}, potencializacoes: [] })}
                                     className="w-8 h-8 rounded-lg bg-cyber-yellow/20 border border-cyber-yellow/40 text-cyber-yellow hover:bg-cyber-yellow/30 transition-all flex items-center justify-center"
                                 >
                                     <i className="fa-solid fa-plus text-xs"></i>
@@ -311,6 +318,11 @@ const FeatTab = () => {
                                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/5 border border-white/10 text-gray-500 font-bold uppercase tracking-tighter">
                                                 {item.stats?.ativacao || 'Passiva'}
                                             </span>
+                                            {item.group && (
+                                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyber-yellow/20 border border-cyber-yellow/40 text-cyber-yellow font-bold uppercase tracking-tighter">
+                                                    {item.group}
+                                                </span>
+                                            )}
                                         </div>
                                         <p className="text-sm text-gray-400 leading-relaxed line-clamp-2">{item.description}</p>
                                     </div>
@@ -349,14 +361,11 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
-                                    {viewingTalent?.tags?.map((tag, idx) => (
-                                        <React.Fragment key={tag}>
-                                            <span className={`px-2.5 py-0.5 rounded-md ${idx === 0 ? 'bg-cyber-pink/20 border-cyber-pink/40 text-cyber-pink' : 'bg-white/5 border-white/10 text-slate-300'} border text-[10px] font-bold uppercase tracking-widest`}>
-                                                {tag}
-                                            </span>
-                                            {idx < viewingTalent.tags.length - 1 && <span className="w-1 h-1 rounded-full bg-slate-600"></span>}
-                                        </React.Fragment>
-                                    ))}
+                                    {viewingTalent?.group && (
+                                        <span className={`px-2.5 py-0.5 rounded-md ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/20 border-cyber-pink/40 text-cyber-pink' : 'bg-cyber-yellow/20 border-cyber-yellow/40 text-cyber-yellow'} border text-[10px] font-bold uppercase tracking-widest`}>
+                                            {viewingTalent.group}
+                                        </span>
+                                    )}
                                 </div>
                             </div>
                         </div>
@@ -581,7 +590,7 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
         if (initialData) {
             setFormData({
                 ...initialData,
-                tags: initialData.tags || [],
+                group: initialData.group || '',
                 stats: initialData.stats || {},
                 potencializacoes: initialData.potencializacoes || []
             });
@@ -603,9 +612,8 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
         }
     };
 
-    const handleTagChange = (e) => {
-        const tags = e.target.value.split(',').map(tag => tag.trim());
-        setFormData(prev => ({ ...prev, tags }));
+    const handleGroupChange = (e) => {
+        setFormData(prev => ({ ...prev, group: e.target.value }));
     };
 
     const addPotencializacao = () => {
@@ -697,13 +705,18 @@ const TalentFormModal = ({ isOpen, onClose, onSave, initialData, isDevMode, onEx
                             currentIcon={formData?.icon}
                         />
                         <div>
-                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Tags (separadas por vírgula)</label>
-                            <input
+                            <label className="block text-xs font-bold text-gray-500 uppercase mb-1">Grupo</label>
+                            <select
                                 className="w-full bg-black/40 border border-white/10 text-gray-200 rounded-lg px-4 py-2 focus:border-cyber-pink focus:outline-none"
-                                value={formData?.tags?.join(', ') || ''}
-                                onChange={handleTagChange}
-                                placeholder="Habilidade Ativa, Magia de Éter"
-                            />
+                                name="group"
+                                value={formData?.group || ''}
+                                onChange={handleChange}
+                            >
+                                <option value="">Sem Grupo</option>
+                                {TALENT_GROUPS.map(group => (
+                                    <option key={group} value={group}>{group}</option>
+                                ))}
+                            </select>
                         </div>
 
                         <div>

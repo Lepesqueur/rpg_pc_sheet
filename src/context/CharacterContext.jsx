@@ -49,7 +49,7 @@ export const CharacterProvider = ({ children }) => {
                     id: 't1',
                     name: "EXPLOSÃO ARCANA",
                     category: "actions",
-                    tags: ["Habilidade Ativa", "Magia de Éter"],
+                    category: "actions",
                     pa: 3,
                     costs: { focus: 2, will: 0, vitality: 0 },
                     stats: {
@@ -72,7 +72,6 @@ export const CharacterProvider = ({ children }) => {
                     id: 't2',
                     name: "TELETRANSPORTE MENOR",
                     category: "actions",
-                    tags: ["Habilidade Ativa"],
                     pa: 2,
                     costs: { focus: 1, will: 0, vitality: 1 },
                     stats: {
@@ -94,7 +93,6 @@ export const CharacterProvider = ({ children }) => {
                     id: 't3',
                     name: "ESCUDO PROTETOR",
                     category: "actions",
-                    tags: ["Habilidade Ativa"],
                     pa: 1,
                     costs: { focus: 0, will: 5, vitality: 0 },
                     stats: {
@@ -115,7 +113,6 @@ export const CharacterProvider = ({ children }) => {
                     id: 't4',
                     name: "MESTRE DE ARMAS",
                     category: "talent",
-                    tags: ["Passiva"],
                     pa: 0,
                     costs: { focus: 0, will: 0, vitality: 0 },
                     stats: {
@@ -134,7 +131,6 @@ export const CharacterProvider = ({ children }) => {
                     id: 't5',
                     name: "SENTIDOS AGUÇADOS",
                     category: "talent",
-                    tags: ["Passiva"],
                     pa: 0,
                     costs: { focus: 1, will: 0, vitality: 0 },
                     stats: {
@@ -155,7 +151,6 @@ export const CharacterProvider = ({ children }) => {
                     id: 't6',
                     name: "RESILIÊNCIA MENTAL",
                     category: "talent",
-                    tags: ["Passiva"],
                     pa: 0,
                     costs: { focus: 0, will: 2, vitality: 0 },
                     stats: {

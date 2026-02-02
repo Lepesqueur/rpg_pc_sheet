@@ -97,9 +97,6 @@ export const COMPENDIUM = {
         {
             name: "ESCUDO PROTETOR",
             category: "actions",
-            tags: [
-                "Habilidade Ativa"
-            ],
             pa: 1,
             stats: {
                 duracao: "1 minuto",
@@ -130,7 +127,6 @@ export const COMPENDIUM = {
         {
             name: "ATAQUE GIRATÓRIO",
             category: "actions",
-            tags: ["Habilidade Ativa", "Marcial"],
             pa: 3,
             costs: { focus: 0, will: 0, vitality: 4 },
             stats: {
@@ -151,7 +147,7 @@ export const COMPENDIUM = {
         {
             name: "VONTADE INDOMÁVEL",
             category: "talent",
-            tags: ["Passiva"],
+            category: "talent",
             pa: 0,
             costs: { focus: 0, will: 0, vitality: 0 },
             stats: {
@@ -289,7 +285,6 @@ export const COMPENDIUM = {
                 {
                     name: "ATAQUE GIRATÓRIO",
                     category: "actions",
-                    tags: ["Habilidade Ativa", "Marcial"],
                     pa: 3,
                     costs: { focus: 0, will: 0, vitality: 4 },
                     stats: { duracao: "Instantânea", ativacao: "Ação", alcance: "Adjacente", alvo: "Todos os inimigos" },
