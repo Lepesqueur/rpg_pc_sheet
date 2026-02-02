@@ -62,13 +62,15 @@ const Header = () => {
                     <i className="fa-solid fa-bed text-xs group-hover:scale-110 transition-transform"></i>
                 </button>
 
-                <button
-                    onClick={() => setIsCompendiumOpen(true)}
-                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-blue hover:text-white hover:border-cyber-blue/30 transition-all group"
-                    title="Abrir Compêndio"
-                >
-                    <i className="fa-solid fa-book-atlas text-xs group-hover:scale-110 transition-transform"></i>
-                </button>
+                {isEditMode && (
+                    <button
+                        onClick={() => setIsCompendiumOpen(true)}
+                        className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-blue hover:text-white hover:border-cyber-blue/30 transition-all group"
+                        title="Abrir Compêndio"
+                    >
+                        <i className="fa-solid fa-book-atlas text-xs group-hover:scale-110 transition-transform"></i>
+                    </button>
+                )}
 
                 <button
                     onClick={toggleEditMode}
