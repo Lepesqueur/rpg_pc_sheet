@@ -100,11 +100,22 @@ const InventoryTab = () => {
         }
     };
 
-    const getPeculiaritiesMeta = (val) => {
+    const getPeculiaritiesMeta = (val, type) => {
         const numVal = parseInt(val.replace(/[^\d-]/g, '')) || 0;
-        if (numVal > 0) return { icon: 'fa-circle-plus', color: 'text-cyber-yellow', valColor: 'text-[#00ff99]' };
-        if (numVal < 0) return { icon: 'fa-circle-minus', color: 'text-cyber-pink', valColor: 'text-red-400' };
-        return { icon: 'fa-circle-dot', color: 'text-cyber-gray', valColor: 'text-cyber-gray' };
+
+        const typeIcons = {
+            'Mundana': 'fa-user',
+            'Bestial': 'fa-paw',
+            'Extraordinária': 'fa-sparkles',
+            'Sobrenatural': 'fa-ghost',
+            'Mágica': 'fa-wand-magic-sparkles'
+        };
+
+        const icon = typeIcons[type] || 'fa-circle-dot';
+
+        if (numVal > 0) return { icon, color: 'text-cyber-yellow', valColor: 'text-[#00ff99]' };
+        if (numVal < 0) return { icon, color: 'text-cyber-pink', valColor: 'text-red-400' };
+        return { icon, color: 'text-cyber-gray', valColor: 'text-cyber-gray' };
     };
 
     const totalWeight = items.reduce((acc, item) => acc + (parseFloat(item.weight) * parseInt(item.qty) || 0), 0);
@@ -245,7 +256,7 @@ const InventoryTab = () => {
                         <div className="overflow-y-auto custom-scrollbar pr-2 flex-grow">
                             <ul className="space-y-3">
                                 {peculiarities.map((p) => {
-                                    const meta = getPeculiaritiesMeta(p.val);
+                                    const meta = getPeculiaritiesMeta(p.val, p.type);
                                     return (
                                         <li
                                             key={p.id}
@@ -481,7 +492,7 @@ const InventoryTab = () => {
                 <ModalHeader onClose={() => setViewingPec(null)} className="bg-gradient-to-r from-cyber-yellow/10 to-transparent">
                     <div className="flex items-center gap-4">
                         <div className={`w-12 h-12 rounded-lg bg-black/40 flex items-center justify-center border border-cyber-yellow/20`}>
-                            <i className={`fa-solid ${viewingPec ? getPeculiaritiesMeta(viewingPec.val).icon : ''} text-2xl text-cyber-yellow`}></i>
+                            <i className={`fa-solid ${viewingPec ? getPeculiaritiesMeta(viewingPec.val, viewingPec.type).icon : ''} text-2xl text-cyber-yellow`}></i>
                         </div>
                         <div className="flex flex-col text-left">
                             <h2 className="text-2xl font-bold text-white tracking-tight font-display uppercase italic">
