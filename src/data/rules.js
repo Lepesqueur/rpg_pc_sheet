@@ -162,3 +162,18 @@ export const TALENT_GROUPS = [
     "ELETRICIDADE", "ELOQUÊNCIA", "ESPREITAR", "NATUREZA",
     "PIROMANCIA", "PRESERVAR", "TELECINESE", "TELEPATIA"
 ];
+
+export const TALENT_GROUP_COLORS = {
+    "OFUSCAR": "cyber-purple",
+    "RESPLANDECER": "cyber-yellow",
+    "ARTES MARCIAIS": "cyber-pink",
+    "COMBATE ARMADO": "cyber-cyan",
+    "ELETRICIDADE": "cyber-blue",
+    "ELOQUÊNCIA": "cyber-green",
+    "ESPREITAR": "cyber-purple",
+    "NATUREZA": "cyber-green",
+    "PIROMANCIA": "cyber-pink",
+    "PRESERVAR": "cyber-cyan",
+    "TELECINESE": "cyber-blue",
+    "TELEPATIA": "cyber-purple"
+};

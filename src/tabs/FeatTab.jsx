@@ -5,7 +5,7 @@ import { useCharacter } from '../context/CharacterContext';
 import { useToast } from '../components/Toast';
 import IconPicker from '../components/IconPicker';
 import { stringifyForCompendium } from '../utils/exportUtils';
-import { TALENT_GROUPS } from '../data/rules';
+import { TALENT_GROUPS, TALENT_GROUP_COLORS } from '../data/rules';
 
 const FeatTab = () => {
     const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
@@ -158,6 +158,13 @@ const FeatTab = () => {
         showToast('CÓDIGO COPIADO PARA O COMPÊNDIO!', 'success');
     };
 
+    const getGroupColor = (item) => {
+        if (item.group && TALENT_GROUP_COLORS[item.group]) {
+            return TALENT_GROUP_COLORS[item.group];
+        }
+        return item.category === 'actions' ? 'cyber-pink' : 'cyber-yellow';
+    };
+
     return (
         <div className="animate-fade-in">
             <section className="glass-card rounded-2xl p-6 min-h-[500px] flex flex-col">
@@ -196,7 +203,7 @@ const FeatTab = () => {
                             <div
                                 key={item.id}
                                 onClick={() => handleItemClick(item)}
-                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-pink bg-cyber-pink/5 shadow-[0_0_15px_rgba(255,0,153,0.1)]' : 'hover:border-cyber-pink/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
+                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? `hover:border-${getGroupColor(item)} bg-${getGroupColor(item)}/5 shadow-[0_0_15px_rgba(255,255,255,0.05)]` : `hover:border-${getGroupColor(item)}/50`} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -215,7 +222,7 @@ const FeatTab = () => {
                                                 <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
                                             </span>
                                         )}
-                                        <span className="px-2 py-0.5 bg-cyber-pink/20 text-cyber-pink text-[10px] font-bold border border-cyber-pink/30 rounded uppercase">
+                                        <span className={`px-2 py-0.5 bg-${getGroupColor(item)}/20 text-${getGroupColor(item)} text-[10px] font-bold border border-${getGroupColor(item)}/30 rounded uppercase`}>
                                             {item.pa} PA
                                         </span>
                                     </div>
@@ -231,8 +238,8 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-cyber-pink/10 border border-cyber-pink/20 group-hover:shadow-[0_0_10px_#ff009966] transition-all">
-                                        <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-cyber-pink`}></i>
+                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-${getGroupColor(item)}/10 border border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
+                                        <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-${getGroupColor(item)}`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
                                         <div className="flex items-center gap-2 mb-1">
@@ -241,7 +248,7 @@ const FeatTab = () => {
                                                 {item.stats?.ativacao || 'Ação'}
                                             </span>
                                             {item.group && (
-                                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyber-pink/20 border border-cyber-pink/40 text-cyber-pink font-bold uppercase tracking-tighter">
+                                                <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
                                                     {item.group}
                                                 </span>
                                             )}
@@ -274,7 +281,7 @@ const FeatTab = () => {
                             <div
                                 key={item.id}
                                 onClick={() => handleItemClick(item)}
-                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? 'hover:border-cyber-yellow bg-cyber-yellow/5 shadow-[0_0_15px_rgba(255,215,0,0.1)]' : 'hover:border-cyber-yellow/50'} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
+                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? `hover:border-${getGroupColor(item)} bg-${getGroupColor(item)}/5 shadow-[0_0_15px_rgba(255,255,255,0.05)]` : `hover:border-${getGroupColor(item)}/50`} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -293,7 +300,7 @@ const FeatTab = () => {
                                                 <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
                                             </span>
                                         )}
-                                        <span className="px-2 py-0.5 bg-cyber-yellow/20 text-cyber-yellow text-[10px] font-bold border border-cyber-yellow/30 rounded uppercase">
+                                        <span className={`px-2 py-0.5 bg-${getGroupColor(item)}/20 text-${getGroupColor(item)} text-[10px] font-bold border border-${getGroupColor(item)}/30 rounded uppercase`}>
                                             {item.pa} PA
                                         </span>
                                     </div>
@@ -309,8 +316,8 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <div className="shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-cyber-yellow/10 border border-cyber-yellow/20 group-hover:shadow-[0_0_10px_#ffd70066] transition-all">
-                                        <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-cyber-yellow`}></i>
+                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-${getGroupColor(item)}/10 border border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
+                                        <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-${getGroupColor(item)}`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
                                         <div className="flex items-center gap-2 mb-1">
@@ -319,7 +326,7 @@ const FeatTab = () => {
                                                 {item.stats?.ativacao || 'Passiva'}
                                             </span>
                                             {item.group && (
-                                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-cyber-yellow/20 border border-cyber-yellow/40 text-cyber-yellow font-bold uppercase tracking-tighter">
+                                                <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
                                                     {item.group}
                                                 </span>
                                             )}
@@ -343,7 +350,7 @@ const FeatTab = () => {
                             <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center relative`}>
                                 <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'actions' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
                                 {viewingTalent?.pa !== undefined && (
-                                    <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink border-white/20 text-white shadow-cyber-pink/40' : 'bg-cyber-yellow border-black/10 text-zinc-900 shadow-cyber-yellow/40'}`}>
+                                    <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg bg-${getGroupColor(viewingTalent || {})} ${getGroupColor(viewingTalent || {}) === 'cyber-yellow' ? 'border-black/10 text-zinc-900' : 'border-white/20 text-white'} shadow-${getGroupColor(viewingTalent || {})}/40`}>
                                         {viewingTalent.pa} PA
                                     </div>
                                 )}
@@ -362,7 +369,7 @@ const FeatTab = () => {
                                 </div>
                                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
                                     {viewingTalent?.group && (
-                                        <span className={`px-2.5 py-0.5 rounded-md ${viewingTalent?.category === 'actions' ? 'bg-cyber-pink/20 border-cyber-pink/40 text-cyber-pink' : 'bg-cyber-yellow/20 border-cyber-yellow/40 text-cyber-yellow'} border text-[10px] font-bold uppercase tracking-widest`}>
+                                        <span className={`px-2.5 py-0.5 rounded-md bg-${getGroupColor(viewingTalent)}/20 border border-${getGroupColor(viewingTalent)}/40 text-${getGroupColor(viewingTalent)} border text-[10px] font-bold uppercase tracking-widest`}>
                                             {viewingTalent.group}
                                         </span>
                                     )}
