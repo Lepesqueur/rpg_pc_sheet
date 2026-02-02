@@ -679,6 +679,41 @@ export const CharacterProvider = ({ children }) => {
         document.body.removeChild(link);
     };
 
+    const importBundle = (bundle) => {
+        if (!isEditMode) return;
+
+        setCharacterData(prev => {
+            const newData = { ...prev };
+
+            if (bundle.items && bundle.items.length > 0) {
+                const newItems = bundle.items.map(item => ({
+                    ...item,
+                    id: `cb-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                }));
+                newData.inventory = [...(prev.inventory || []), ...newItems];
+            }
+
+            if (bundle.talents && bundle.talents.length > 0) {
+                const newTalents = bundle.talents.map(talent => ({
+                    ...talent,
+                    id: `ct-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                }));
+                newData.talents = [...(prev.talents || []), ...newTalents];
+            }
+
+            if (bundle.peculiarities && bundle.peculiarities.length > 0) {
+                const newPeculiarities = bundle.peculiarities.map(pec => ({
+                    ...pec,
+                    id: `cp-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+                }));
+                newData.peculiarities = [...(prev.peculiarities || []), ...newPeculiarities];
+            }
+
+            return newData;
+        });
+        return true;
+    };
+
     const importCharacter = (jsonData) => {
         try {
             const parsed = JSON.parse(jsonData);
@@ -744,7 +779,8 @@ export const CharacterProvider = ({ children }) => {
         updateSpeed,
         updatePerception,
         exportCharacter,
-        importCharacter
+        importCharacter,
+        importBundle
     };
 
     return (

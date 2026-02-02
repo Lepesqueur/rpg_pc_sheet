@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCharacter } from '../context/CharacterContext';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from './Modal';
 import { useToast } from './Toast';
+import CompendiumModal from './CompendiumModal';
 
 const Header = () => {
     const { isEditMode, toggleEditMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception, updateStatus } = useCharacter();
@@ -9,6 +10,7 @@ const Header = () => {
     const { showToast } = useToast();
     const [restModal, setRestModal] = useState({ isOpen: false, type: null });
     const [comfortLevel, setComfortLevel] = useState(0);
+    const [isCompendiumOpen, setIsCompendiumOpen] = useState(false);
 
     const openRestModal = (type) => {
         setRestModal({ isOpen: true, type });
@@ -58,6 +60,14 @@ const Header = () => {
                     title="Descanso Longo"
                 >
                     <i className="fa-solid fa-bed text-xs group-hover:scale-110 transition-transform"></i>
+                </button>
+
+                <button
+                    onClick={() => setIsCompendiumOpen(true)}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-blue hover:text-white hover:border-cyber-blue/30 transition-all group"
+                    title="Abrir Compêndio"
+                >
+                    <i className="fa-solid fa-book-atlas text-xs group-hover:scale-110 transition-transform"></i>
                 </button>
 
                 <button
@@ -265,6 +275,11 @@ const Header = () => {
                     </button>
                 </ModalFooter>
             </Modal>
+
+            <CompendiumModal
+                isOpen={isCompendiumOpen}
+                onClose={() => setIsCompendiumOpen(false)}
+            />
         </header>
     );
 };
