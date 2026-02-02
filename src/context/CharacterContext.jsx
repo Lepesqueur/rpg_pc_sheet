@@ -269,6 +269,7 @@ export const CharacterProvider = ({ children }) => {
                     }),
                     peculiarities: (parsed.peculiarities || []).map(pec => ({
                         description: "",
+                        type: "Mundana",
                         ...pec
                     })),
                     biography: parsed.biography || "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
@@ -589,7 +590,7 @@ export const CharacterProvider = ({ children }) => {
         if (!isEditMode) return;
         setCharacterData(prev => ({
             ...prev,
-            peculiarities: [...(prev.peculiarities || []), { ...pec, id: Date.now().toString() }]
+            peculiarities: [...(prev.peculiarities || []), { type: "Mundana", ...pec, id: Date.now().toString() }]
         }));
     };
 

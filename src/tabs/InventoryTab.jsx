@@ -21,7 +21,7 @@ const InventoryTab = () => {
     // Peculiarities State
     const [editingPec, setEditingPec] = useState(null);
     const [viewingPec, setViewingPec] = useState(null);
-    const [pecForm, setPecForm] = useState({ name: '', val: '+0', description: '' });
+    const [pecForm, setPecForm] = useState({ name: '', val: '+0', description: '', type: 'Mundana' });
     const [pecToDelete, setPecToDelete] = useState(null);
 
     const [isIconPickerOpen, setIsIconPickerOpen] = useState(false);
@@ -71,7 +71,7 @@ const InventoryTab = () => {
     // Peculiarity Handlers
     const openAddPecModal = () => {
         setEditingPec(null);
-        setPecForm({ name: '', val: '+0', description: '' });
+        setPecForm({ name: '', val: '+0', description: '', type: 'Mundana' });
         setEditingPec('new');
     };
 
@@ -431,6 +431,20 @@ const InventoryTab = () => {
                             </div>
                         </div>
                         <div className="space-y-2">
+                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Tipo de Peculiaridade</label>
+                            <select
+                                className="w-full bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white focus:ring-1 focus:ring-cyber-yellow outline-none transition-all"
+                                value={pecForm.type}
+                                onChange={(e) => setPecForm({ ...pecForm, type: e.target.value })}
+                            >
+                                <option value="Mundana">Mundana</option>
+                                <option value="Bestial">Bestial</option>
+                                <option value="Extraordinária">Extraordinária</option>
+                                <option value="Sobrenatural">Sobrenatural</option>
+                                <option value="Mágica">Mágica</option>
+                            </select>
+                        </div>
+                        <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Descrição</label>
                             <textarea
                                 className="w-full h-32 bg-black/40 border border-white/10 rounded-lg p-4 text-sm text-gray-200 focus:border-cyber-yellow outline-none resize-none custom-scrollbar font-sans leading-relaxed"
@@ -469,11 +483,11 @@ const InventoryTab = () => {
                         <div className={`w-12 h-12 rounded-lg bg-black/40 flex items-center justify-center border border-cyber-yellow/20`}>
                             <i className={`fa-solid ${viewingPec ? getPeculiaritiesMeta(viewingPec.val).icon : ''} text-2xl text-cyber-yellow`}></i>
                         </div>
-                        <div className="flex flex-col">
+                        <div className="flex flex-col text-left">
                             <h2 className="text-2xl font-bold text-white tracking-tight font-display uppercase italic">
                                 {viewingPec?.name}
                             </h2>
-                            <span className="text-xs text-cyber-gray uppercase tracking-[0.3em] font-mono">Peculiaridade</span>
+                            <span className="text-xs text-cyber-gray uppercase tracking-[0.3em] font-mono">{viewingPec?.type || 'Peculiaridade'}</span>
                         </div>
                     </div>
                 </ModalHeader>
