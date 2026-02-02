@@ -3,6 +3,7 @@ import { Modal, ModalHeader, ModalBody } from './Modal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from './Toast';
 import { COMPENDIUM } from '../data/compendium';
+import { TALENT_GROUPS } from '../data/rules';
 
 const CompendiumModal = ({ isOpen, onClose }) => {
     const { isEditMode, addInventoryItem, addTalent, addPeculiarity, importBundle } = useCharacter();
@@ -10,6 +11,7 @@ const CompendiumModal = ({ isOpen, onClose }) => {
     const [activeCategory, setActiveCategory] = useState('items');
     const [searchTerm, setSearchTerm] = useState('');
     const [subFilter, setSubFilter] = useState('all');
+    const [groupFilter, setGroupFilter] = useState('all');
 
     const categories = [
         { id: 'items', label: 'Itens', icon: 'fa-box-open' },
@@ -71,9 +73,15 @@ const CompendiumModal = ({ isOpen, onClose }) => {
         const matchesSearch = item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()));
 
-        const matchesSubFilter = subFilter === 'all' || item.type === subFilter;
+        let matchesSubFilter = subFilter === 'all' || item.type === subFilter;
+        if (activeCategory === 'talents' && subFilter !== 'all') {
+            const cat = subFilter === 'Ações' ? 'actions' : 'talent';
+            matchesSubFilter = item.category === cat;
+        }
 
-        return matchesSearch && matchesSubFilter;
+        const matchesGroup = groupFilter === 'all' || item.group === groupFilter;
+
+        return matchesSearch && matchesSubFilter && matchesGroup;
     });
 
     const getSubFilters = () => {
@@ -82,6 +90,9 @@ const CompendiumModal = ({ isOpen, onClose }) => {
         }
         if (activeCategory === 'peculiarities') {
             return ['Mundana', 'Bestial', 'Extraordinária', 'Sobrenatural', 'Mágica'];
+        }
+        if (activeCategory === 'talents') {
+            return ['Ações', 'Talentos'];
         }
         return [];
     };
@@ -126,6 +137,7 @@ const CompendiumModal = ({ isOpen, onClose }) => {
                                     setActiveCategory(cat.id);
                                     setSearchTerm('');
                                     setSubFilter('all');
+                                    setGroupFilter('all');
                                 }}
                                 className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all whitespace-nowrap ${activeCategory === cat.id
                                     ? 'bg-cyber-blue text-white shadow-neon-blue'
@@ -160,6 +172,32 @@ const CompendiumModal = ({ isOpen, onClose }) => {
                                         }`}
                                 >
                                     {filter}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                    {/* Group Filters for Talents */}
+                    {activeCategory === 'talents' && (
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide">
+                            <button
+                                onClick={() => setGroupFilter('all')}
+                                className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${groupFilter === 'all'
+                                    ? 'bg-white/20 border-white/40 text-white'
+                                    : 'bg-white/5 border-white/5 text-cyber-gray hover:text-white'
+                                    }`}
+                            >
+                                Todos os Grupos
+                            </button>
+                            {TALENT_GROUPS.map(group => (
+                                <button
+                                    key={group}
+                                    onClick={() => setGroupFilter(group)}
+                                    className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider transition-all border ${groupFilter === group
+                                        ? 'bg-cyber-purple/20 border-cyber-purple/40 text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.2)]'
+                                        : 'bg-white/5 border-white/5 text-cyber-gray hover:text-white'
+                                        }`}
+                                >
+                                    {group}
                                 </button>
                             ))}
                         </div>

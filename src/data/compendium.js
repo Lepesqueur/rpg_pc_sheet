@@ -94,74 +94,7 @@ export const COMPENDIUM = {
     ],
     talents: [
 
-        {
-            name: "ESCUDO PROTETOR",
-            category: "actions",
-            pa: 1,
-            stats: {
-                duracao: "1 minuto",
-                ativacao: "Passiva",
-                alcance: "Pessoal",
-                alvo: "Pessoal"
-            },
-            description: "Conjura uma barreira translúcida que absorve os próximos 10 pontos de dano físico.",
-            fullDescription: "Proteção física básica.",
-            potencializacoes: [
-                {
-                    name: "Custo de Vontade",
-                    effect: "Aumenta durabilidade",
-                    resource: "will",
-                    value: 5
-                }
-            ],
-            icon: "fa-shield-halved",
-            color: "neon-pink",
-            costs: {
-                will: "1",
-                focus: "1",
-                vitality: "1"
-            },
-            relatedSkill: ""
-        },
 
-        {
-            name: "ATAQUE GIRATÓRIO",
-            category: "actions",
-            pa: 3,
-            costs: { focus: 0, will: 0, vitality: 4 },
-            stats: {
-                duracao: "Instantânea",
-                ativacao: "Ação",
-                alcance: "Adjacente",
-                alvo: "Todos os inimigos"
-            },
-            description: "Realiza um ataque contra todos os inimigos adjacentes.",
-            fullDescription: "O guerreiro gira seu tronco com força bruta, atingindo todos ao seu redor em um único movimento fluido. Requer uma arma de combate corpo a corpo.",
-            potencializacoes: [
-                { name: "+1d6 de Dano", effect: "Aumenta a força centrífuga", resource: "vitality", value: 2 },
-                { name: "Empurrar 1.5m", effect: "Afasta os inimigos atingidos", resource: "focus", value: 1 }
-            ],
-            icon: "fa-arrows-spin",
-            color: "neon-blue"
-        },
-        {
-            name: "VONTADE INDOMÁVEL",
-            category: "talent",
-            category: "talent",
-            pa: 0,
-            costs: { focus: 0, will: 0, vitality: 0 },
-            stats: {
-                duracao: "Passiva",
-                ativacao: "Passiva",
-                alcance: "-",
-                alvo: "Pessoal"
-            },
-            description: "Sempre que estiver com menos de 25% de Vitalidade, ganha +2 em todas as defesas.",
-            fullDescription: "Sua determinação brilha mais forte quando você está à beira da derrota.",
-            potencializacoes: [],
-            icon: "fa-shield-heart",
-            color: "neon-yellow"
-        }
     ],
     peculiarities: [
         { name: "Alerta", val: "2", type: "Mundana", description: "[Combate, Especialista] Rolagem de iniciativa com vantagem e age normalmente se surpreendido." },
