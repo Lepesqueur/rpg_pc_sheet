@@ -8,7 +8,7 @@ import { stringifyForCompendium } from '../utils/exportUtils';
 import { TALENT_GROUPS, TALENT_GROUP_COLORS } from '../data/rules';
 
 const FeatTab = () => {
-    const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources } = useCharacter();
+    const { characterData, isEditMode, isDevMode, addTalent, updateTalent, deleteTalent, consumeResources, theme } = useCharacter();
     const { showToast } = useToast();
     const [viewingTalent, setViewingTalent] = useState(null);
     const [editingTalent, setEditingTalent] = useState(null); // Used for both Add and Edit
@@ -203,7 +203,7 @@ const FeatTab = () => {
                             <div
                                 key={item.id}
                                 onClick={() => handleItemClick(item)}
-                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? `hover:border-${getGroupColor(item)} bg-${getGroupColor(item)}/5 shadow-[0_0_15px_rgba(255,255,255,0.05)]` : `hover:border-${getGroupColor(item)}/50`} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
+                                className={`group relative bg-white/5 border border-white/10 ${isEditMode ? `hover:border-${getGroupColor(item)} bg-${getGroupColor(item)}/${theme === 'medieval' ? '15' : '5'} shadow-[0_0_15px_rgba(255,255,255,0.05)]` : `hover:border-${getGroupColor(item)}/50`} rounded-xl p-5 transition-all duration-300 cursor-pointer`}
                             >
                                 <div className="absolute top-3 right-3 flex flex-col items-end gap-1.5">
                                     <div className="flex items-center gap-2">
@@ -222,7 +222,7 @@ const FeatTab = () => {
                                                 <i className="fa-solid fa-heart text-[9px]"></i> {item.costs.vitality}
                                             </span>
                                         )}
-                                        <span className={`px-2 py-0.5 bg-${getGroupColor(item)}/20 text-${getGroupColor(item)} text-[10px] font-bold border border-${getGroupColor(item)}/30 rounded uppercase`}>
+                                        <span className={`px-2 py-0.5 ${theme === 'medieval' ? `bg-${getGroupColor(item)}/40 border-${getGroupColor(item)}/50 shadow-[0_0_5px_rgba(var(--accent-yellow),0.2)]` : `bg-${getGroupColor(item)}/20 border-${getGroupColor(item)}/30`} text-${getGroupColor(item)} text-[10px] font-bold border rounded uppercase`}>
                                             {item.pa} PA
                                         </span>
                                     </div>
@@ -238,8 +238,8 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-${getGroupColor(item)}/10 border border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
-                                        <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-${getGroupColor(item)}`}></i>
+                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg ${theme === 'medieval' ? `bg-${getGroupColor(item)}/20 border-2` : `bg-${getGroupColor(item)}/10 border`} border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
+                                        <i className={`fa-solid ${item.icon || 'fa-burst'} text-2xl text-${getGroupColor(item)} ${theme === 'medieval' ? 'brightness-125' : ''}`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
                                         <div className="flex items-center gap-2 mb-1">
@@ -248,7 +248,7 @@ const FeatTab = () => {
                                                 {item.stats?.ativacao || 'Ação'}
                                             </span>
                                             {item.category && item.category !== 'Ação Básica' && (
-                                                <span className={`text-[9px] px-1.5 py-0.5 rounded bg-${getGroupColor(item)}/20 border border-${getGroupColor(item)}/40 text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
+                                                <span className={`text-[9px] px-1.5 py-0.5 rounded ${theme === 'medieval' ? `bg-${getGroupColor(item)}/40 border-${getGroupColor(item)}/60` : `bg-${getGroupColor(item)}/20 border-${getGroupColor(item)}/40`} text-${getGroupColor(item)} font-bold uppercase tracking-tighter`}>
                                                     {item.category}
                                                 </span>
                                             )}
@@ -316,8 +316,8 @@ const FeatTab = () => {
                                     )}
                                 </div>
                                 <div className="flex items-start gap-4">
-                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-${getGroupColor(item)}/10 border border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
-                                        <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-${getGroupColor(item)}`}></i>
+                                    <div className={`shrink-0 w-12 h-12 flex items-center justify-center rounded-lg ${theme === 'medieval' ? `bg-${getGroupColor(item)}/20 border-2` : `bg-${getGroupColor(item)}/10 border`} border-${getGroupColor(item)}/20 group-hover:shadow-[0_0_10px_rgba(255,255,255,0.2)] transition-all`}>
+                                        <i className={`fa-solid ${item.icon || 'fa-star'} text-2xl text-${getGroupColor(item)} ${theme === 'medieval' ? 'brightness-125' : ''}`}></i>
                                     </div>
                                     <div className="flex-grow pr-16">
                                         <div className="flex items-center gap-2 mb-1">
@@ -347,7 +347,9 @@ const FeatTab = () => {
 
                     <div className="p-6 md:p-8 flex items-start justify-between border-b border-white/10 bg-zinc-950/98 backdrop-blur-xl">
                         <div className="flex items-center gap-5">
-                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'Ação Básica' ? 'bg-cyber-pink/10 border-cyber-pink/40 text-cyber-pink shadow-[0_0_20px_rgba(255,0,153,0.2)]' : 'bg-cyber-yellow/10 border-cyber-yellow/40 text-cyber-yellow shadow-[0_0_20px_rgba(255,215,0,0.2)]'} border flex items-center justify-center relative`}>
+                            <div className={`w-16 h-16 rounded-2xl ${viewingTalent?.category === 'Ação Básica'
+                                ? `${theme === 'medieval' ? 'bg-cyber-pink/20 border-cyber-pink/60' : 'bg-cyber-pink/10 border-cyber-pink/40'} text-cyber-pink shadow-[0_0_20px_rgba(var(--accent-pink),0.2)]`
+                                : `${theme === 'medieval' ? 'bg-cyber-yellow/20 border-cyber-yellow/60' : 'bg-cyber-yellow/10 border-cyber-yellow/40'} text-cyber-yellow shadow-[0_0_20px_rgba(var(--accent-yellow),0.2)]`} border flex items-center justify-center relative`}>
                                 <i className={`fa-solid ${viewingTalent?.icon || (viewingTalent?.category === 'Ação Básica' ? 'fa-burst' : 'fa-star')} text-4xl`}></i>
                                 {viewingTalent?.pa !== undefined && (
                                     <div className={`absolute -bottom-2 -right-2 px-2 py-0.5 rounded-md border font-display font-black text-xs shadow-lg bg-${getGroupColor(viewingTalent || {})} ${['cyber-yellow', 'cyber-cyan'].includes(getGroupColor(viewingTalent || {})) ? 'border-black/10 text-zinc-900' : 'border-white/20 text-white'} shadow-${getGroupColor(viewingTalent || {})}/40`}>
@@ -369,7 +371,7 @@ const FeatTab = () => {
                                 </div>
                                 <div className="flex flex-wrap items-center gap-2 mt-1.5">
                                     {viewingTalent?.category && viewingTalent.category !== 'Ação Básica' && (
-                                        <span className={`px-2.5 py-0.5 rounded-md bg-${getGroupColor(viewingTalent)}/20 border border-${getGroupColor(viewingTalent)}/40 text-${getGroupColor(viewingTalent)} border text-[10px] font-bold uppercase tracking-widest`}>
+                                        <span className={`px-2.5 py-0.5 rounded-md ${theme === 'medieval' ? `bg-${getGroupColor(viewingTalent)}/30 border-${getGroupColor(viewingTalent)}/60` : `bg-${getGroupColor(viewingTalent)}/20 border-${getGroupColor(viewingTalent)}/40`} text-${getGroupColor(viewingTalent)} border text-[10px] font-bold uppercase tracking-widest`}>
                                             {viewingTalent.category}
                                         </span>
                                     )}
@@ -425,7 +427,7 @@ const FeatTab = () => {
                                 { label: 'Alcance', value: viewingTalent?.stats?.alcance },
                                 { label: 'Alvo', value: viewingTalent?.stats?.alvo }
                             ].map(stat => (
-                                <div key={stat.label} className="bg-white/5 border border-white/5 p-4 rounded-2xl flex flex-col items-center text-center">
+                                <div key={stat.label} className={`${theme === 'medieval' ? 'bg-white/10 border-white/15' : 'bg-white/5 border-white/5'} border p-4 rounded-2xl flex flex-col items-center text-center`}>
                                     <span className="text-[10px] text-slate-500 uppercase font-bold tracking-widest mb-2">{stat.label}</span>
                                     <span className="font-display text-lg text-slate-200">{stat.value || '-'}</span>
                                 </div>

@@ -14,6 +14,9 @@ export const useCharacter = () => {
 export const CharacterProvider = ({ children }) => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [isDevMode, setIsDevMode] = useState(false);
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem('rpg_sheet_theme') || 'cyberpunk';
+    });
 
     // Inicializar estado com dados das regras
     const [characterData, setCharacterData] = useState(() => {
@@ -304,6 +307,21 @@ export const CharacterProvider = ({ children }) => {
     useEffect(() => {
         localStorage.setItem('aeliana_character_data', JSON.stringify(characterData));
     }, [characterData]);
+
+    // Theme effect
+    useEffect(() => {
+        const body = document.body;
+        if (theme === 'medieval') {
+            body.classList.add('theme-medieval');
+        } else {
+            body.classList.remove('theme-medieval');
+        }
+        localStorage.setItem('rpg_sheet_theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => {
+        setTheme(prev => prev === 'cyberpunk' ? 'medieval' : 'cyberpunk');
+    };
 
     const toggleEditMode = () => setIsEditMode(prev => !prev);
     const toggleDevMode = () => {
@@ -785,7 +803,9 @@ export const CharacterProvider = ({ children }) => {
         updatePerception,
         exportCharacter,
         importCharacter,
-        importBundle
+        importBundle,
+        theme,
+        toggleTheme
     };
 
     return (

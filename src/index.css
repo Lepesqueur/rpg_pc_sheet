@@ -1,14 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Pirata+One&family=MedievalSharp&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   color-scheme: dark;
+  --bg-color: 5 5 5;
+  --text-main: 255 255 255;
+  --card-bg: 19 19 31;
+  --accent-pink: 255 0 153;
+  --accent-purple: 189 0 255;
+  --accent-yellow: 255 215 0;
+  --accent-green: 57 255 20;
+  --accent-red: 255 49 49;
+  --accent-cyan: 0 243 255;
+  --accent-blue: 0 112 255;
+  --border-color: 255 255 255;
+}
+
+.theme-medieval {
+  --bg-color: 10 10 12;
+  --text-main: 226 217 194;
+  --card-bg: 26 26 28;
+  --accent-pink: 200 40 40;
+  --accent-purple: 120 60 180;
+  --accent-yellow: 218 165 32;
+  --accent-green: 85 140 70;
+  --accent-red: 180 20 20;
+  --accent-cyan: 40 140 140;
+  --accent-blue: 60 80 160;
+  --border-color: 218 165 32;
+  font-family: 'MedievalSharp', cursive;
 }
 
 body {
-  @apply bg-cyber-bg text-white min-h-screen overflow-x-hidden;
-  background-image: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0b0b0f 90%);
+  @apply min-h-screen overflow-x-hidden;
+  background-color: rgb(var(--bg-color));
+  color: rgb(var(--text-main));
+  background-image: radial-gradient(circle at 50% 50%, rgb(var(--accent-purple) / 0.1) 0%, rgb(var(--bg-color)) 90%);
 }
 
 .bg-scanline {
@@ -17,36 +47,46 @@ body {
     linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
 }
 
+.theme-medieval .bg-scanline {
+  background-image: none;
+  /* No scanlines in medieval theme */
+}
+
 .glass-card {
-  background: rgba(19, 19, 31, 0.7);
+  background: rgb(var(--card-bg) / 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgb(var(--border-color) / 0.1);
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
 }
 
+.theme-medieval .glass-card {
+  background: rgb(var(--card-bg) / 0.9);
+  border: 1px solid rgb(var(--border-color) / 0.2);
+}
+
 .text-glow-pink {
-  text-shadow: 0 0 8px #ff007f;
+  text-shadow: 0 0 8px rgb(var(--accent-pink));
 }
 
 .text-glow-purple {
-  text-shadow: 0 0 8px #7f00ff;
+  text-shadow: 0 0 8px rgb(var(--accent-purple));
 }
 
 .text-glow-yellow {
-  text-shadow: 0 0 8px #ffd700;
+  text-shadow: 0 0 8px rgb(var(--accent-yellow));
 }
 
 .text-glow-green {
-  text-shadow: 0 0 8px #39ff14;
+  text-shadow: 0 0 8px rgb(var(--accent-green));
 }
 
 .text-glow-cyan {
-  text-shadow: 0 0 8px #00f3ff;
+  text-shadow: 0 0 8px rgb(var(--accent-cyan));
 }
 
 .text-glow-red {
-  text-shadow: 0 0 8px #ff3131;
+  text-shadow: 0 0 8px rgb(var(--accent-red));
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -102,14 +142,36 @@ body {
 }
 
 /* Condições */
-.condition-pink { @apply text-cyber-pink shadow-[0_0_10px_rgba(255,0,153,0.3)]; }
-.condition-purple { @apply text-cyber-purple shadow-[0_0_10px_rgba(189,0,255,0.3)]; }
-.condition-green { @apply text-cyber-green shadow-[0_0_10px_rgba(57,255,20,0.3)]; }
-
-.level-badge {
-    @apply w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/20 bg-white/5;
+.condition-pink {
+  @apply text-cyber-pink;
+  text-shadow: 0 0 10px rgb(var(--accent-pink) / 0.3);
 }
 
-.level-badge-active-purple { @apply border-cyber-purple/60 bg-cyber-purple/10 text-cyber-purple shadow-[0_0_15px_rgba(189,0,255,0.4)]; }
-.level-badge-active-pink { @apply border-cyber-pink/60 bg-cyber-pink/10 text-cyber-pink shadow-[0_0_15px_rgba(255,0,153,0.4)]; }
-.level-badge-active-green { @apply border-cyber-green/60 bg-cyber-green/10 text-cyber-green shadow-[0_0_15px_rgba(57,255,20,0.4)]; }
+.condition-purple {
+  @apply text-cyber-purple;
+  text-shadow: 0 0 10px rgb(var(--accent-purple) / 0.3);
+}
+
+.condition-green {
+  @apply text-cyber-green;
+  text-shadow: 0 0 10px rgb(var(--accent-green) / 0.3);
+}
+
+.level-badge {
+  @apply w-8 h-8 flex items-center justify-center rounded-md text-sm font-bold transition-all border border-white/20 bg-white/5;
+}
+
+.level-badge-active-purple {
+  @apply border-cyber-purple/60 bg-cyber-purple/10 text-cyber-purple;
+  box-shadow: 0 0 15px rgb(var(--accent-purple) / 0.4);
+}
+
+.level-badge-active-pink {
+  @apply border-cyber-pink/60 bg-cyber-pink/10 text-cyber-pink;
+  box-shadow: 0 0 15px rgb(var(--accent-pink) / 0.4);
+}
+
+.level-badge-active-green {
+  @apply border-cyber-green/60 bg-cyber-green/10 text-cyber-green;
+  box-shadow: 0 0 15px rgb(var(--accent-green) / 0.4);
+}

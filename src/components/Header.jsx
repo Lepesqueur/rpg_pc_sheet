@@ -5,7 +5,22 @@ import { useToast } from './Toast';
 import CompendiumModal from './CompendiumModal';
 
 const Header = () => {
-    const { isEditMode, toggleEditMode, isDevMode, toggleDevMode, characterData, updateName, updateLevel, updateXp, updateNextLevel, updateSpeed, updatePerception, updateStatus } = useCharacter();
+    const {
+        isEditMode,
+        toggleEditMode,
+        isDevMode,
+        toggleDevMode,
+        characterData,
+        updateName,
+        updateLevel,
+        updateXp,
+        updateNextLevel,
+        updateSpeed,
+        updatePerception,
+        updateStatus,
+        theme,
+        toggleTheme
+    } = useCharacter();
 
     const { showToast } = useToast();
     const [restModal, setRestModal] = useState({ isOpen: false, type: null });
@@ -42,7 +57,7 @@ const Header = () => {
 
     return (
         <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow opacity-50"></div>
+            <div className={`absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyber-pink via-cyber-purple to-cyber-yellow ${theme === 'cyberpunk' ? 'opacity-50' : 'opacity-80'}`}></div>
 
             {/* Edit Mode Toggle */}
             <div className="absolute top-4 right-6 z-20 flex gap-2">
@@ -71,6 +86,15 @@ const Header = () => {
                         <i className="fa-solid fa-book-atlas text-xs group-hover:scale-110 transition-transform"></i>
                     </button>
                 )}
+
+                {/* Theme Toggle */}
+                <button
+                    onClick={toggleTheme}
+                    className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 border border-white/10 text-cyber-gray hover:text-white hover:border-white/30 transition-all group"
+                    title={`Mudar para tema ${theme === 'cyberpunk' ? 'Medieval' : 'Cyberpunk'}`}
+                >
+                    <i className={`fa-solid ${theme === 'cyberpunk' ? 'fa-microchip' : 'fa-scroll'} text-xs group-hover:scale-110 transition-transform`}></i>
+                </button>
 
                 <button
                     onClick={toggleEditMode}
@@ -102,14 +126,16 @@ const Header = () => {
             </div>
 
             <div className="relative shrink-0 group">
-                <div className="absolute inset-0 rounded-full bg-gradient-to-br from-cyber-pink to-cyber-purple blur opacity-60 group-hover:opacity-100 transition duration-500"></div>
+                <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${theme === 'medieval' ? 'from-cyber-yellow/40 to-cyber-red/40' : 'from-cyber-pink to-cyber-purple'} blur opacity-60 group-hover:opacity-100 transition duration-500`}></div>
                 <img
                     alt="Aeliana Portrait"
-                    className="relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 border-cyber-pink shadow-neon-pink object-cover z-10"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"
+                    className={`relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 ${theme === 'medieval' ? 'border-cyber-yellow shadow-neon-yellow' : 'border-cyber-pink shadow-neon-pink'} object-cover z-10`}
+                    src={theme === 'medieval'
+                        ? "aeliana_medieval.png"
+                        : "https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"}
                 />
             </div>
-            <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center h-32 md:h-40">
+            <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center min-h-[128px] md:min-h-[160px]">
                 {isEditMode ? (
                     <input
                         type="text"
@@ -119,7 +145,9 @@ const Header = () => {
                         placeholder="Nome do Personagem"
                     />
                 ) : (
-                    <h1 className="text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink font-display">{characterData.name}</h1>
+                    <h1 className={`text-4xl md:text-5xl font-bold tracking-wide text-white mb-1 uppercase text-glow-pink ${theme === 'medieval' ? 'font-medieval' : 'font-display'}`}>
+                        {characterData.name}
+                    </h1>
                 )}
 
                 <div className="text-cyber-gray text-lg font-medium tracking-widest uppercase mb-4 flex items-center justify-center md:justify-start gap-2">
