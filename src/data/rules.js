@@ -157,6 +157,7 @@ export const CONDITIONS = {
     }
 };
 
+// "Ação Básica" é obrigatória para a separação da UI (coluna esquerda vs direita)
 export const TALENT_GROUPS = [
     "Ação Básica", "OFUSCAR", "RESPLANDECER", "ARTES MARCIAIS", "COMBATE ARMADO",
     "ELETRICIDADE", "ELOQUÊNCIA", "ESPREITAR", "NATUREZA",
