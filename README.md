@@ -29,6 +29,8 @@ O app está funcional, mas não está finalizado. Por quê? Porque o sistema do 
 
 Estamos esperando as regras se estabilizarem nas mesas de jogo antes de implementar novas funcionalidades. Afinal, ninguém quer codar um sistema complexo hoje para ter que refazer tudo amanhã.
 
+> **🛠️ NOTA SOBRE O COMPÊNDIO**: A biblioteca de itens, talentos e peculiaridades (Compêndio) está sendo populada gradualmente e ainda está em fase de construção.
+
 ## �📋 Natureza e Propósito
 
 A ideia é simples: substituir aquela ficha de papel amassada e cheia de marcas de borracha por algo digital que roda no seu celular ou PC. Além de salvar árvores, serve como meu atestado de que sei fazer **PWAs** bonitas e funcionais.
