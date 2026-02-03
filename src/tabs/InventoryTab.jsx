@@ -11,7 +11,7 @@ const InventoryTab = () => {
         characterData, isEditMode, isDevMode,
         addInventoryItem, updateInventoryItem, deleteInventoryItem,
         addPeculiarity, updatePeculiarity, deletePeculiarity,
-        updateBiography, updateCurrency
+        updateBiography, updateCurrency, theme
     } = useCharacter();
     const { showToast } = useToast();
 
@@ -134,7 +134,7 @@ const InventoryTab = () => {
     };
 
     const getItemColor = (item) => {
-        return ITEM_COLORS[item.type] || 'slate-400';
+        return ITEM_COLORS[item.type] || 'text-item-outro';
     };
 
     const totalWeight = items.reduce((acc, item) => acc + (parseFloat(item.weight) * parseInt(item.qty) || 0), 0);
@@ -225,7 +225,7 @@ const InventoryTab = () => {
                                             {groupedItems[type].map((item) => (
                                                 <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-cyan-900/10 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group border-b border-white/5 last:border-0`}>
                                                     <td className="p-2 text-center text-lg">
-                                                        <i className={`fa-solid ${item.icon} text-${getItemColor(item)}`}></i>
+                                                        <i className={`fa-solid ${item.icon} ${getItemColor(item)} ${theme === 'medieval' ? 'brightness-110' : ''}`}></i>
                                                     </td>
                                                     <td className="p-2 font-medium text-white group-hover:text-white transition-colors">
                                                         <div className="flex items-center gap-2">
@@ -418,7 +418,7 @@ const InventoryTab = () => {
                                 >
                                     <span className="flex items-center gap-3">
                                         <div className="w-6 h-6 rounded bg-white/5 flex items-center justify-center">
-                                            <i className={`fa-solid ${itemForm.icon || 'fa-box'} text-${getItemColor(itemForm)}`}></i>
+                                            <i className={`fa-solid ${itemForm.icon || 'fa-box'} ${getItemColor(itemForm)}`}></i>
                                         </div>
                                         <span className="text-sm font-mono">{itemForm.icon || 'Selecionar Ícone...'}</span>
                                     </span>

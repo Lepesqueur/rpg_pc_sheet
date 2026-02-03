@@ -81,10 +81,10 @@ const CompendiumModal = ({ isOpen, onClose }) => {
     });
 
     const getResourceColor = (item, category) => {
-        if (category === 'items') return ITEM_COLORS[item.type] || 'slate-400';
-        if (category === 'talents') return TALENT_GROUP_COLORS[item.category] || 'cyber-pink';
-        if (category === 'peculiarities') return 'white'; // Keep default for now or add PECULIARITY_COLORS if desired
-        return 'white';
+        if (category === 'items') return ITEM_COLORS[item.type] || 'text-slate-400';
+        if (category === 'talents') return `text-${TALENT_GROUP_COLORS[item.category] || 'cyber-pink'}`;
+        if (category === 'peculiarities') return 'text-white';
+        return 'text-white';
     };
 
     const getSubFilters = () => {

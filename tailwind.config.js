@@ -39,6 +39,15 @@ export default {
           cyan: 'rgb(var(--accent-cyan) / <alpha-value>)',
           blue: 'rgb(var(--accent-blue) / <alpha-value>)',
         },
+        item: {
+          arma: 'rgb(var(--item-arma) / <alpha-value>)',
+          armadura: 'rgb(var(--item-armadura) / <alpha-value>)',
+          escudo: 'rgb(var(--item-escudo) / <alpha-value>)',
+          elmo: 'rgb(var(--item-elmo) / <alpha-value>)',
+          ferramenta: 'rgb(var(--item-ferramenta) / <alpha-value>)',
+          consumivel: 'rgb(var(--item-consumivel) / <alpha-value>)',
+          outro: 'rgb(var(--item-outro) / <alpha-value>)',
+        },
         rpg: {
           dark: '#0f0f13',
           panel: '#151520',

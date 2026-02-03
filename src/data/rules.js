@@ -180,12 +180,12 @@ export const TALENT_GROUP_COLORS = {
     "TELEPATIA": "cyber-purple"
 };
 export const ITEM_COLORS = {
-    'Arma': 'rose-400',
-    'Armadura': 'blue-400',
-    'Escudo': 'cyan-400',
-    'Elmo': 'sky-400',
-    'Ferramenta': 'amber-400',
-    'Consumível': 'emerald-400',
-    'Item': 'slate-400',
-    'Outro': 'slate-400'
+    'Arma': 'text-item-arma',
+    'Armadura': 'text-item-armadura',
+    'Escudo': 'text-item-escudo',
+    'Elmo': 'text-item-elmo',
+    'Ferramenta': 'text-item-ferramenta',
+    'Consumível': 'text-item-consumivel',
+    'Item': 'text-item-outro',
+    'Outro': 'text-item-outro'
 };

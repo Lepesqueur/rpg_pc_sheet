@@ -17,6 +17,13 @@
   --accent-cyan: 0 243 255;
   --accent-blue: 0 112 255;
   --border-color: 255 255 255;
+  --item-arma: 251 113 133;
+  --item-armadura: 96 165 250;
+  --item-escudo: 34 211 238;
+  --item-elmo: 56 189 248;
+  --item-ferramenta: 251 191 36;
+  --item-consumivel: 52 211 153;
+  --item-outro: 148 163 184;
 }
 
 .theme-medieval {
@@ -31,6 +38,13 @@
   --accent-cyan: 40 140 140;
   --accent-blue: 60 80 160;
   --border-color: 218 165 32;
+  --item-arma: 180 20 20;
+  --item-armadura: 120 120 130;
+  --item-escudo: 139 69 19;
+  --item-elmo: 160 140 80;
+  --item-ferramenta: 105 105 105;
+  --item-consumivel: 85 140 70;
+  --item-outro: 160 140 100;
   font-family: 'MedievalSharp', cursive;
 }
 
