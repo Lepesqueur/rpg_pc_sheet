@@ -23,159 +23,29 @@ export const CharacterProvider = ({ children }) => {
         const defaultData = {
             attributes: ATTRIBUTES,
             skillCategories: SKILLS_CATEGORIES,
-            name: "Aeliana, a Arconte",
-            level: 5,
-            xp: 14500,
-            nextLevel: 18000,
+            name: "Novo Personagem",
+            level: 1,
+            xp: 0,
+            nextLevel: 1000,
             speed: "9m",
-            perception: 15,
-            vitality: { current: 80, max: 100, level: 0 },
-            focus: { current: 45, max: 50, level: 0 },
-            will: { current: 28, max: 40, level: 0 },
+            perception: 10,
+            vitality: { current: 5, max: 5, level: 0 },
+            focus: { current: 5, max: 5, level: 0 },
+            will: { current: 5, max: 105, level: 0 },
             defenses: {
-                fortitude: 16,
-                reflex: 18,
-                tenacity: 14
+                fortitude: 10,
+                reflex: 10,
+                tenacity: 10
             },
-            attacks: [
-                { id: '1', name: 'Espada Longa', ap: 3, costs: { vitality: 2, focus: 0, will: 0 }, damage: 13, range: 'C.C.', wear: 0, skill: 'Lâminas', properties: 'Versátil', damageType: 'corte' },
-                { id: '2', name: 'Arco Curto', ap: 4, costs: { vitality: 0, focus: 5, will: 0 }, damage: 7, range: '18m', wear: 0, skill: 'Arqueirismo', properties: '', damageType: 'perfuracao' }
-            ],
-            armors: [
-                { id: 'a1', name: 'Colete de Kevlar', icon: 'fa-shield-halved', current: 4, max: 4, notes: '', reflexBonus: 0, properties: 'Leve' },
-                { id: 'a2', name: 'Elmo Neural', icon: 'fa-mask', current: 2, max: 2, notes: '', reflexBonus: 1, properties: '' }
-            ],
+            attacks: [],
+            armors: [],
             resistances: {}, // Will be populated below
             conditions: {}, // Will be populated below
-            talents: [
-                {
-                    id: 't1',
-                    name: "EXPLOSÃO ARCANA",
-                    category: "Ação Básica",
-                    pa: 3,
-                    costs: { focus: 2, will: 0, vitality: 0 },
-                    stats: {
-                        duracao: "Instantânea",
-                        ativacao: "Ação",
-                        alcance: "10 metros",
-                        alvo: "Área Circular"
-                    },
-                    description: "Libera uma onda de energia bruta em um raio de 3 metros, causando dano mágico crítico.",
-                    fullDescription: "O conjurador canaliza energia pura do Éter, liberando-a em uma violenta onda de choque ao seu redor. A explosão ignora armaduras físicas convencionais e empurra inimigos pequenos para longe do centro do impacto. Criaturas atingidas devem realizar um teste de Resistência Mágica ou sofrerão 4d8 de dano arcano.",
-                    potencializacoes: [
-                        { name: "+2d6 de Dano Adicional", effect: "Aumenta a densidade da carga energética", resource: "focus", value: 2 },
-                        { name: "Aumentar Alcance (+5m)", effect: "Expande a projeção da onda de choque", resource: "will", value: 1 },
-                        { name: "Efeito de Atordoamento", effect: "Inimigos falham automaticamente em reações", resource: "vitality", value: 3 }
-                    ],
-                    icon: "fa-burst"
-                },
-                {
-                    id: 't2',
-                    name: "TELETRANSPORTE MENOR",
-                    category: "Ação Básica",
-                    pa: 2,
-                    costs: { focus: 1, will: 0, vitality: 1 },
-                    stats: {
-                        duracao: "Instantânea",
-                        ativacao: "Ação",
-                        alcance: "15 metros",
-                        alvo: "Pessoal"
-                    },
-                    description: "Permite deslocar-se instantaneamente para um ponto visível a até 15 metros.",
-                    fullDescription: "Curte distância de transporte através do Éter.",
-                    potencializacoes: [
-                        { name: "Custo de Foco", effect: "Custo reduzido", resource: "focus", value: 1 },
-                        { name: "Custo de Vitalidade", effect: "Custo reduzido", resource: "vitality", value: 1 }
-                    ],
-                    icon: "fa-door-open"
-                },
-                {
-                    id: 't3',
-                    name: "ESCUDO PROTETOR",
-                    category: "Ação Básica",
-                    pa: 1,
-                    costs: { focus: 0, will: 5, vitality: 0 },
-                    stats: {
-                        duracao: "1 minuto",
-                        ativacao: "Ação",
-                        alcance: "Pessoal",
-                        alvo: "Pessoal"
-                    },
-                    description: "Conjura uma barreira translúcida que absorve os próximos 10 pontos de dano físico.",
-                    fullDescription: "Proteção física básica.",
-                    potencializacoes: [
-                        { name: "Custo de Vontade", effect: "Aumenta durabilidade", resource: "will", value: 5 }
-                    ],
-                    icon: "fa-shield-halved"
-                },
-                {
-                    id: 't4',
-                    name: "MESTRE DE ARMAS",
-                    category: "Ação Básica",
-                    pa: 0,
-                    costs: { focus: 0, will: 0, vitality: 0 },
-                    stats: {
-                        duracao: "Passiva",
-                        ativacao: "Passiva",
-                        alcance: "-",
-                        alvo: "Pessoal"
-                    },
-                    description: "Adiciona +2 em jogadas de ataque com armas pesadas ou de haste.",
-                    fullDescription: "Sua maestria com armas grandes é inigualável.",
-                    potencializacoes: [],
-                    icon: "fa-gavel"
-                },
-                {
-                    id: 't5',
-                    name: "SENTIDOS AGUÇADOS",
-                    category: "Ação Básica",
-                    pa: 0,
-                    costs: { focus: 1, will: 0, vitality: 0 },
-                    stats: {
-                        duracao: "Passiva",
-                        ativacao: "Passiva",
-                        alcance: "-",
-                        alvo: "Pessoal"
-                    },
-                    description: "Vantagem em testes de Percepção baseados em audição ou olfato.",
-                    fullDescription: "Seus sentidos são extremamente treinados.",
-                    potencializacoes: [
-                        { name: "Custo de Foco", effect: "Foco aprofundado", resource: "focus", value: 1 }
-                    ],
-                    icon: "fa-ear-listen"
-                },
-                {
-                    id: 't6',
-                    name: "RESILIÊNCIA MENTAL",
-                    category: "Ação Básica",
-                    pa: 0,
-                    costs: { focus: 0, will: 2, vitality: 0 },
-                    stats: {
-                        duracao: "Passiva",
-                        ativacao: "Passiva",
-                        alcance: "-",
-                        alvo: "Pessoal"
-                    },
-                    description: "Sua mente é um forte. Imune a efeitos de medo mundanos e resistência a dano psíquico.",
-                    fullDescription: "Mente inquebrável.",
-                    potencializacoes: [
-                        { name: "Custo de Vontade", effect: "Proteção extra", resource: "will", value: 2 }
-                    ],
-                    icon: "fa-head-side-virus"
-                }
-            ],
-            inventory: [
-                { id: 'i1', name: "Poção de Cura", icon: "fa-flask", color: "text-rpg-pink", qty: 3, currentUses: 1, maxUses: 1, type: "Consumível", price: "5 po", weight: 0.5 },
-                { id: 'i2', name: "Pergaminho de Mísseis", icon: "fa-scroll", color: "text-rpg-gold", qty: 2, currentUses: 3, maxUses: 3, type: "Consumível", price: "15 po", weight: 0.1 },
-                { id: 'i3', name: "Corda de Cânhamo", icon: "fa-dharmachakra", color: "text-rpg-gold", qty: 1, currentUses: 0, maxUses: 0, type: "Item", price: "2 po", weight: 2.0 },
-                { id: 'i4', name: "Adaga", icon: "fa-khanda", color: "text-gray-300", qty: 1, currentUses: 0, maxUses: 0, type: "Arma", price: "10 po", weight: 1.0 }
-            ],
-            peculiarities: [
-                { id: 'p1', name: "Sentidos Aguçados", val: "+2", description: "Seus sentidos são extremamente treinados." },
-                { id: 'p2', name: "Fobia de Escuro", val: "-3", description: "O personagem entra em pânico em escuridão total." }
-            ],
-            biography: "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
-            currency: { po: 1250, pp: 45, pc: 0 }
+            talents: [],
+            inventory: [],
+            peculiarities: [],
+            biography: "",
+            currency: { po: 0, pp: 0, pc: 0 }
         };
 
         // Populate initial conditions from rules
