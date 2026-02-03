@@ -45,7 +45,8 @@ export const CharacterProvider = ({ children }) => {
             inventory: [],
             peculiarities: [],
             biography: "",
-            currency: { po: 0, pp: 0, pc: 0 }
+            currency: { po: 0, pp: 0, pc: 0 },
+            portraitUrl: "default_portrait.png"
         };
 
         // Populate initial conditions from rules
@@ -557,6 +558,11 @@ export const CharacterProvider = ({ children }) => {
         setCharacterData(prev => ({ ...prev, perception: newVal }));
     };
 
+    const updatePortrait = (url) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({ ...prev, portraitUrl: url }));
+    };
+
     // --- IMPORT / EXPORT ---
     const exportCharacter = () => {
         const dataStr = JSON.stringify(characterData, null, 2);
@@ -662,18 +668,11 @@ export const CharacterProvider = ({ children }) => {
         addPeculiarity,
         updatePeculiarity,
         deletePeculiarity,
-        updateBiography,
-
-        updateCurrency,
-        updateName,
-        updateLevel,
-        updateXp,
-        updateNextLevel,
-        updateSpeed,
-        updatePerception,
-        exportCharacter,
-        importCharacter,
-        importBundle,
+        updateBiography, updateCurrency,
+        updateName, updateLevel, updateXp, updateNextLevel,
+        updateSpeed, updatePerception,
+        updatePortrait,
+        exportCharacter, importCharacter, importBundle,
         theme,
         toggleTheme
     };

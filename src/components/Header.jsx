@@ -14,9 +14,9 @@ const Header = () => {
         updateName,
         updateLevel,
         updateXp,
-        updateNextLevel,
         updateSpeed,
         updatePerception,
+        updatePortrait,
         updateStatus,
         theme,
         toggleTheme
@@ -26,6 +26,8 @@ const Header = () => {
     const [restModal, setRestModal] = useState({ isOpen: false, type: null });
     const [comfortLevel, setComfortLevel] = useState(0);
     const [isCompendiumOpen, setIsCompendiumOpen] = useState(false);
+    const [isPortraitModalOpen, setIsPortraitModalOpen] = useState(false);
+    const [tempPortraitUrl, setTempPortraitUrl] = useState('');
 
     const openRestModal = (type) => {
         setRestModal({ isOpen: true, type });
@@ -54,6 +56,19 @@ const Header = () => {
         showToast(`Descanso ${typeName} realizado! Recursos recuperados.`, 'success');
         setRestModal({ isOpen: false, type: null });
     };
+
+    const openPortraitModal = () => {
+        if (!isEditMode) return;
+        setTempPortraitUrl(characterData.portraitUrl);
+        setIsPortraitModalOpen(true);
+    };
+
+    const handleSavePortrait = () => {
+        updatePortrait(tempPortraitUrl);
+        setIsPortraitModalOpen(false);
+        showToast('PORTRAIT ATUALIZADO', 'success');
+    };
+
 
     return (
         <header className="glass-card rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start gap-6 relative overflow-hidden mb-6">
@@ -125,15 +140,20 @@ const Header = () => {
                 )}
             </div>
 
-            <div className="relative shrink-0 group">
+            <div className={`relative shrink-0 group ${isEditMode ? 'cursor-pointer' : ''}`} onClick={openPortraitModal}>
                 <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${theme === 'medieval' ? 'from-cyber-yellow/40 to-cyber-red/40' : 'from-cyber-pink to-cyber-purple'} blur opacity-60 group-hover:opacity-100 transition duration-500`}></div>
                 <img
-                    alt="Aeliana Portrait"
-                    className={`relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 ${theme === 'medieval' ? 'border-cyber-yellow shadow-neon-yellow' : 'border-cyber-pink shadow-neon-pink'} object-cover z-10`}
-                    src={theme === 'medieval'
-                        ? "aeliana_medieval.png"
-                        : "https://lh3.googleusercontent.com/aida-public/AB6AXuBL-Rfhvvuljmg4jGXDfv6K9f-p8gl_YGelnFGV46NwdIKq5W6n9_oax95Cw3LFCCnknNkNWUFEsB1Gmv92NJAF-ATelbs3tiPKx5ulVbkWzHKYqjqICpIWYWGZ5Ty_Zl8w-FS0tDI_ZBIAQ9W6ahI6rjcZSHPrIJsMoE95hy2LB2tcUznhskAhxzqy9qVExzdb7nTB0qleORSCCqLWUQjSMcWYN7SGV8UqVYbyHr8xhekKtDP0kB31SUDFAWkIxxLLu7J-lFpradI"}
+                    alt="Character Portrait"
+                    className={`relative w-32 h-32 md:w-40 md:h-40 rounded-full border-2 ${theme === 'medieval' ? 'border-cyber-yellow shadow-neon-yellow' : 'border-cyber-pink shadow-neon-pink'} object-cover z-10 transition-transform duration-300 ${isEditMode ? 'group-hover:scale-105' : ''}`}
+                    src={characterData.portraitUrl || "default_portrait.png"}
                 />
+                {isEditMode && (
+                    <div className="absolute inset-0 flex items-center justify-center z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="bg-black/60 rounded-full p-4 border border-white/20">
+                            <i className="fa-solid fa-camera text-white text-2xl"></i>
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="flex-grow w-full md:w-auto text-center md:text-left flex flex-col justify-center min-h-[128px] md:min-h-[160px]">
                 {isEditMode ? (
@@ -324,6 +344,81 @@ const Header = () => {
                 isOpen={isCompendiumOpen}
                 onClose={() => setIsCompendiumOpen(false)}
             />
+
+            {/* Portrait Selection Modal */}
+            <Modal isOpen={isPortraitModalOpen} onClose={() => setIsPortraitModalOpen(false)} maxWidth="max-w-2xl">
+                <ModalHeader onClose={() => setIsPortraitModalOpen(false)} className="bg-white/5">
+                    <div className="flex items-center gap-3">
+                        <div className={`w-10 h-10 rounded bg-${theme === 'medieval' ? 'cyber-yellow' : 'cyber-pink'}/20 flex items-center justify-center text-${theme === 'medieval' ? 'cyber-yellow' : 'cyber-pink'}`}>
+                            <i className="fa-solid fa-image"></i>
+                        </div>
+                        <h3 className="text-lg font-bold text-white uppercase font-display">
+                            Alterar Portrait do Personagem
+                        </h3>
+                    </div>
+                </ModalHeader>
+                <ModalBody>
+                    <div className="flex flex-col gap-6">
+                        {/* Custom URL Input */}
+                        <div className="flex flex-col gap-2">
+                            <label className="text-[10px] font-bold text-cyber-gray uppercase tracking-widest">URL da Imagem Personalizada</label>
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={tempPortraitUrl}
+                                    onChange={(e) => setTempPortraitUrl(e.target.value)}
+                                    placeholder="https://exemplo.com/imagem.png"
+                                    className="flex-1 bg-black/40 border border-white/10 rounded-lg px-4 py-2 text-white text-sm outline-none focus:border-cyber-pink transition-all"
+                                />
+                                {tempPortraitUrl && (
+                                    <button
+                                        onClick={() => setTempPortraitUrl('')}
+                                        className="px-3 bg-white/5 hover:bg-white/10 text-cyber-gray rounded-lg border border-white/10 transition-all"
+                                    >
+                                        <i className="fa-solid fa-xmark"></i>
+                                    </button>
+                                )}
+                            </div>
+                            <p className="text-[9px] text-cyber-gray italic">
+                                Use links do Imgur, Discord, Pinterest ou outra hospedagem de imagem.
+                            </p>
+                        </div>
+
+
+                        {/* Preview */}
+                        <div className="flex flex-col items-center gap-3 py-4 border-t border-white/5">
+                            <label className="text-[10px] font-bold text-cyber-gray uppercase tracking-widest">Preview</label>
+                            <div className="relative">
+                                <div className={`absolute inset-0 rounded-full bg-gradient-to-br ${theme === 'medieval' ? 'from-cyber-yellow/40 to-cyber-red/40' : 'from-cyber-pink to-cyber-purple'} blur opacity-60`}></div>
+                                <img
+                                    src={tempPortraitUrl || "default_portrait.png"}
+                                    alt="Preview"
+                                    className={`relative w-24 h-24 rounded-full border-2 ${theme === 'medieval' ? 'border-cyber-yellow' : 'border-cyber-pink'} object-cover z-10`}
+                                    onError={(e) => {
+                                        e.target.src = "https://via.placeholder.com/150/111111/FFFFFF?text=URL+Invalida";
+                                    }}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </ModalBody>
+                <ModalFooter>
+                    <div className="flex gap-2 w-full">
+                        <button
+                            onClick={() => setIsPortraitModalOpen(false)}
+                            className="flex-1 py-2 bg-white/5 hover:bg-white/10 text-white font-bold uppercase tracking-widest rounded transition-all border border-white/10"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            onClick={handleSavePortrait}
+                            className={`flex-1 py-2 bg-${theme === 'medieval' ? 'cyber-yellow' : 'cyber-pink'} text-black font-bold uppercase tracking-widest rounded transition-all shadow-lg hover:brightness-110`}
+                        >
+                            Salvar Alterações
+                        </button>
+                    </div>
+                </ModalFooter>
+            </Modal>
         </header>
     );
 };
