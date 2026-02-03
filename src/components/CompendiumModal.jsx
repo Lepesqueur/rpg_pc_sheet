@@ -3,7 +3,7 @@ import { Modal, ModalHeader, ModalBody } from './Modal';
 import { useCharacter } from '../context/CharacterContext';
 import { useToast } from './Toast';
 import { COMPENDIUM } from '../data/compendium';
-import { TALENT_GROUPS } from '../data/rules';
+import { TALENT_GROUPS, ITEM_COLORS, TALENT_GROUP_COLORS } from '../data/rules';
 
 const CompendiumModal = ({ isOpen, onClose }) => {
     const { isEditMode, addInventoryItem, addTalent, addPeculiarity, importBundle } = useCharacter();
@@ -79,6 +79,13 @@ const CompendiumModal = ({ isOpen, onClose }) => {
 
         return matchesSearch && matchesSubFilter;
     });
+
+    const getResourceColor = (item, category) => {
+        if (category === 'items') return ITEM_COLORS[item.type] || 'slate-400';
+        if (category === 'talents') return TALENT_GROUP_COLORS[item.category] || 'cyber-pink';
+        if (category === 'peculiarities') return 'white'; // Keep default for now or add PECULIARITY_COLORS if desired
+        return 'white';
+    };
 
     const getSubFilters = () => {
         if (activeCategory === 'items') {
@@ -182,7 +189,7 @@ const CompendiumModal = ({ isOpen, onClose }) => {
                                     <div className="flex justify-between items-start gap-3">
                                         <div className="flex items-start gap-3">
                                             {item.icon && (
-                                                <div className={`w-10 h-10 rounded bg-white/5 flex items-center justify-center ${item.color || 'text-white'} border border-white/10 shrink-0`}>
+                                                <div className={`w-10 h-10 rounded bg-white/5 flex items-center justify-center text-${getResourceColor(item, activeCategory)} border border-white/10 shrink-0`}>
                                                     <i className={`fa-solid ${item.icon}`}></i>
                                                 </div>
                                             )}

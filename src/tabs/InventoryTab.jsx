@@ -17,7 +17,7 @@ const InventoryTab = () => {
 
     // Inventory State
     const [editingItem, setEditingItem] = useState(null);
-    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
+    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
     const [itemToDelete, setItemToDelete] = useState(null);
 
     // Peculiarities State
@@ -36,7 +36,7 @@ const InventoryTab = () => {
     // Item Handlers
     const openAddItemModal = () => {
         setEditingItem(null);
-        setItemForm({ name: '', icon: 'fa-box', color: 'text-gray-300', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
+        setItemForm({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
         setEditingItem('new');
     };
 
