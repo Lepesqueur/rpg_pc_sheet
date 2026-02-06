@@ -211,13 +211,14 @@ const InventoryTab = () => {
                                         <th className="p-2 text-center">Usos</th>
                                         <th className="p-2">Tipo</th>
                                         <th className="p-2 text-right">Peso</th>
+                                        <th className="p-2 w-8"></th>
                                     </tr>
                                 </thead>
                                 <tbody className="text-sm">
                                     {sortedTypes.map(type => (
                                         <React.Fragment key={type}>
                                             <tr className="bg-white/5 border-y border-white/10">
-                                                <td colSpan="6" className="px-4 py-2 text-[10px] font-bold text-cyber-yellow tracking-[0.2em] uppercase italic">
+                                                <td colSpan="7" className="px-4 py-2 text-[10px] font-bold text-cyber-yellow tracking-[0.2em] uppercase italic">
                                                     <i className="fa-solid fa-layer-group mr-2 opacity-50"></i>
                                                     {type}
                                                 </td>
@@ -225,19 +226,7 @@ const InventoryTab = () => {
                                             {groupedItems[type].map((item) => (
                                                 <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-cyan-900/10 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group border-b border-white/5 last:border-0`}>
                                                     <td className="p-2 text-center text-lg">
-                                                        <div className="flex items-center justify-center gap-2">
-                                                            <button
-                                                                onClick={(e) => {
-                                                                    e.stopPropagation();
-                                                                    updateInventoryItem(item.id, { ...item, equipped: !item.equipped });
-                                                                }}
-                                                                className={`w-6 h-6 flex items-center justify-center rounded transition-all ${item.equipped ? 'text-cyber-yellow bg-cyber-yellow/10 shadow-[0_0_8px_rgba(255,211,0,0.2)]' : 'text-cyber-gray hover:text-white bg-white/5'}`}
-                                                                title={item.equipped ? "Desequipar" : "Equipar"}
-                                                            >
-                                                                <i className={`fa-solid ${item.equipped ? 'fa-shield-halved' : 'fa-shield'}`}></i>
-                                                            </button>
-                                                            <i className={`fa-solid ${item.icon} ${getItemColor(item)} ${theme === 'medieval' ? 'brightness-110' : ''}`}></i>
-                                                        </div>
+                                                        <i className={`fa-solid ${item.icon} ${getItemColor(item)} ${theme === 'medieval' ? 'brightness-110' : ''}`}></i>
                                                     </td>
                                                     <td className="p-2 font-medium text-white group-hover:text-white transition-colors">
                                                         <div className="flex flex-col">
@@ -254,13 +243,25 @@ const InventoryTab = () => {
                                                     </td>
                                                     <td className="p-2 text-xs text-[#aaaaaa] uppercase tracking-tighter opacity-50">{item.type}</td>
                                                     <td className="p-2 text-right text-cyber-gray text-xs font-mono">{item.weight}kg</td>
+                                                    <td className="p-2 text-center">
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                updateInventoryItem(item.id, { ...item, equipped: !item.equipped });
+                                                            }}
+                                                            className={`w-7 h-7 flex items-center justify-center rounded transition-all ${item.equipped ? 'text-cyber-yellow bg-cyber-yellow/10 shadow-[0_0_8px_rgba(255,211,0,0.1)]' : 'text-cyber-gray hover:text-white bg-white/5'}`}
+                                                            title={item.equipped ? "Desequipar" : "Equipar"}
+                                                        >
+                                                            <i className={`fa-solid ${item.equipped ? 'fa-shield-halved' : 'fa-shield'} text-xs`}></i>
+                                                        </button>
+                                                    </td>
                                                 </tr>
                                             ))}
                                         </React.Fragment>
                                     ))}
                                     {items.length === 0 && (
                                         <tr>
-                                            <td colSpan="6" className="p-8 text-center text-cyber-gray/50 italic text-xs uppercase tracking-widest font-mono">Inventário Vazio</td>
+                                            <td colSpan="7" className="p-8 text-center text-cyber-gray/50 italic text-xs uppercase tracking-widest font-mono">Inventário Vazio</td>
                                         </tr>
                                     )}
                                 </tbody>
