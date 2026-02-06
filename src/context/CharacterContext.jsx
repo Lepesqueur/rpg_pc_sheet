@@ -128,16 +128,22 @@ export const CharacterProvider = ({ children }) => {
                         return t;
                     }),
                     inventory: (parsed.inventory || []).map(item => {
+                        let baseItem = {
+                            currentUses: 0,
+                            maxUses: 0,
+                            description: "",
+                            equipped: false,
+                            ...item
+                        };
                         if (item.uses && item.currentUses === undefined) {
                             const [curr, max] = item.uses.split('/').map(v => parseInt(v.trim()));
-                            const { uses, ...rest } = item;
                             return {
-                                ...rest,
+                                ...baseItem,
                                 currentUses: isNaN(curr) ? 0 : curr,
                                 maxUses: isNaN(max) ? 0 : max
                             };
                         }
-                        return { currentUses: 0, maxUses: 0, ...item };
+                        return baseItem;
                     }),
                     peculiarities: (parsed.peculiarities || []).map(pec => ({
                         description: "",

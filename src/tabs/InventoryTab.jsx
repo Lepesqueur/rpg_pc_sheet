@@ -17,7 +17,7 @@ const InventoryTab = () => {
 
     // Inventory State
     const [editingItem, setEditingItem] = useState(null);
-    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
+    const [itemForm, setItemForm] = useState({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0, description: '', equipped: false });
     const [itemToDelete, setItemToDelete] = useState(null);
 
     // Peculiarities State
@@ -36,7 +36,7 @@ const InventoryTab = () => {
     // Item Handlers
     const openAddItemModal = () => {
         setEditingItem(null);
-        setItemForm({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0 });
+        setItemForm({ name: '', icon: 'fa-box', qty: 1, currentUses: 0, maxUses: 0, type: 'Outro', price: '', weight: 0, description: '', equipped: false });
         setEditingItem('new');
     };
 
@@ -225,12 +225,27 @@ const InventoryTab = () => {
                                             {groupedItems[type].map((item) => (
                                                 <tr key={item.id} onClick={() => isEditMode && openEditItemModal(item)} className={`hover:bg-cyan-900/10 transition-colors ${isEditMode ? 'cursor-pointer' : ''} group border-b border-white/5 last:border-0`}>
                                                     <td className="p-2 text-center text-lg">
-                                                        <i className={`fa-solid ${item.icon} ${getItemColor(item)} ${theme === 'medieval' ? 'brightness-110' : ''}`}></i>
+                                                        <div className="flex items-center justify-center gap-2">
+                                                            <button
+                                                                onClick={(e) => {
+                                                                    e.stopPropagation();
+                                                                    updateInventoryItem(item.id, { ...item, equipped: !item.equipped });
+                                                                }}
+                                                                className={`w-6 h-6 flex items-center justify-center rounded transition-all ${item.equipped ? 'text-cyber-yellow bg-cyber-yellow/10 shadow-[0_0_8px_rgba(255,211,0,0.2)]' : 'text-cyber-gray hover:text-white bg-white/5'}`}
+                                                                title={item.equipped ? "Desequipar" : "Equipar"}
+                                                            >
+                                                                <i className={`fa-solid ${item.equipped ? 'fa-shield-halved' : 'fa-shield'}`}></i>
+                                                            </button>
+                                                            <i className={`fa-solid ${item.icon} ${getItemColor(item)} ${theme === 'medieval' ? 'brightness-110' : ''}`}></i>
+                                                        </div>
                                                     </td>
                                                     <td className="p-2 font-medium text-white group-hover:text-white transition-colors">
-                                                        <div className="flex items-center gap-2">
-                                                            {item.name}
-                                                            {isEditMode && <i className="fa-solid fa-pen-to-square text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>}
+                                                        <div className="flex flex-col">
+                                                            <div className="flex items-center gap-2">
+                                                                {item.name}
+                                                                {isEditMode && <i className="fa-solid fa-pen-to-square text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>}
+                                                            </div>
+                                                            {item.description && <span className="text-[10px] text-cyber-gray italic truncate max-w-[200px]">{item.description}</span>}
                                                         </div>
                                                     </td>
                                                     <td className="p-2 text-center text-cyber-gray font-mono">x{item.qty}</td>
@@ -434,6 +449,15 @@ const InventoryTab = () => {
                                 value={itemForm.price}
                                 onChange={(e) => setItemForm({ ...itemForm, price: e.target.value })}
                                 placeholder="ex: 100 po"
+                            />
+                        </div>
+                        <div className="md:col-span-2 space-y-2">
+                            <label className="text-[10px] uppercase tracking-widest text-cyber-gray font-bold">Descrição</label>
+                            <textarea
+                                className="w-full h-24 bg-black/40 border border-white/10 rounded-lg p-4 text-sm text-gray-200 focus:border-cyber-pink outline-none resize-none custom-scrollbar font-sans leading-relaxed"
+                                value={itemForm.description}
+                                onChange={(e) => setItemForm({ ...itemForm, description: e.target.value })}
+                                placeholder="Descreva as propriedades e efeitos deste item..."
                             />
                         </div>
                     </div>
