@@ -11,7 +11,7 @@ const InventoryTab = () => {
         characterData, isEditMode, isDevMode,
         addInventoryItem, updateInventoryItem, deleteInventoryItem,
         addPeculiarity, updatePeculiarity, deletePeculiarity,
-        updateBiography, updateCurrency, theme
+        updateBiography, updateCurrency, updateMaxWeight, theme
     } = useCharacter();
     const { showToast } = useToast();
 
@@ -270,12 +270,25 @@ const InventoryTab = () => {
                         <div className="p-4 bg-black/60 border-t border-white/10 mt-auto">
                             <div className="flex justify-between text-xs text-cyber-gray mb-1">
                                 <span>CARGA TOTAL</span>
-                                <span className={`font-mono uppercase ${totalWeight > 100 ? 'text-cyber-pink shadow-neon-pink' : 'text-white'}`}>{totalWeight.toFixed(1)} / 100 KG</span>
+                                <div className="flex items-center gap-1">
+                                    <span className={`font-mono uppercase ${totalWeight > characterData.maxWeight ? 'text-cyber-pink shadow-neon-pink' : 'text-white'}`}>{totalWeight.toFixed(1)} /</span>
+                                    {isEditMode ? (
+                                        <input
+                                            type="number"
+                                            className="w-16 bg-black/40 border-b border-cyber-yellow/50 text-[11px] font-bold text-cyber-yellow text-center outline-none focus:border-cyber-yellow transition-all p-0 h-4 font-mono"
+                                            value={characterData.maxWeight}
+                                            onChange={(e) => updateMaxWeight(e.target.value)}
+                                        />
+                                    ) : (
+                                        <span className="text-white font-mono">{characterData.maxWeight}</span>
+                                    )}
+                                    <span className="text-white font-mono uppercase">KG</span>
+                                </div>
                             </div>
                             <div className="w-full bg-gray-800 rounded-full h-1.5 overflow-hidden">
                                 <div
                                     className={`h-full transition-all duration-500 bg-gradient-to-r from-cyber-purple to-cyber-pink shadow-[0_0_8px_#ff0099]`}
-                                    style={{ width: `${Math.min(100, (totalWeight / 100) * 100)}%` }}
+                                    style={{ width: `${Math.min(100, (totalWeight / (characterData.maxWeight || 1)) * 100)}%` }}
                                 ></div>
                             </div>
                         </div>

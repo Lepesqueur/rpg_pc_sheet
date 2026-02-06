@@ -46,6 +46,7 @@ export const CharacterProvider = ({ children }) => {
             peculiarities: [],
             biography: "",
             currency: { po: 0, pp: 0, pc: 0 },
+            maxWeight: 100,
             portraitUrl: "default_portrait.png"
         };
 
@@ -151,7 +152,8 @@ export const CharacterProvider = ({ children }) => {
                         ...pec
                     })),
                     biography: parsed.biography || "Registros decimais encontrados no núcleo de memória de Aeliana sugerem uma origem fora do Setor 7. Protocolos de segurança nível Archon ativa...",
-                    currency: parsed.currency || { po: 1250, pp: 45, pc: 0 }
+                    currency: parsed.currency || { po: 1250, pp: 45, pc: 0 },
+                    maxWeight: parsed.maxWeight !== undefined ? parsed.maxWeight : defaultData.maxWeight
                 };
 
                 // Sincronizar ícones e atributos das regras (para garantir que fix de UI se propaguem)
@@ -569,6 +571,11 @@ export const CharacterProvider = ({ children }) => {
         setCharacterData(prev => ({ ...prev, portraitUrl: url }));
     };
 
+    const updateMaxWeight = (newVal) => {
+        if (!isEditMode) return;
+        setCharacterData(prev => ({ ...prev, maxWeight: parseFloat(newVal) || 0 }));
+    };
+
     // --- IMPORT / EXPORT ---
     const exportCharacter = () => {
         const dataStr = JSON.stringify(characterData, null, 2);
@@ -678,6 +685,7 @@ export const CharacterProvider = ({ children }) => {
         updateName, updateLevel, updateXp, updateNextLevel,
         updateSpeed, updatePerception,
         updatePortrait,
+        updateMaxWeight,
         exportCharacter, importCharacter, importBundle,
         theme,
         toggleTheme
